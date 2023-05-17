@@ -35,7 +35,7 @@
     </div>
     <div style="padding-bottom: 1rem">
       Pamiršote slaptažodį?
-      <a href="#/users/forgot-password"> Pakeisti slaptažodį </a>
+      <a href="#/users/auth-refresh"> Pakeisti slaptažodį </a>
     </div>
     <div class="mb-3">
       <button class="btn w-100" @click="() => login()">Prisijungti</button>
@@ -43,15 +43,23 @@
   </div>
 </template>
 <script>
-
 import { LoginMixin } from "../views/mixins/LoginMixin";
+import { mapActions } from "vuex";
 export default {
-  mixins:[LoginMixin],
+  mixins: [LoginMixin],
   methods: {
-    login() {
-      if ( !this.emailMessage && !this.passwordMessage) {
-        console.log("showwwww the message");
-        return;
+    ...mapActions(["authWithPassword"]),
+    async login() {
+      if (!this.emailMessage && !this.passwordMessage) {
+        try {
+          await this.authWithPassword({
+            email: this.email,
+            password: this.password,
+          });
+          return;
+        } catch {
+          console.log("try again");
+        }
       }
       this.submit = true;
     },

@@ -1,5 +1,9 @@
 export const UserState = {
-    email: '',
-    password: '',
-    repeatPassword: ''
+    id: null,
+    username: "",
+    verified: null,
+    emailVisibility: null,
+    email: "",
+    name: "",
+    avatar: ""
 }

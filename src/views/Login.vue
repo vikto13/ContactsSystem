@@ -41,25 +41,22 @@ export default {
     DivideComponents,
     AdminLogin,
     RemindPassword,
-    UpdatePassword
+    UpdatePassword,
   },
   data() {
     return {
-
       screens: {
         "auth-with-password": "admin-login",
-        "forgot-password": "remind-password",
-        "auth-refresh": "update-password",
+        "auth-refresh": "remind-password",
+        "update-password": "update-password",
       },
-
     };
   },
   computed: {
     addingBottom() {
-      return this.$route.params.info=="auth-with-password"?'25%':"5%"
-    }
-  }
-  
+      return this.$route.params.info == "auth-with-password" ? "25%" : "5%";
+    },
+  },
 };
 </script>
 <style>

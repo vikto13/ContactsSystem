@@ -13,10 +13,12 @@
           style="padding-left: 2.5rem; background-color: #f1f2f4"
         />
       </input-box-icon>
-      <span v-show="showPasswordMessage" style="color: red"> {{  passwordMessage }} </span>
+      <span v-show="showPasswordMessage" style="color: red">
+        {{ passwordMessage }}
+      </span>
     </div>
     <div class="forms-inputs mb-4">
-      <span>Pakartotas naujas slaptažodis: </span>
+      <span>Pakartoti naują slaptažodį: </span>
       <input-box-icon :icon-name="'lock'">
         <input
           v-model="secPassword"
@@ -27,25 +29,26 @@
           style="padding-left: 2.5rem; background-color: #f1f2f4"
         />
       </input-box-icon>
-      <span v-show="comparePasswords" style="color: red"> {{comparePasswords}} </span>
+      <span v-show="comparePasswords" style="color: red">
+        {{ comparePasswords }}
+      </span>
     </div>
     <div class="mb-3">
-      <button class="btn w-100" @click="()=>change()" >Keisti</button>
+      <button class="btn w-100" @click="() => change()">Keisti</button>
     </div>
   </div>
 </template>
 <script>
-
-import { LoginMixin } from '../views/mixins/LoginMixin';
+import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
-mixins:[LoginMixin],
-methods: {
-  change() {
-    if (!this.passwordMessage && !this.comparePasswords) {
-      console.log("changeeeeeeeee")
-    }
-    this.submit=true
-  }
-}
+  mixins: [LoginMixin],
+  methods: {
+    change() {
+      if (!this.passwordMessage && !this.comparePasswords) {
+        console.log("changeeeeeeeee");
+      }
+      this.submit = true;
+    },
+  },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isSended">
     <h1>Priminti slaptažodį</h1>
     <div class="forms-inputs mb-4">
       <span>Elektroninis paštas: </span>
@@ -21,22 +21,35 @@
       <button class="btn w-100" @click="() => send()">Pateikti</button>
     </div>
   </div>
+  <div v-else>
+    <h1>Žinutė išsiųsta</h1>
+    <p>Patikrinkite elektroninį paštą</p>
+  </div>
 </template>
 <script>
-
-import { LoginMixin } from '../views/mixins/LoginMixin';
+import { LoginMixin } from "../views/mixins/LoginMixin";
+import { mapActions } from "vuex";
 export default {
-  mixins:[LoginMixin],
+  mixins: [LoginMixin],
+  data() {
+    return {
+      isSended: false,
+    };
+  },
   methods: {
-    send() {
-      if (!this.emailMessage) {
-        console.log("showwwww the message");
+    ...mapActions(["resetPassword"]),
+    async send() {
+      if (this.emailMessage) {
+        this.submit = true;
         return;
-      } 
-      this.submit = true;
-    }
-  }
-}
+      }
 
-
+      try {
+        await this.resetPassword(this.email);
+        this.isSended = true;
+        return;
+      } catch {}
+    },
+  },
+};
 </script>

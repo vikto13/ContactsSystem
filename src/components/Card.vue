@@ -29,6 +29,24 @@
           <p>El pastas:</p>
           <p>Adresas:</p>
         </md-card-content>
+
+        <div class="mb-4">
+          <md-button
+            class="md-icon-button md-raised ml-3"
+            @click=""
+            style="background-color: #0054a6 !important"
+          >
+            <md-icon style="color: #ffffff">edit</md-icon>
+          </md-button>
+
+          <md-button
+            class="md-icon-button md-raised ml-2"
+            @click=""
+            style="background-color: #a61a11 !important"
+          >
+            <md-icon style="color: #ffffff">delete</md-icon>
+          </md-button>
+        </div>
       </md-ripple>
     </md-card>
   </a>
