@@ -33,23 +33,18 @@
 </template>
 <script>
 import AdminLogin from "../components/AdminLogin.vue";
-import Card from "../components/Card.vue";
-import DivideComponents from "../components/DivideComponents.vue";
-import InputBoxIcon from "../components/InputBoxIcon.vue";
 import RemindPassword from "../components/RemindPassword.vue";
 import UpdatePassword from "../components/UpdatePassword.vue";
+import DivideComponents from "../components/DivideComponents.vue";
 export default {
   components: {
     DivideComponents,
-    Card,
-    InputBoxIcon,
     AdminLogin,
     RemindPassword,
+    UpdatePassword
   },
   data() {
     return {
-      email: "",
-      password: "",
 
       screens: {
         "auth-with-password": "admin-login",
@@ -57,61 +52,14 @@ export default {
         "auth-refresh": "update-password",
       },
 
-      submit: false,
-      remind: false,
-      titleText: {
-        0: "Admin prisijungimas",
-        1: "Priminti slaptažodį",
-      },
-      buttonText: {
-        0: "Prisijungti",
-        1: "Pateikti",
-      },
     };
   },
   computed: {
     addingBottom() {
-      return `${this.remind ? "50%" : "25%"}`;
-    },
-    emailMessage() {
-      return !this.email
-        ? `Elektroninis paštas turi būti įvestas`
-        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)
-        ? `Elektroninis paštas turi būti validus`
-        : null;
-    },
-    passwordMessage() {
-      return !this.password
-        ? `Slaptažodis turi būti įvestas`
-        : this.password.length < 8
-        ? `Slaptažodis turi būti sudarytas iš 8 raidžių`
-        : null;
-    },
-    showEmailMessage() {
-      return (
-        this.submit &&
-        (!this.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email))
-      );
-    },
-    showPasswordMessage() {
-      return this.submit && (!this.password || this.password.length < 8);
-    },
-  },
-  methods: {
-    isInvallid(input) {
-      return !input && this.submit;
-    },
-    login() {
-      if (this.remind && !this.emailMessage) {
-        console.log("showwwww the message");
-        return;
-      } else if (!(this.emailMessage || this.passwordMessage)) {
-        console.log("registration is working");
-        return;
-      }
-      this.submit = true;
-    },
-  },
+      return this.$route.params.info=="auth-with-password"?'25%':"5%"
+    }
+  }
+  
 };
 </script>
 <style>
