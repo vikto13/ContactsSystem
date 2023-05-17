@@ -1,5 +1,6 @@
 <template>
   <div>
+    <slot></slot>
     <div style="margin: 2% 8% 2% 8%">
       <h1>Kontaktų sistema</h1>
       <div class="col-md-4" style="padding: 0">

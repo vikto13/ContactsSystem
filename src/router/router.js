@@ -13,8 +13,9 @@ export const router = new VueRouter({
             path: '/contact/:id',
             component: ContactDetails
         }, {
-            path: '/users/auth-with-password',
-            component: Login
+            path: '/users/:info',
+            component: Login,
+            props: true,
 
         }
     ]
