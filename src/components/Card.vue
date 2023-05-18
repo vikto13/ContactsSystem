@@ -32,7 +32,7 @@
 
         <div class="mb-4">
           <md-button
-            class="md-icon-button md-raised ml-3"
+            class="md-icon-button md-raised ml-3 mb-3"
             @click=""
             style="background-color: #0054a6 !important"
           >

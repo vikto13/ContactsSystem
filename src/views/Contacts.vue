@@ -10,7 +10,7 @@
               type="text"
               class="form-control"
               placeholder="Ieškoti kontakto"
-              style="padding-left: 2.5rem; background-color: #f1f2f4"
+              style="background-color: #f1f2f4"
             />
           </input-box-icon>
         </div>
@@ -24,10 +24,18 @@
           >
             <md-icon style="color: #ffffff">{{ button }}</md-icon>
           </md-button>
+
+          <md-button
+            class="md-icon-button md-raised ml-3"
+            style="background-color: #0054a6 !important"
+            @click="() => triggerDialog()"
+          >
+            <md-icon style="color: #ffffff">add</md-icon>
+          </md-button>
         </div>
       </div>
-
       <p>Iš viso rasta : 152 kontaktai</p>
+      <DialogBox></DialogBox>
       <filter-sections></filter-sections>
       <contact-cards></contact-cards>
       <pagination></pagination>
@@ -40,11 +48,18 @@ import FilterSections from "../components/FilterSections.vue";
 import ContactCards from "../components/ContactCards.vue";
 import Pagination from "../components/Pagination.vue";
 import InputBoxIcon from "../components/InputBoxIcon.vue";
+import DialogBox from "../components/DialogBox.vue";
+import { mapActions, mapGetters } from "vuex";
+import { triggerRef } from "vue";
 export default {
   data() {
     return {
-      buttons: ["filter_alt", "calendar_month", "add"],
+      buttons: ["filter_alt", "calendar_month"],
+      showBox: false,
     };
+  },
+  computed: {
+    ...mapGetters(["showDialog"]),
   },
   components: {
     NavBar,
@@ -52,6 +67,10 @@ export default {
     FilterSections,
     ContactCards,
     Pagination,
+    DialogBox,
+  },
+  methods: {
+    ...mapActions(["triggerDialog"]),
   },
 };
 </script>

@@ -2,3 +2,6 @@
 .darkBlue {
     background-color: #1F3F77;
   }
+  .md-dialog .md-dialog-container {
+    max-width: 768px;
+  }

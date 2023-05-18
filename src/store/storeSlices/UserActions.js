@@ -1,4 +1,4 @@
-import { pocketBase } from "../../../services/pocketbase";
+import { pocketBase } from "../../../services/pocketBase";
 import { UserState } from "../initState/UserState";
 
 export default {
@@ -8,7 +8,6 @@ export default {
             state.token = token;
             state = { ...record }
         }
-
     },
     actions: {
         async authWithPassword({ commit }, user) {
