@@ -10,7 +10,7 @@
           class="form-control"
           :class="{ 'is-invalid': isInvalid(email) }"
           placeholder="Įveskite el pašto adresą..."
-          style="padding-left: 2.5rem; background-color: #f1f2f4"
+          style=" background-color: #f1f2f4; border-left-width: 0;"
         />
       </input-box-icon>
       <span v-show="showEmailMessage" style="color: red">
@@ -26,7 +26,7 @@
           :class="{ 'is-invalid': isInvalid(password) }"
           class="form-control"
           placeholder="Įveskite slaptažodį..."
-          style="padding-left: 2.5rem; background-color: #f1f2f4"
+          style=" background-color: #f1f2f4; border-left-width: 0;"
         />
       </input-box-icon>
       <span v-show="showPasswordMessage" style="color: red">

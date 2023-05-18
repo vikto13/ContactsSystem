@@ -8,10 +8,10 @@ import Vuex from 'vuex'
 import { router } from './router/router';
 import { initializeStore } from './store/initializeStore';
 
-
+Vue.use(Vuex);
 Vue.use(VueMaterial)
 Vue.use(VueRouter);
-Vue.use(Vuex);
+
 
 const store = new Vuex.Store(initializeStore)
 

@@ -3,6 +3,7 @@ import Contacts from "../views/Contacts.vue"
 import ContactDetails from "../views/ContactDetails.vue"
 import Login from "../views/Login.vue"
 import Companies from "../views/Companies.vue"
+import { initializeStore } from "../store/initializeStore"
 export const router = new VueRouter({
     routes: [
         {
@@ -11,7 +12,10 @@ export const router = new VueRouter({
         },
         {
             path: '/companies/records',
-            component: Companies
+            component: Companies,
+            meta: {
+                needsAuth: true
+            }
         },
         {
             path: '/contact/:id',
@@ -24,4 +28,11 @@ export const router = new VueRouter({
 
         }
     ]
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.needsAuth && !initializeStore.modules.User.state.token) {
+        return next({ path: "/users/auth-with-password" })
+    }
+    next()
 })

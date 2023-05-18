@@ -45,7 +45,7 @@
           text-align: start;
           padding-left: 5%;
         "
-        @click="openFilePicker"
+    
       >
         ĮKELTI NUOTRAUKĄ
       </md-button>

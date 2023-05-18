@@ -5,5 +5,6 @@ export const UserState = {
     emailVisibility: null,
     email: "",
     name: "",
-    avatar: ""
+    avatar: "",
+    token: ''
 }

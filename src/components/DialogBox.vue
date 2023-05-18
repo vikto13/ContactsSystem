@@ -1,5 +1,5 @@
 <template>
-  <md-dialog :md-active.sync="showDialog" style="overflow: auto">
+  <md-dialog :md-active.sync="showDialog">
     <div
       style="
         display: flex;
@@ -9,12 +9,12 @@
         top: 1rem;
       "
     >
-      <md-button class="md-icon-button" @click.stop="showDialog = false">
+      <md-button class="md-icon-button" @click="showDialog = false">
         <md-icon style="color: white">close</md-icon>
       </md-button>
     </div>
-    <md-dialog-content style="overflow: auto">
-      <div class="md-layout m-3">
+    <md-dialog-content >
+      <div class="md-layout " >
         <div class="md-layout-item m-2" style="">
           <h3 class="mb-3 mt-3">Pridėti naują kontaktą:</h3>
           <div v-for="(table, index) in inputs" :key="index">
@@ -36,36 +36,74 @@
           </div>
         </div>
 
-        <div v-for="(box, index) in selects" class="md-layout-item m-3">
+        <div
+          v-for="(box, index) in selects"
+          :key="index"
+          class="md-layout-item m-3"
+        >
           <h5 class="mt-4" style="text-align: center">
             {{ box.name }}
           </h5>
-          <div v-for="(select, position) in box.items" class="mt-4">
+          <div
+            v-for="(select, position) in box.items"
+            :key="position"
+            class="mt-4"
+          >
             <label class="form-label">{{ `${select.title}:` }}</label>
             <select class="form-select" style="width: 100%">
               <option selected>{{ select.placeholder }}</option>
-              <option v-for="(option, value) in select.options" :value="value">
+              <option
+                v-for="(option, value) in select.options"
+                :key="value"
+                :value="value"
+              >
                 {{ option }}
               </option>
             </select>
           </div>
 
-          <md-button
+          <label
+            for="image-upload"
             style="
-              background-color: #1f3f77 !important;
+              background-color: #1f3f77;
               color: white;
               width: 100%;
               margin: 0;
               margin-top: 1rem;
               text-align: start;
               padding-left: 5%;
+              padding: 3%;
+              display: inline-block;
+              cursor: pointer;
             "
-            @click="openFilePicker"
           >
             ĮKELTI NUOTRAUKĄ
-          </md-button>
+            <input
+              id="image-upload"
+              type="file"
+              accept="image/*"
+              @change="uploadImage"
+              style="display: none"
+            />
+          </label>
+
+          <p>{{ images }}</p>
         </div>
       </div>
+      <md-button
+        style="
+          background-color: #1f3f77 !important;
+          color: white;
+          width: 100%;
+          margin: 0;
+          margin-top: 1rem;
+          text-align: start;
+          padding-left: 5%;
+        "
+    
+      >
+        PRIDĖTI
+      </md-button>
     </md-dialog-content>
   </md-dialog>
 </template>
@@ -95,30 +133,42 @@ export default {
     },
   },
   methods: {
-    openGallery() {
-      this.isGalleryOpen = true;
-    },
-    openFilePicker() {
-      this.$nextTick(() => {
-        this.$refs.fileInput.click(); // Programmatically trigger the file picker
-      });
-    },
-    handleFileUpload(event) {
-      const files = event.target.files;
-      if (files.length > 0) {
-        const fileReader = new FileReader();
-        fileReader.onload = (e) => {
-          const imageUrl = e.target.result;
-          this.images.push(imageUrl);
-        };
-        fileReader.readAsDataURL(files[0]);
-      }
+    uploadImage(e) {
+      const [image] = e.target.files;
+      this.images = image.name;
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = (e) => {
+        this.previewImage = e.target.result;
+        // console.log(this.previewImage);
+      };
     },
   },
+  openGallery() {
+    this.isGalleryOpen = true;
+  },
+  openFilePicker() {
+    this.$nextTick(() => {
+      this.$refs.fileInput.click(); // Programmatically trigger the file picker
+    });
+  },
+  handleFileUpload(event) {
+    const files = event.target.files;
+    if (files.length > 0) {
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const imageUrl = e.target.result;
+        this.images.push(imageUrl);
+      };
+      fileReader.readAsDataURL(files[0]);
+    }
+  },
+
   data() {
     return {
+      previewImage: null,
       isGalleryOpen: false,
-      images: [],
+      images: null,
       inputs: [
         {
           name: "",
@@ -176,9 +226,7 @@ export default {
 };
 </script>
 <style scoped>
-.md-dialog .md-dialog-container {
-  max-width: 768px;
-}
+
 </style>
 
 <!-- <md-tabs md-dynamic-height>

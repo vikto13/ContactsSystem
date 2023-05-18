@@ -25,6 +25,57 @@
             <md-icon style="color: #ffffff">{{ button }}</md-icon>
           </md-button>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+      <div class="form-group">
+         <div class='input-group date' id='datetimepicker10'>
+            <input type='text' class="form-control" />
+            <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar">
+            </span>
+            </span>
+         </div>
+        </div>
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <md-button
             class="md-icon-button md-raised ml-3"
             style="background-color: #0054a6 !important"
@@ -56,10 +107,27 @@ export default {
     return {
       buttons: ["filter_alt", "calendar_month"],
       showBox: false,
+      selectedDate: null
     };
   },
   computed: {
     ...mapGetters(["showDialog"]),
+    firstDayOfAWeek: {
+        get () {
+          return this.$material.locale.firstDayOfAWeek
+        },
+        set (val) {
+          this.$material.locale.firstDayOfAWeek = val
+        }
+      },
+      dateFormat: {
+        get () {
+          return this.$material.locale.dateFormat
+        },
+        set (val) {
+          this.$material.locale.dateFormat = val
+        }
+      }
   },
   components: {
     NavBar,
