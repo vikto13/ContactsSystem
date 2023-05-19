@@ -4,15 +4,22 @@ export default {
     state: DialogState,
     mutations: {
         setToShow(state, show) {
-            state.show = show
+            state.screen = show
+            state.show = true
+        },
+        disableDialog(state) {
+            state.show = false
         }
     },
     actions: {
-        triggerDialog({ commit }) {
-            commit("setToShow", true)
+        triggerDialog({ commit }, show) {
+            commit("setToShow", show)
         },
+        dismissDialog({ commit }) {
+            commit("disableDialog")
+        }
     },
     getters: {
-        showDialog: (state) => state.show
+        dialog: (state) => state
     }
 }

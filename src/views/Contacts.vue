@@ -25,68 +25,18 @@
             <md-icon style="color: #ffffff">{{ button }}</md-icon>
           </md-button>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-      <div class="form-group">
-         <div class='input-group date' id='datetimepicker10'>
-            <input type='text' class="form-control" />
-            <span class="input-group-addon">
-            <span class="glyphicon glyphicon-calendar">
-            </span>
-            </span>
-         </div>
-        </div>
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <!-- like here -->
 
           <md-button
             class="md-icon-button md-raised ml-3"
             style="background-color: #0054a6 !important"
-            @click="() => triggerDialog()"
+            @click="() => triggerDialog('add-contacts')"
           >
             <md-icon style="color: #ffffff">add</md-icon>
           </md-button>
         </div>
       </div>
       <p>Iš viso rasta : 152 kontaktai</p>
-      <DialogBox></DialogBox>
       <filter-sections></filter-sections>
       <contact-cards></contact-cards>
       <pagination></pagination>
@@ -99,46 +49,49 @@ import FilterSections from "../components/FilterSections.vue";
 import ContactCards from "../components/ContactCards.vue";
 import Pagination from "../components/Pagination.vue";
 import InputBoxIcon from "../components/InputBoxIcon.vue";
-import DialogBox from "../components/DialogBox.vue";
 import { mapActions, mapGetters } from "vuex";
-import { triggerRef } from "vue";
 export default {
-  data() {
-    return {
-      buttons: ["filter_alt", "calendar_month"],
-      showBox: false,
-      selectedDate: null
-    };
-  },
-  computed: {
-    ...mapGetters(["showDialog"]),
-    firstDayOfAWeek: {
-        get () {
-          return this.$material.locale.firstDayOfAWeek
-        },
-        set (val) {
-          this.$material.locale.firstDayOfAWeek = val
-        }
-      },
-      dateFormat: {
-        get () {
-          return this.$material.locale.dateFormat
-        },
-        set (val) {
-          this.$material.locale.dateFormat = val
-        }
-      }
-  },
   components: {
     NavBar,
     InputBoxIcon,
     FilterSections,
     ContactCards,
     Pagination,
-    DialogBox,
+  },
+  data() {
+    return {
+      buttons: ["filter_alt", "calendar_month"],
+      showBox: false,
+      showPicker: true,
+      selectedDate: "",
+      date: new Date(2016, 9, 16),
+      selectedDate: null,
+      calendarVisible: false,
+    };
+  },
+  computed: {
+    firstDayOfAWeek: {
+      get() {
+        return this.$material.locale.firstDayOfAWeek;
+      },
+      set(val) {
+        this.$material.locale.firstDayOfAWeek = val;
+      },
+    },
+    dateFormat: {
+      get() {
+        return this.$material.locale.dateFormat;
+      },
+      set(val) {
+        this.$material.locale.dateFormat = val;
+      },
+    },
   },
   methods: {
     ...mapActions(["triggerDialog"]),
+    showCalendar() {
+      this.calendarVisible = true;
+    },
   },
 };
 </script>

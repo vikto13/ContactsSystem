@@ -4,6 +4,7 @@ import ContactDetails from "../views/ContactDetails.vue"
 import Login from "../views/Login.vue"
 import Companies from "../views/Companies.vue"
 import { initializeStore } from "../store/initializeStore"
+import NotFound from "../views/NotFound.vue"
 export const router = new VueRouter({
     routes: [
         {
@@ -13,9 +14,9 @@ export const router = new VueRouter({
         {
             path: '/companies/records',
             component: Companies,
-            meta: {
-                needsAuth: true
-            }
+            // meta: {
+            //     needsAuth: true
+            // }
         },
         {
             path: '/contact/:id',
@@ -26,6 +27,10 @@ export const router = new VueRouter({
             component: Login,
             props: true,
 
+        },
+        {
+            path: '*',
+            component: NotFound
         }
     ]
 })

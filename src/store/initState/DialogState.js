@@ -1,3 +1,4 @@
 export const DialogState = {
-    show: false
+    show: false,
+    screen: ''
 }

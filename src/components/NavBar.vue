@@ -46,7 +46,9 @@
             >arrow_drop_down</md-icon
           ></md-menu-item
         >
-        <md-menu-item>Atsijungti</md-menu-item>
+        <md-menu-item @click="$router.push('/users/auth-with-password')"
+          >Atsijungti</md-menu-item
+        >
       </md-menu-content>
     </md-menu>
   </ul>

@@ -10,7 +10,7 @@
           class="form-control"
           :class="{ 'is-invalid': isInvalid(email) }"
           placeholder="Įveskite el pašto adresą..."
-          style=" background-color: #f1f2f4; border-left-width: 0;"
+          style="background-color: #f1f2f4; border-left-width: 0"
         />
       </input-box-icon>
       <span v-show="showEmailMessage" style="color: red">
@@ -26,7 +26,7 @@
           :class="{ 'is-invalid': isInvalid(password) }"
           class="form-control"
           placeholder="Įveskite slaptažodį..."
-          style=" background-color: #f1f2f4; border-left-width: 0;"
+          style="background-color: #f1f2f4; border-left-width: 0"
         />
       </input-box-icon>
       <span v-show="showPasswordMessage" style="color: red">
@@ -56,9 +56,10 @@ export default {
             email: this.email,
             password: this.password,
           });
+          this.$router.push("/users/records");
           return;
-        } catch {
-          console.log("try again");
+        } catch (err) {
+          console.log(err);
         }
       }
       this.submit = true;
