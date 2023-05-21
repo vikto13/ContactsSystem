@@ -22,11 +22,13 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import AddContacts from "./AddContacts.vue";
 import AddCompany from "./AddCompany.vue";
+import AddAdmin from "./AddAdmin.vue";
 
 export default {
   components: {
     AddContacts,
     AddCompany,
+    AddAdmin
   },
   computed: {
     ...mapGetters(["dialog"]),

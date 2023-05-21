@@ -1,27 +1,39 @@
 <template>
-  <!-- <md-dialog-confirm
+  <md-dialog-confirm
     :md-active.sync="message.active"
-    md-title="Ar tikrai norite ištrinti įmonę?"
-    md-content="Įmonės pavadinimas: įmonės_pavadinimas"
+    :md-title="message.title"
+    :md-content="message.content"
     md-confirm-text="Taip"
     md-cancel-text="Ne"
     @md-cancel="onCancel"
     @md-confirm="onConfirm"
-  /> -->
+  />
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["message"]),
+    ...mapGetters(["message","company"]),
   },
   methods: {
-    onConfirm() {
-      this.message.value = 1;
+    ...mapActions(['deleteCompany','fetchCompanies']),
+   async onConfirm() {
+      if (this.company.id) {
+           await this.deleteCompany()
+     await this.fetchCompanies();
+      }
+
     },
     onCancel() {
-      this.message.value = 0;
+ 
+    
     },
   },
 };
 </script>
+
+<style scoped>
+.md-button {
+    color: white !important;
+}
+</style>

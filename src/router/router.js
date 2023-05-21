@@ -5,8 +5,14 @@ import Login from "../views/Login.vue"
 import Companies from "../views/Companies.vue"
 import { initializeStore } from "../store/initializeStore"
 import NotFound from "../views/NotFound.vue"
+import Admins from "../views/Admins.vue"
 export const router = new VueRouter({
     routes: [
+        {
+            path: '/admins/records',
+            component: Admins
+
+        },
         {
             path: '/users/records',
             component: Contacts

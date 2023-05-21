@@ -9,8 +9,7 @@ export default {
         },
         setId(state, id) {
             state.company.id = id
-            // state.company.name = state.companies.filter((value) => id == value.id).name
-            console.log(state.companies)
+            state.company.name = id ? state.companies.find((value) => id == value.id).name : ''
         },
         setCompanies(state, list) {
             state.companies = list
@@ -18,8 +17,10 @@ export default {
     },
     actions: {
         addCompanyName({ commit }, name) {
-            console.log(name)
             commit("setName", name)
+        },
+        putCompany({ commit }, id) {
+            commit("setId", id)
         },
         async saveCompany({ state }) {
             await pocketBase.collection("companies").create({ name: state.company.name })
@@ -27,7 +28,17 @@ export default {
         async fetchCompanies({ commit }) {
             let allCompanies = await pocketBase.collection("companies").getFullList({ sort: '-created', });
             commit('setCompanies', allCompanies)
-
+        },
+        async editCompany({ state }) {
+            await pocketBase
+                .collection("companies")
+                .update(state.company.id, { name: state.company.name });
+        },
+        async deleteCompany({ commit, state }) {
+            await pocketBase
+                .collection("companies")
+                .delete(state.company.id)
+            commit("setId", null)
         }
     },
     getters: {

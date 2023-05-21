@@ -1,4 +1,6 @@
 export const MessageState = {
-    active: true,
+    active: false,
     value: null,
+    title: "",
+    content: ""
 }

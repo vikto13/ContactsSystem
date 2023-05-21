@@ -30,6 +30,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DivideComponents from "./DivideComponents.vue";
+import { pocketBase } from "../../services/pocketBase";
 export default {
   components: {
     DivideComponents,
@@ -45,20 +46,24 @@ export default {
       return this.company.id != null ? "Redaguoti" : "Pridėti";
     },
   },
-  created() {
-    console.log(this.company);
-  },
   methods: {
-    ...mapActions(["saveCompany", "fetchCompanies", "dismissDialog"]),
+    ...mapActions([
+      "saveCompany",
+      "fetchCompanies",
+      "dismissDialog",
+      "editCompany",
+    ]),
     async save() {
-      await pb
-        .collection("companies")
-        .update(this.company.is, this.company.name);
+      try {
+        this.company.id
+         ?await this.editCompany()
+         :await this.saveCompany()
 
-      // this.saveCompany();
-      // this.company.name = "";
-      // this.dismissDialog();
-      // this.fetchCompanies();
+        await this.fetchCompanies();
+        this.dismissDialog();
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };

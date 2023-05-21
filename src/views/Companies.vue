@@ -5,22 +5,13 @@
     <div class="container mt-2">
       <h1>Įmonės</h1>
 
-      <div class="mb-3" style="display: flex; align-items: center">
-        <md-button
-          md-menu-trigger
-          class="md-icon-button md-raised"
-          style="background-color: #0054a6ff !important"
-          @click="edit(null)"
-        >
-          <md-icon style="color: #ffff">add</md-icon>
-        </md-button>
-        Pridėti naują įmonę
-      </div>
+      <field-to-create :text="'Pridėti naują įmonę'" @pressed="edit(null)">
+      </field-to-create>
 
       <p>Iš viso rasta: {{ companyList.length }} įmonių</p>
       <divide-components
-        v-for="(company, index) in companyList"
-        :key="index"
+        v-for="company in companyList"
+        :key="company.id"
         :size-xl="40"
         :size-l="50"
         :size-s="90"
@@ -35,7 +26,7 @@
             justify-content: flex-end;
           "
         >
-          <div style="flex: 1">
+          <div style="overflow: hidden; text-overflow: ellipsis; flex: 1">
             {{ company.name }}
           </div>
           <div>
@@ -43,7 +34,7 @@
               md-with-hover
               class="md-icon-button md-raised"
               style="background-color: #1f3f77 !important"
-              @click="() => edit(5)"
+              @click="() => edit(company.id)"
             >
               <md-icon style="color: white">edit</md-icon>
             </md-button>
@@ -51,6 +42,7 @@
             <md-button
               class="md-icon-button md-raised ml-3"
               style="background-color: #a61a11 !important"
+              @click="() => deleteIt(company.id)"
             >
               <md-icon style="color: white">delete</md-icon>
             </md-button>
@@ -65,6 +57,7 @@
 import { mapActions, mapGetters } from "vuex";
 import Card from "../components/Card.vue";
 import DivideComponents from "../components/DivideComponents.vue";
+import FieldToCreate from "../components/FieldToCreate.vue";
 import Message from "../components/Message.vue";
 
 export default {
@@ -72,19 +65,34 @@ export default {
     Card,
     DivideComponents,
     Message,
+    FieldToCreate,
   },
   computed: {
-    ...mapGetters(["user", "companyList"]),
+    ...mapGetters(["user", "companyList", "company"]),
   },
   async created() {
     await this.fetchCompanies();
-    console.log(this.companyList.length);
   },
   methods: {
-    ...mapActions(["triggerDialog", "addCompanyName", "fetchCompanies"]),
+    ...mapActions([
+      "triggerDialog",
+      "addCompanyName",
+      "fetchCompanies",
+      "deleteCompany",
+      "triggerMessage",
+      "putCompany",
+    ]),
     edit(id) {
-      this.$store.commit("setId", id);
+      this.putCompany(id);
       this.triggerDialog("add-company");
+    },
+    async deleteIt(id) {
+      await this.putCompany(id);
+      console.log(this.company);
+      this.triggerMessage({
+        title: "Ar tikrai norite ištrinti įmonę?",
+        content: `Įmonės pavadinimas: ${this.company.name}`,
+      });
     },
   },
 };

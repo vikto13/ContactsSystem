@@ -2,13 +2,15 @@ import { MessageState } from "../initState/MessageState"
 export default {
     state: MessageState,
     mutations: {
-        setToShow(state, show) {
+        setToShowMessage(state, { show, info }) {
             state.active = show
+            state.title = info.title
+            state.content = info.content
         }
     },
     actions: {
-        triggerMessage({ commit }) {
-            commit("setToShow", true)
+        triggerMessage({ commit }, info) {
+            commit("setToShowMessage", { show: true, info })
         },
     },
     getters: {

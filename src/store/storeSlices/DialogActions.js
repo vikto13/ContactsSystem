@@ -3,7 +3,7 @@ import { DialogState } from "../initState/DialogState";
 export default {
     state: DialogState,
     mutations: {
-        setToShow(state, show) {
+        setToShowDialog(state, show) {
             state.screen = show
             state.show = true
         },
@@ -13,7 +13,7 @@ export default {
     },
     actions: {
         triggerDialog({ commit }, show) {
-            commit("setToShow", show)
+            commit("setToShowDialog", show)
         },
         dismissDialog({ commit }) {
             commit("disableDialog")

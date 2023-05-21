@@ -62,7 +62,7 @@ export default {
         { title: "Įmonės", path: "/companies/records" },
         { title: "Struktūra", path: "/companies_offices/records" },
         { title: "Būstinės", path: "/offices/records" },
-        { title: "Paskyros", path: "/groups/records" },
+        { title: "Paskyros", path: "/admins/records" },
       ],
     };
   },
