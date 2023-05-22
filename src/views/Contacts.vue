@@ -14,27 +14,43 @@
             />
           </input-box-icon>
         </div>
-        <div class="col-6 col-md-4 align-self-center" style="padding: 0">
-          <md-button
-            v-for="(button, index) in buttons"
-            :key="index"
-            class="md-icon-button md-raised ml-3"
-            @click=""
-            style="background-color: #0054a6 !important"
-          >
-            <md-icon style="color: #ffffff">{{ button }}</md-icon>
-          </md-button>
+        <div class="col-4 col-md-1 align-self-center" style="display: flex; ">
+  <div class="d-flex flex-wrap">
+    <md-button
+      v-for="(button, index) in buttons"
+      :key="index"
+      class="md-icon-button md-raised ml-3"
+      @click=""
+      style="background-color: #0054a6 !important;"
+    >
+      <md-icon style="color: #ffffff">{{ button }}</md-icon>
+    </md-button>
+  </div>
 
-          <!-- like here -->
-
-          <md-button
-            class="md-icon-button md-raised ml-3"
-            style="background-color: #0054a6 !important"
-            @click="() => triggerDialog('add-contacts')"
-          >
-            <md-icon style="color: #ffffff">add</md-icon>
-          </md-button>
-        </div>
+  <div class="d-flex flex-wrap">
+    <VueDatePicker v-model="date">
+      <template #activator>
+        <md-button
+          class="md-icon-button md-raised ml-3"
+          style="background-color: #0054a6 !important; "
+          ref="activator"
+          type="button"
+        >
+          <md-icon style="color: #ffffff">calendar_month</md-icon>
+        </md-button>
+      </template>
+    </VueDatePicker>
+  </div>
+  <div class="d-flex flex-wrap">
+    <md-button 
+      class="md-icon-button md-raised ml-3"
+      style="background-color: #0054a6 !important; "
+      @click="() => triggerDialog('add-contacts')"
+    >
+      <md-icon style="color: #ffffff">add</md-icon>
+    </md-button>
+    </div>
+</div>
       </div>
       <p>Iš viso rasta : 152 kontaktai</p>
       <filter-sections></filter-sections>
@@ -60,7 +76,8 @@ export default {
   },
   data() {
     return {
-      buttons: ["filter_alt", "calendar_month"],
+      date: new Date(),
+      buttons: ["filter_alt"],
       showBox: false,
       showPicker: true,
       selectedDate: "",

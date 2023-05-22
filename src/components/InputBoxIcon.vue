@@ -1,5 +1,5 @@
 <template>
-  <div class="forms-inputs mt-2">
+  <div class="forms-inputs">
     <label v-if="title" class="form-label">{{ title }}</label>
     <div class="input-group" style="width: 100%">
       <span
