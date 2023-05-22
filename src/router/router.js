@@ -6,6 +6,9 @@ import Companies from "../views/Companies.vue"
 import { initializeStore } from "../store/initializeStore"
 import NotFound from "../views/NotFound.vue"
 import Admins from "../views/Admins.vue"
+import Relationship from "../views/Relationship.vue"
+import Offices from "../views/Offices.vue"
+
 export const router = new VueRouter({
     routes: [
         {
@@ -33,6 +36,14 @@ export const router = new VueRouter({
             component: Login,
             props: true,
 
+        },
+        {
+            path: '/relationship/record',
+            component: Relationship,
+        },
+        {
+            path: '/offices/records',
+            component: Offices
         },
         {
             path: '*',

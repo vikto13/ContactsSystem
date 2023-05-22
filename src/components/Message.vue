@@ -13,27 +13,20 @@
 import { mapActions, mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["message","company"]),
+    ...mapGetters(["message", "company", "admin"]),
   },
   methods: {
-    ...mapActions(['deleteCompany','fetchCompanies']),
-   async onConfirm() {
-      if (this.company.id) {
-           await this.deleteCompany()
-     await this.fetchCompanies();
-      }
-
+    ...mapActions(["deleteCompany", "fetchCompanies"]),
+    async onConfirm() {
+      await this.message.action();
     },
-    onCancel() {
- 
-    
-    },
+    onCancel() {},
   },
 };
 </script>
 
 <style scoped>
 .md-button {
-    color: white !important;
+  color: white !important;
 }
 </style>

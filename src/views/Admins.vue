@@ -1,120 +1,116 @@
 <template>
   <div>
     <slot></slot>
-    <div class="container">
-      <h5>Sukurti admin paskyrą</h5>
-      <field-to-create :text="'Sukurti naują admin paskyrą'" @pressed="triggerDialog('add-admin')">
+    <div class="m-5">
+      <h1 style="font-weight: normal">Sukurti admin paskyrą</h1>
+      <field-to-create
+        :text="'Sukurti naują admin paskyrą'"
+        @pressed="triggerDialog('add-admin')"
+      >
       </field-to-create>
-      <div>
-        <md-table
-          v-model="users"
-          md-sort="name"
-          md-sort-order="asc"
-          md-card
-          md-fixed-header
-          style="background-color: #f1f2f4"
-        >
-          <md-table-row slot="md-table-row" slot-scope="{ item }">
-            <md-table-cell md-label="Name" md-sort-by="name">{{
-              item.name
-            }}</md-table-cell>
-            <md-table-cell md-label="Email" md-sort-by="email">{{
-              item.email
-            }}</md-table-cell>
 
-            <md-table-cell md-label="Veiksmas">
-              <md-button
-                class="md-dense md-raised md-primary"
-                style="
-                  background-color: #0054a6 !important;
-                  border-radius: 5rem;
-                  width: 15rem;
-                "
-                >Keisti leidimus</md-button
-              >
-              <md-button
-                class="md-dense md-raised md-primary"
-                style="
-                  background-color: #0054a6 !important;
-                  border-radius: 5rem;
-                  width: 15rem;
-                "
-                >Redaguoti</md-button
-              >
-              <md-button
-                class="md-dense md-raised md-primary"
-                style="
-                  background-color: #a61a11 !important;
-                  border-radius: 5rem;
-                "
-                >Ištrinti</md-button
-              >
-            </md-table-cell>
-          </md-table-row>
-        </md-table>
-      </div>
+      <md-table
+        v-if="admins.length"
+        v-model="admins"
+        md-sort="name"
+        md-sort-order="asc"
+        md-card
+        md-fixed-header
+        class="mt-5"
+        style="background-color: #f1f2f4"
+      >
+        <md-table-row slot="md-table-row" slot-scope="{ item }">
+          <md-table-cell md-label="Name" md-sort-by="name">{{
+            item.name
+          }}</md-table-cell>
+          <md-table-cell md-label="Email" md-sort-by="email">{{
+            item.email
+          }}</md-table-cell>
+
+          <md-table-cell md-label="Veiksmas">
+            <md-button
+              class="md-dense md-raised md-primary"
+              style="
+                background-color: #0054a6 !important;
+                border-radius: 5rem;
+                width: 15rem;
+                margin-left: 0;
+              "
+              @click="() => change(item.id, 0)"
+              >Keisti leidimus</md-button
+            >
+            <md-button
+              class="md-dense md-raised md-primary"
+              style="
+                background-color: #0054a6 !important;
+                border-radius: 5rem;
+                width: 15rem;
+              "
+              @click="() => change(item.id, 1)"
+              >Redaguoti</md-button
+            >
+            <md-button
+              class="md-dense md-raised md-primary"
+              style="background-color: #a61a11 !important; border-radius: 5rem"
+              @click="() => deleting(item.id)"
+              >Ištrinti</md-button
+            >
+          </md-table-cell>
+        </md-table-row>
+      </md-table>
+      <h5 v-else style="text-align: center">Nėra sukurtų admino paskyrų</h5>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 import FieldToCreate from "../components/FieldToCreate.vue";
 export default {
   components: {
     FieldToCreate,
-    },
-    methods: {
-       ...mapActions(['triggerDialog'])
   },
-  data() {
-    return {
-      users: [
-        {
-          id: 1,
-          name: "Shawna Dubbin",
-          email: "sdubbin0@geocities.com",
-          gender: "Male",
-          title: "Assistant Media Planner",
+  async mounted() {
+    await this.fetchAdmins();
+  },
+  computed: {
+    ...mapGetters(["admin"]),
+    admins: {
+      get() {
+        return this.$store.getters.admins;
+      },
+      set() {},
+    },
+  },
+  methods: {
+    ...mapActions([
+      "triggerDialog",
+      "fetchAdmins",
+      "setAdmin",
+      "setWhatDo",
+      "triggerMessage",
+      "deleteAdmin",
+      "clearAdminData",
+    ]),
+    async deleting(id) {
+      this.setAdmin(id);
+      this.triggerMessage({
+        title: "Ar tikrai norite ištrinti adminą?",
+        content: `Admino vardas: ${this.admin.name}`,
+        action: async () => {
+          await this.deleteAdmin();
+          await this.fetchAdmins();
         },
-        {
-          id: 2,
-          name: "Odette Demageard",
-          email: "odemageard1@spotify.com",
-          gender: "Female",
-          title: "Account Coordinator",
-        },
-        {
-          id: 3,
-          name: "Vera Taleworth",
-          email: "vtaleworth2@google.ca",
-          gender: "Male",
-          title: "Community Outreach Specialist",
-        },
-        {
-          id: 4,
-          name: "Lonnie Izkovitz",
-          email: "lizkovitz3@youtu.be",
-          gender: "Female",
-          title: "Operator",
-        },
-        {
-          id: 5,
-          name: "Thatcher Stave",
-          email: "tstave4@reference.com",
-          gender: "Male",
-          title: "Software Test Engineer III",
-        },
-        {
-          id: 6,
-          name: "Karim Chipping",
-          email: "kchipping5@scribd.com",
-          gender: "Female",
-          title: "Safety Technician II",
-        },
-      ],
-    };
+        // beforeDestroy: () => {
+        //   this.clearAdminData();
+        // },
+      });
+    },
+    change(id, action) {
+      this.setAdmin(id);
+      this.setWhatDo(action);
+      this.triggerDialog("add-admin");
+    },
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

@@ -6,6 +6,8 @@ export default {
             state.active = show
             state.title = info.title
             state.content = info.content
+            state.action = info.action
+            // state.destroy = info.beforeDestroy
         }
     },
     actions: {

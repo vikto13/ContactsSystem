@@ -25,28 +25,18 @@
       />
     </label>
 
-    <p>{{ images }}</p>
+    <p>{{ image.name }}</p>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
-  data() {
-    return {
-      previewImage: null,
-      images: null,
-    };
+  computed: {
+    ...mapGetters(["image"]),
   },
   methods: {
-    uploadImage(e) {
-      const [image] = e.target.files;
-      this.images = image.name;
-      const reader = new FileReader();
-      reader.readAsDataURL(image);
-      reader.onload = (e) => {
-        this.previewImage = e.target.result;
-        // console.log(this.previewImage);
-      };
-    },
+    ...mapActions(["uploadImage"]),
   },
 };
 </script>

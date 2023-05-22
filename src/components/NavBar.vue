@@ -60,7 +60,7 @@ export default {
       tabItems: [
         { title: "Kontaktai", path: "/users/records" },
         { title: "Įmonės", path: "/companies/records" },
-        { title: "Struktūra", path: "/companies_offices/records" },
+        { title: "Struktūra", path: "/relationship/record" },
         { title: "Būstinės", path: "/offices/records" },
         { title: "Paskyros", path: "/admins/records" },
       ],

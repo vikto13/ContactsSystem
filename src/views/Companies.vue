@@ -1,7 +1,6 @@
 <template>
   <div>
     <slot></slot>
-    <message></message>
     <div class="container mt-2">
       <h1>Įmonės</h1>
 
@@ -58,13 +57,11 @@ import { mapActions, mapGetters } from "vuex";
 import Card from "../components/Card.vue";
 import DivideComponents from "../components/DivideComponents.vue";
 import FieldToCreate from "../components/FieldToCreate.vue";
-import Message from "../components/Message.vue";
 
 export default {
   components: {
     Card,
     DivideComponents,
-    Message,
     FieldToCreate,
   },
   computed: {
@@ -88,10 +85,14 @@ export default {
     },
     async deleteIt(id) {
       await this.putCompany(id);
-      console.log(this.company);
       this.triggerMessage({
         title: "Ar tikrai norite ištrinti įmonę?",
         content: `Įmonės pavadinimas: ${this.company.name}`,
+        action: async () => {
+          await this.deleteCompany();
+          await this.fetchCompanies();
+        },
+        // beforeDestroy: () => {},
       });
     },
   },
