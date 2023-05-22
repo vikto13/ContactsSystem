@@ -5,3 +5,23 @@
   .md-dialog .md-dialog-container {
     max-width: 768px;
   }
+  .cr{
+    color: red
+  }
+  .input-w{
+    padding-left: 2.5rem;
+     background-color: #f1f2f4"
+  }
+  .bg-w{
+    background-color: #ffffff !important
+  }
+  .cb{
+    color: #0054a6"
+  }
+  .dialog-box{
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    right: 2rem;
+    top: 1rem;
+  }

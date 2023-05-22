@@ -56,7 +56,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 import InputBoxIcon from "./InputBoxIcon.vue";
 export default {

@@ -1,13 +1,5 @@
 <template>
-  <ul
-    class="nav nav-fill"
-    style="
-      background-color: #1f3f77;
-      flex: 1;
-      align-items: center;
-      padding: 1% 3% 1% 3%;
-    "
-  >
+  <ul class="nav nav-fill dialog-box">
     <router-link :to="'/users/records'">
       <img
         id="logo-icon"
@@ -31,12 +23,8 @@
       >
     </li>
     <md-menu md-size="medium" md-align-trigger>
-      <md-button
-        md-menu-trigger
-        class="md-icon-button md-raised"
-        style="background-color: #ffffff !important"
-      >
-        <md-icon style="color: #0054a6">person</md-icon>
+      <md-button md-menu-trigger class="md-icon-button md-raised bg-w">
+        <md-icon class="cb">person</md-icon>
       </md-button>
 
       <md-menu-content>

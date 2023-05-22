@@ -7,13 +7,12 @@
         <input
           v-model="email"
           type="text"
-          class="form-control"
+          class="form-control input-w"
           :class="{ 'is-invalid': isInvalid(email) }"
           placeholder="Įveskite el pašto adresą..."
-          style="padding-left: 2.5rem; background-color: #f1f2f4"
         />
       </input-box-icon>
-      <span v-show="showEmailMessage" style="color: red">
+      <span v-show="showEmailMessage" class="cr">
         {{ emailMessage }}
       </span>
     </div>

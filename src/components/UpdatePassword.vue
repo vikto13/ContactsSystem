@@ -7,13 +7,12 @@
         <input
           v-model="password"
           type="password"
-          class="form-control"
+          class="form-control input-w"
           :class="{ 'is-invalid': isInvalid(password) }"
           placeholder="Įveskite naują slaptažodį..."
-          style="padding-left: 2.5rem; background-color: #f1f2f4"
         />
       </input-box-icon>
-      <span v-show="showPasswordMessage" style="color: red">
+      <span v-show="showPasswordMessage" class="cr">
         {{ passwordMessage }}
       </span>
     </div>
@@ -23,13 +22,12 @@
         <input
           v-model="secPassword"
           type="password"
-          class="form-control"
+          class="form-control input-w"
           :class="{ 'is-invalid': isInvalid(secPassword) }"
           placeholder="Pakartoti naują slaptažodį..."
-          style="padding-left: 2.5rem; background-color: #f1f2f4"
         />
       </input-box-icon>
-      <span v-show="comparePasswords" style="color: red">
+      <span v-show="comparePasswords" class="cr">
         {{ comparePasswords }}
       </span>
     </div>
