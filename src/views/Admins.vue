@@ -100,9 +100,6 @@ export default {
           await this.deleteAdmin();
           await this.fetchAdmins();
         },
-        // beforeDestroy: () => {
-        //   this.clearAdminData();
-        // },
       });
     },
     change(id, action) {

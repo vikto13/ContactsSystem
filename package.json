@@ -12,6 +12,7 @@
   "dependencies": {
     "@mathieustan/vue-datepicker": "^0.2.11",
     "@vitejs/plugin-vue2": "^2.2.0",
+    "axios": "^1.4.0",
     "env": "^0.0.2",
     "jsdom": "^21.1.0",
     "pocketbase": "^0.14.4",

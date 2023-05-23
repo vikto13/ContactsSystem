@@ -16,7 +16,6 @@ export default {
     ...mapGetters(["message", "company", "admin"]),
   },
   methods: {
-    ...mapActions(["deleteCompany", "fetchCompanies"]),
     async onConfirm() {
       await this.message.action();
     },

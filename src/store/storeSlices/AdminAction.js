@@ -28,7 +28,7 @@ export default {
     },
     actions: {
         async fetchRoles({ commit }) {
-            const data = await pocketBase.collection('admin_roles').getFullList()
+            const data = await pocketBase.collection('admin_role').getFullList()
             commit("setRoles", data)
         },
         async fetchAdmins({ commit }) {

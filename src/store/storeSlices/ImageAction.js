@@ -1,4 +1,5 @@
 import { pocketBase } from "../../../services/pocketBase";
+import axios from 'axios';
 export default {
     state: {
         base64: null,
@@ -13,29 +14,22 @@ export default {
     actions: {
         uploadImage({ commit }, e) {
             const [image] = e.target.files;
-
             const reader = new FileReader();
-            const data = new FormData();
-            // // this.image.previewImage = image;
-
             reader.readAsDataURL(image);
             reader.onload = async (e) => {
 
+                try {
+                    await axios.post('http://127.0.0.1:8090/api/collections/admin/records',
+                        {
+                            name: "test",
+                            email: "test",
+                            avatar: image
+                        },
+                        { headers: { 'Content-Type': 'multipart/form-data', } });
 
-                // data.append('picture', e.target.result);
-                // const arrayBuffer = e.target.result;
-                const im = { ...image, imageUrl: e.target.result, fileName: image.name }
-                const blob = new Blob([im], { type: image.type });
-                console.log(blob)
-                // try {
-                await pocketBase.collection('admin').create({
-                    name: "test",
-                    email: "test", avatar: blob
-                })
-
-                // } catch (error) {
-                //     console.log(error)
-                // }
+                } catch (error) {
+                    console.log(error)
+                }
 
                 // commit({ base64: e.target.result, name: image.name })
 

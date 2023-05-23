@@ -14,18 +14,10 @@ export const router = new VueRouter({
         {
             path: '/admins/records',
             component: Admins
-
         },
         {
             path: '/users/records',
             component: Contacts
-        },
-        {
-            path: '/companies/records',
-            component: Companies,
-            // meta: {
-            //     needsAuth: true
-            // }
         },
         {
             path: '/contact/:id',
@@ -44,6 +36,22 @@ export const router = new VueRouter({
         {
             path: '/offices/records',
             component: Offices
+        },
+        {
+            path: '/:id/records',
+            component: Companies,
+            props: true,
+            beforeEnter: (to, from, next) => {
+                const { id } = to.params;
+                if (id == 'companies' || id == 'divisions' || id == "groups" || id == "departaments") {
+                    return next({ path: to })
+                }
+
+                return next({ path: "./" })
+            }
+            // meta: {
+            //     needsAuth: true
+            // }
         },
         {
             path: '*',

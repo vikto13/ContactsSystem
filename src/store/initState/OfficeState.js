@@ -1,3 +1,10 @@
 export const OfficeState = {
-    offices: []
+    offices: [],
+    office: {
+        name: '',
+        street: '',
+        country: '',
+        city: '',
+        street_number: null
+    }
 }

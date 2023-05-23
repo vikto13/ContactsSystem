@@ -1,13 +1,12 @@
 <template>
   <div class="m-3 mt-5" style="width: 30rem">
     <h5 class="pb-3">{{ showTitle }}</h5>
-    Įmonės pavadinimas
-
+    {{ companyDetails[routeId].whose }} pavadinimas:
     <input
       v-model="company.name"
       type="text"
       class="form-control"
-      :placeholder="'Įveskite įmonės pavadinimą...'"
+      :placeholder="`Įveskite ${companyDetails[routeId].whose} pavadinimą...`"
       style="background-color: #f1f2f4; width: 20rem"
     />
 
@@ -30,17 +29,21 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DivideComponents from "./DivideComponents.vue";
-import { pocketBase } from "../../services/pocketBase";
 export default {
   components: {
     DivideComponents,
   },
   computed: {
-    ...mapGetters(["company"]),
+    ...mapGetters(["company", "companyDetails"]),
+    routeId: {
+      get() {
+        return this.$route.params.id;
+      },
+    },
     showTitle() {
       return this.company.id != null
-        ? "Redaguoti įmonę: "
-        : "Pridėti naują įmonę: ";
+        ? `Redaguoti ${this.companyDetails[this.routeId].what}: `
+        : `Pridėti naują ${this.companyDetails[this.routeId].what}:`;
     },
     buttonTitle() {
       return this.company.id != null ? "Redaguoti" : "Pridėti";
@@ -56,10 +59,9 @@ export default {
     async save() {
       try {
         this.company.id
-         ?await this.editCompany()
-         :await this.saveCompany()
-
-        await this.fetchCompanies();
+          ? await this.editCompany(this.routeId)
+          : await this.saveCompany(this.routeId);
+        await this.fetchCompanies(this.routeId);
         this.dismissDialog();
       } catch (err) {
         console.log(err);
