@@ -11,7 +11,7 @@
     >
       <label class="form-label">{{ filter.title }}: </label>
       <select class="form-select elipses" aria-label="Default select example">
-        <option selected disabled>{{ filter.title }}</option>
+        <option selected disabled >{{ filter.title }}</option>
         <option
           v-for="(select, position) in filter.all"
           :key="position"

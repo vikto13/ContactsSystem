@@ -61,7 +61,7 @@ export default {
             //     formData.append('documents', file);
             // }
             // console.log({ ...state.admin, avatar: imageData })
-            await pocketBase.collection('admin').create({ ...state.admin, avatar: getters.image.base64 });
+            // await pocketBase.collection('admin').create({ ...state.admin, avatar: getters.image.base64 });
         },
         setAdmin({ commit, getters }, id) {
             commit("setAdmin", getters.admins.find((value) => value.id == id))

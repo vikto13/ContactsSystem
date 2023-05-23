@@ -3,7 +3,10 @@
     <divide-components :size-l="30" :size-m="30" :size-xl="20">
       <md-button
         class="md-dense md-raised md-primary text-uppercase"
-        style="width: 100%"
+        style="width: 100%; "
+        :style="{'opacity':currentPage?null:0}"
+        :disabled="!currentPage"
+        @click="currentPage=0"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,6 +29,9 @@
       <md-button
         class="md-dense md-raised md-primary text-uppercase"
         style="width: 100%"
+        @click="currentPage=1"
+        :style="{'opacity':!goNext?null:0}"
+        :disabled="goNext"
       >
         Kitas puslapis
         <svg
@@ -47,10 +53,26 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import DivideComponents from "./DivideComponents.vue";
 
 export default {
-  components: { DivideComponents },
+  components: {
+    DivideComponents
+  },
+  computed: {
+    ...mapGetters(['contacts','sizeOfPaginate']),
+    goNext() {
+      return this.contacts.length<=(this.currentPage*this.sizeOfPaginate+this.sizeOfPaginate)
+    },
+    currentPage: {
+      set(isNext) {
+        this.$store.commit(isNext?"nextPage":'previuosPage')
+      }, get() {
+      return this.$store.getters.currentPage
+    }
+   }
+  },
   data() {
     return {};
   },

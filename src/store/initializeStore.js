@@ -5,6 +5,8 @@ import Company from "./storeSlices/CompanyActions"
 import Admin from "./storeSlices/AdminAction"
 import Image from "./storeSlices/ImageAction"
 import Office from "./storeSlices/OfficeAction"
+import Contact from "./storeSlices/ContactActions"
+import Paginate from "./storeSlices/PaginateAction"
 
 export const initializeStore = {
     modules: {
@@ -14,6 +16,8 @@ export const initializeStore = {
         Company,
         Admin,
         Image,
-        Office
+        Office,
+        Contact,
+        Paginate
     }
 }

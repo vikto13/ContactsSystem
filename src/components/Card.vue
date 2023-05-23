@@ -19,32 +19,23 @@
           </md-avatar>
 
           <md-card-header-text>
-            <div class="md-title">VARDAS IR PAVARDE</div>
-            <div class="md-subhead">Pozicija: pozicija</div>
+            <div class="md-title">{{ title }}</div>
+            <div class="md-subhead">{{ subtitle }}</div>
           </md-card-header-text>
         </md-card-header>
 
         <md-card-content>
-          <p>Telefono nr:</p>
-          <p>El pastas:</p>
-          <p>Adresas:</p>
+          <p v-for="(content,index) in contents" :key="index" >{{ content }}</p>
         </md-card-content>
 
         <div class="mb-4">
           <md-button
+          v-for="(button,index) in buttons" :key="index"
             class="md-icon-button md-raised ml-3 mb-3"
-            @click=""
-            style="background-color: #0054a6 !important"
+            :class="`button-${button}`"
+            @click.stop=""
           >
-            <md-icon style="color: #ffffff">edit</md-icon>
-          </md-button>
-
-          <md-button
-            class="md-icon-button md-raised ml-2"
-            @click=""
-            style="background-color: #a61a11 !important"
-          >
-            <md-icon style="color: #ffffff">delete</md-icon>
+            <md-icon style="color: #ffffff">{{button}}</md-icon>
           </md-button>
         </div>
       </md-ripple>
@@ -52,11 +43,29 @@
   </a>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  methods: {
-    clicedCard() {
-      console.log("aaaaaaaaa");
+  props: {
+    title:{
+    type:String
     },
-  },
+    subtitle:{
+    type:String
+    },
+    contents:{
+    type:Array
+    },
+    buttons:{
+    type:Array
+  }
+}
 };
 </script>
+<style scoped>
+.button-delete{
+  background-color: #A61A11 !important;
+}
+.button-edit{
+  background-color: #1F3F77 !important;
+}
+</style>

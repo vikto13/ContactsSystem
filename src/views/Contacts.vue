@@ -14,45 +14,48 @@
             />
           </input-box-icon>
         </div>
-        <div class="col-4 col-md-1 align-self-center" style="display: flex; ">
-  <div class="d-flex flex-wrap">
-    <md-button
-      v-for="(button, index) in buttons"
-      :key="index"
-      class="md-icon-button md-raised ml-3"
-      @click=""
-      style="background-color: #0054a6 !important;"
-    >
-      <md-icon style="color: #ffffff">{{ button }}</md-icon>
-    </md-button>
-  </div>
+        <div class="col-4 col-md-1 align-self-center" style="display: flex">
+          <div class="d-flex flex-wrap">
+            <md-button
+              v-for="(button, index) in buttons"
+              :key="index"
+              class="md-icon-button md-raised ml-3"
+              @click=""
+              style="background-color: #0054a6 !important"
+            >
+              <md-icon style="color: #ffffff">{{ button }}</md-icon>
+            </md-button>
+          </div>
 
-  <div class="d-flex flex-wrap">
-    <VueDatePicker v-model="date">
-      <template #activator>
-        <md-button
-          class="md-icon-button md-raised ml-3"
-          style="background-color: #0054a6 !important; "
-          ref="activator"
-          type="button"
-        >
-          <md-icon style="color: #ffffff">calendar_month</md-icon>
-        </md-button>
-      </template>
-    </VueDatePicker>
-  </div>
-  <div class="d-flex flex-wrap">
-    <md-button 
-      class="md-icon-button md-raised ml-3"
-      style="background-color: #0054a6 !important; "
-      @click="() => triggerDialog('add-contacts')"
-    >
-      <md-icon style="color: #ffffff">add</md-icon>
-    </md-button>
-    </div>
-</div>
+          <div class="d-flex flex-wrap">
+            <VueDatePicker v-model="date">
+              <template #activator>
+                <md-button
+                  class="md-icon-button md-raised ml-3"
+                  style="background-color: #0054a6 !important"
+                  ref="activator"
+                  type="button"
+                >
+                  <md-icon style="color: #ffffff">calendar_month</md-icon>
+                </md-button>
+              </template>
+            </VueDatePicker>
+          </div>
+          <div class="d-flex flex-wrap">
+            <md-button
+              class="md-icon-button md-raised ml-3"
+              style="background-color: #0054a6 !important"
+              @click="() => triggerDialog('add-contacts')"
+            >
+              <md-icon style="color: #ffffff">add</md-icon>
+            </md-button>
+          </div>
+        </div>
       </div>
-      <p>Iš viso rasta : 152 kontaktai</p>
+      <p style="display: inline">
+        Iš viso rasta:
+        <span style="font-weight: bold">{{ contacts.length }}</span> kontaktai
+      </p>
       <filter-sections></filter-sections>
       <contact-cards></contact-cards>
       <pagination></pagination>
@@ -74,6 +77,13 @@ export default {
     ContactCards,
     Pagination,
   },
+  async mounted() {
+    try {
+      await this.fetchContacts();
+    } catch (err) {
+      console.log(err);
+    }
+  },
   data() {
     return {
       date: new Date(),
@@ -87,28 +97,14 @@ export default {
     };
   },
   computed: {
-    firstDayOfAWeek: {
-      get() {
-        return this.$material.locale.firstDayOfAWeek;
-      },
-      set(val) {
-        this.$material.locale.firstDayOfAWeek = val;
-      },
-    },
-    dateFormat: {
-      get() {
-        return this.$material.locale.dateFormat;
-      },
-      set(val) {
-        this.$material.locale.dateFormat = val;
-      },
-    },
+    ...mapGetters(["contacts"]),
   },
   methods: {
-    ...mapActions(["triggerDialog"]),
+    ...mapActions(["triggerDialog", "fetchContacts"]),
     showCalendar() {
       this.calendarVisible = true;
     },
   },
 };
 </script>
+

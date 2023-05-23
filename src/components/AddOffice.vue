@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout-item m-3">
     <h5 class="mt-5" style="width: 32rem; text-align: center">
-      {{ `${office ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
+      {{ `${office.id!=null ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
     </h5>
     <input-box-icon
       v-for="(input, index) in inputs"
@@ -30,7 +30,7 @@
       "
       @click="add"
     >
-      {{ office ? "Pakeisti" : "Pridėti" }}
+      {{ office.id!=null ? "Pakeisti" : "Pridėti" }}
     </md-button>
   </div>
 </template>

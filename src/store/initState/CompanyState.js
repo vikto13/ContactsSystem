@@ -36,7 +36,7 @@ export const CompanyState = {
         },
         departments: {
             id: "departments",
-            what: "departamentai",
+            what: "departamentą",
             whose: "departamentai",
             addText: "Pridėti naują departamentą",
             emptyText: "Nėra pridėta departamentų",
