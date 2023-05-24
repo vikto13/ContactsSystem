@@ -12,7 +12,8 @@ export const CompanyState = {
             emptyText: "Nėra pridėta kompanijų",
             path: "#/companies/records",
             title: 'Įmonė',
-            all: []
+            all: [],
+            selected: null
         },
         divisions: {
             id: "divisions",
@@ -22,7 +23,8 @@ export const CompanyState = {
             emptyText: "Nėra pridėta divizijų",
             path: "#/divisions/records",
             title: 'Divizija',
-            all: []
+            all: [],
+            selected: null
         },
         groups: {
             id: "groups",
@@ -32,7 +34,8 @@ export const CompanyState = {
             emptyText: "Nėra pridėta grupių",
             path: "#/groups/records",
             title: 'Grupė',
-            all: []
+            all: [],
+            selected: null
         },
         departments: {
             id: "departments",
@@ -42,7 +45,8 @@ export const CompanyState = {
             emptyText: "Nėra pridėta departamentų",
             path: "#/departments/records",
             title: 'Departamentai',
-            all: []
+            all: [],
+            selected: null
         },
     }
 

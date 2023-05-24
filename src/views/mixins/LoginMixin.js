@@ -3,28 +3,20 @@ export const LoginMixin = {
     components: {
         InputBoxIcon
     },
+    // beforeMount() {
+    //     this.submit = false
+    // },
     data() {
         return {
             submit: false,
             email: '',
             password: '',
-            secPassword: ''
+            secPassword: '',
+
+            name: ''
         }
     },
     computed: {
-        emailMessage() {
-            return !this.email
-                ? `Elektroninis paštas turi būti įvestas`
-                : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)
-                    ? `Elektroninis paštas turi būti validus`
-                    : null;
-        },
-        showEmailMessage() {
-            return (
-                this.submit &&
-                (!this.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email))
-            );
-        },
         passwordMessage() {
             return !this.password
                 ? `Slaptažodis turi būti įvestas`
@@ -34,6 +26,9 @@ export const LoginMixin = {
         },
         showPasswordMessage() {
             return this.submit && (!this.password || this.password.length < 8);
+        },
+        nameMessage() {
+            return !this.name ? 'Pavadinimas turi būti įvestas' : null
         },
         comparePasswords() {
             return this.submit
@@ -46,6 +41,19 @@ export const LoginMixin = {
     methods: {
         isInvalid(input) {
             return !input && this.submit;
+        },
+        emailMessage(email) {
+            return !email
+                ? `Elektroninis paštas turi būti įvestas`
+                : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+                    ? `Elektroninis paštas turi būti validus`
+                    : null;
+        },
+        showEmailMessage(email) {
+            return (
+                this.submit &&
+                (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+            );
         },
     }
 }

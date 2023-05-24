@@ -16,6 +16,7 @@ export default {
     ...mapGetters(["message", "company", "admin"]),
   },
   methods: {
+    ...mapActions(["clearContact"]),
     async onConfirm() {
       await this.message.action();
     },

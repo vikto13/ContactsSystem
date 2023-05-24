@@ -3,21 +3,33 @@
     <div class="md-layout">
       <div v-show="admin.whatDo != 0" class="md-layout-item m-2">
         <h3 class="mb-3 mt-3">{{ title[admin.whatDo] }}:</h3>
-        <input-box-icon :title="'Vardas:'">
+        <input-box-icon
+          :title="'Vardas:'"
+          :bottom-text="'Įveskite vardą'"
+          :is-not-valid="isInvalid(admin.name)"
+        >
           <input
             v-model="admin.name"
             type="text"
             class="form-control"
+            :class="{ 'is-invalid': isInvalid(admin.name) }"
             :placeholder="'Įveskite vardą...'"
             style="background-color: #f1f2f4"
           />
         </input-box-icon>
-        <input-box-icon :icon-name="'mail'" :title="'Elektroninis paštas:'">
+        <input-box-icon
+          :icon-name="'mail'"
+          :bottom-text="emailMessage(admin.email)"
+          :title="'Elektroninis paštas:'"
+          :is-not-valid="showEmailMessage(admin.email)"
+          class="mt-3"
+        >
           <input
             v-model="admin.email"
             type="text"
-            class="form-control"
             :placeholder="'Įveskite el.paštą...'"
+            class="form-control"
+            :class="{ 'is-invalid': showEmailMessage(admin.email) }"
             style="background-color: #f1f2f4"
             :style="{ 'border-left-width': 0 }"
           />
@@ -59,11 +71,13 @@
 import { mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 import InputBoxIcon from "./InputBoxIcon.vue";
+import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
   components: {
     InputBoxIcon,
     AddImage,
   },
+  mixins: [LoginMixin],
   computed: {
     ...mapGetters(["adminRoles", "admin", "admins"]),
   },
@@ -95,22 +109,25 @@ export default {
       "updateAdmin",
     ]),
     async save() {
-      if ((this.admin.whatDo == 1) & !this.admin.name && !this.admin.email) {
-        console.log("nooooooooooo");
+      if (!this.admin.name || !this.admin.email) {
+        this.submit = true;
         return;
       }
-
-      if (this.admin.whatDo != null) {
-        await this.updateAdmin();
-      } else {
-        await this.saveAdmin();
+      try {
+        if (this.admin.whatDo != null) {
+          await this.updateAdmin();
+        } else {
+          await this.saveAdmin();
+        }
+      } catch (err) {
+        console.log(err);
       }
 
       await this.fetchAdmins();
       this.dismissDialog();
     },
   },
-  destroyed() {
+  beforeDestroy() {
     this.clearAdminData();
   },
 };

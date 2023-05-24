@@ -21,7 +21,8 @@ export const router = new VueRouter({
         },
         {
             path: '/contact/:id',
-            component: ContactDetails
+            component: ContactDetails,
+            props: true
         },
         {
             path: '/users/:info',

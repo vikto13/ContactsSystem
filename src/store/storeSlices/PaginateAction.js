@@ -1,7 +1,7 @@
 export default {
     state: {
         currentPage: 0,
-        sizeOfPaginate: 6
+        sizeOfPaginate: 8
     },
     mutations: {
         nextPage(state) {

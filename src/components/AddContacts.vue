@@ -1,9 +1,8 @@
 <template>
   <div style="width: 42rem">
-    <div :class="true?'md-layout':null"  >
-      
-    <contact-fields v-show="true"></contact-fields>
-    <company-details-select></company-details-select>
+    <div :class="true ? 'md-layout' : null">
+      <contact-fields v-show="true"></contact-fields>
+      <company-details-select></company-details-select>
     </div>
     <md-button
       style="
@@ -15,25 +14,44 @@
         text-align: start;
         padding-left: 5%;
       "
-      @click="saveContact"
+      @click="save"
     >
-      PRIDĖTI
+      {{ contact.id ? "PAKEISTI" : "PRIDĖTI" }}
     </md-button>
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
-import AddImage from './AddImage.vue';
-import CompanyDetailsSelect from './CompanyDetailsSelect.vue';
-import ContactFields from './ContactFields.vue';
-import InputBoxIcon from "./InputBoxIcon.vue";
+import { mapActions, mapGetters } from "vuex";
+import CompanyDetailsSelect from "./CompanyDetailsSelect.vue";
+import ContactFields from "./ContactFields.vue";
 export default {
   components: {
     ContactFields,
-    CompanyDetailsSelect
+    CompanyDetailsSelect,
+  },
+  beforeDestroy() {
+    this.$store.commit("clearContact");
+  },
+  computed: {
+    ...mapGetters(["contact"]),
   },
   methods: {
-    ...mapActions(["saveContact"]),
+    ...mapActions([
+      "saveContact",
+      "fetchContacts",
+      "dismissDialog",
+      "clearContact",
+      "editContact",
+    ]),
+    async save() {
+      try {
+        this.contact.id ? await this.editContact() : await this.saveContact();
+        this.dismissDialog();
+        this.fetchContacts();
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

@@ -5,13 +5,18 @@
       <span
         v-if="iconName"
         class="input-group-text"
-        style="border-right-width: 0; background-color: #f1f2f4"
+        style="background-color: #f1f2f4"
+        :style="{ 'border-color': isNotValid ? '#dc3545' : null }"
       >
         <md-icon style="color: #414042">{{ iconName }}</md-icon>
       </span>
       <slot></slot>
     </div>
-    <div v-if="bottomText" class="form-text">
+    <div
+      v-if="bottomText"
+      :class="{ 'invalid-feedback': !isNotValid }"
+      style="color: #dc3545"
+    >
       {{ bottomText }}
     </div>
   </div>
@@ -30,6 +35,10 @@ export default {
     bottomText: {
       type: String,
       default: null,
+    },
+    isNotValid: {
+      type: Boolean,
+      default: false,
     },
   },
 };

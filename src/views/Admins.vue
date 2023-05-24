@@ -92,7 +92,7 @@ export default {
       "clearAdminData",
     ]),
     async deleting(id) {
-      this.setAdmin(id);
+      await this.setAdmin(id);
       this.triggerMessage({
         title: "Ar tikrai norite ištrinti adminą?",
         content: `Admino vardas: ${this.admin.name}`,
@@ -102,8 +102,8 @@ export default {
         },
       });
     },
-    change(id, action) {
-      this.setAdmin(id);
+    async change(id, action) {
+      await this.setAdmin(id);
       this.setWhatDo(action);
       this.triggerDialog("add-admin");
     },

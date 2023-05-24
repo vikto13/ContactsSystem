@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pt-5">
     <h1 style="font-weight: normal">Detalesnė kontakto informacija:</h1>
     <md-card>
       <md-card-header>
@@ -19,33 +19,36 @@
         </md-avatar>
 
         <md-card-header-text>
-          <div class="md-title">Vardas ir Pavardė</div>
-          <div class="md-subhead">Pozicija: pozicija</div>
+          <div class="md-title">{{ `${contact.name} ${contact.surname}` }}</div>
+          <div class="md-subhead">{{ `Pozicija: ${contact.position}` }}</div>
         </md-card-header-text>
-
-        <md-menu md-size="big" md-direction="bottom-end">
-          <md-menu-content>
-            <md-menu-item @click="">
-              <span>Call</span>
-              <md-icon>phone</md-icon>
-            </md-menu-item>
-
-            <md-menu-item @click="">
-              <span>Send a message</span>
-              <md-icon>message</md-icon>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
       </md-card-header>
 
       <md-card-content>
-        <p>Telefono nr:</p>
-        <p>El pastas:</p>
-        <p>Adresas:</p>
+        <p>{{ `Telefono nr: ${contact.phone_number}` }}</p>
+        <p>{{ `El paštas:: ${contact.email}` }}</p>
+        <p>{{ `Adresas: ${contact.street}` }}</p>
       </md-card-content>
     </md-card>
   </div>
 </template>
 <script>
-export default {};
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+  props: {
+    id: {
+      type: String,
+    },
+  },
+  computed: {
+    ...mapGetters(["contact"]),
+  },
+  async mounted() {
+    await this.findContact(this.id);
+  },
+  methods: {
+    ...mapActions(["findContact"]),
+  },
+};
 </script>

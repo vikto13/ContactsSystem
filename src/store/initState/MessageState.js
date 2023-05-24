@@ -4,5 +4,4 @@ export const MessageState = {
     title: "",
     content: "",
     action: null,
-    // destroy: null
 }

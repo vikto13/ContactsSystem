@@ -1,15 +1,18 @@
 export const ContactState = {
     contacts: [],
     contact: {
-        name: '',
-        surname: '',
-        position: '',
-        email: '',
-        phone_number: '',
-        company: null,
-        division: null,
-        department: null,
-        group: null,
+        id: null,
+        name: "",
+        surname: "",
+        position: "",
+        email: "",
+        phone_number: "",
+
+        companies: null,
+        divisions: null,
+        departments: null,
+        groups: null,
+
         image: null
     },
 }
