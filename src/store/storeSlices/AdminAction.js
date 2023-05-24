@@ -1,6 +1,6 @@
 import { pocketBase } from "../../../services/pocketBase";
 import { AdminState } from "../initState/AdminState";
-
+import axios from 'axios';
 export default {
     state: AdminState,
     mutations: {
@@ -38,13 +38,51 @@ export default {
         async deleteAdmin({ commit, state }) {
             await pocketBase.collection('admin').delete(state.admin.id)
         },
-        async updateAdmin({ commit, state }) {
-            await pocketBase.collection('admin').update(state.admin.id, state.admin)
+        async updateAdmin({ getters, state }) {
+            await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/admin/records/${state.admin.id}`,
+                {
+                    ...state.admin,
+                    avatar: getters.image.file
+                },
+                { headers: { 'Content-Type': 'multipart/form-data' } }
+            )
         },
         clearAdminData({ commit }) {
             commit("clearAdmin")
         },
         async saveAdmin({ state, getters }) {
+            await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/admin/records`,
+                {
+                    ...state.admin,
+                    avatar: getters.image.file
+                },
+                { headers: { 'Content-Type': 'multipart/form-data' } }
+            )
+            // const reader = new FileReader();
+            // reader.readAsDataURL(image);
+            // reader.onload = async (e) => {
+
+            // await axios.post('http://127.0.0.1:8090/api/collections/admin/records',
+            //     {
+            //         name: "test",
+            //         email: "test",
+            //         avatar: image
+            //     },
+            //     { headers: { 'Content-Type': 'multipart/form-data', } });
+
+            // commit({ base64: e.target.result, name: image.name })
+
+            //     };
+            // },
+            // async fetchRoles({ commit }) {
+            //     const data = await pocketBase.collection('admin_roles').getFullList()
+            //     commit("setRoles", data)
+            // },
+            // async saveAdmin({ commit, state }, image) {
+            //     await pocketBase.collection('admin').create({ ...state.admin, avatar: image });
+            // }
+
+
             // const reader = new FileReader();
             // const blob = new Blob([getters.image.previewImage]);
             // await reader.readAsBinaryString(blob)
@@ -63,8 +101,12 @@ export default {
             // console.log({ ...state.admin, avatar: imageData })
             // await pocketBase.collection('admin').create({ ...state.admin, avatar: getters.image.base64 });
         },
-        setAdmin({ commit, getters }, id) {
-            commit("setAdmin", getters.admins.find((value) => value.id == id))
+        async setAdmin({ commit, getters }, id) {
+
+            const data = await pocketBase
+                .collection("admin")
+                .getFirstListItem(`id="${id}"`);
+            commit("setAdmin", data)
         },
         setWhatDo({ commit }, what) {
             commit("setAdminAction", what)

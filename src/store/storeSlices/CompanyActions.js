@@ -13,6 +13,9 @@ export default {
         },
         setCompanies(state, { list, entity }) {
             state.details[entity].all = list
+        },
+        selectCompany(state, { select, id }) {
+            state.details[id].selected = select
         }
     },
     actions: {

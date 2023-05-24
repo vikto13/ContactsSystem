@@ -1,5 +1,5 @@
 <template>
-  <a style="text-decoration: none" @click="() => $router.push(`/contact/1`)">
+  <a style="text-decoration: none" @click="$emit('cardClicked', id)">
     <md-card style="margin-top: 1rem" md-with-hover>
       <md-ripple>
         <md-card-header>
@@ -25,17 +25,18 @@
         </md-card-header>
 
         <md-card-content>
-          <p v-for="(content,index) in contents" :key="index" >{{ content }}</p>
+          <p v-for="(content, index) in contents" :key="index">{{ content }}</p>
         </md-card-content>
 
         <div class="mb-4">
           <md-button
-          v-for="(button,index) in buttons" :key="index"
+            v-for="(button, index) in buttons"
+            :key="index"
             class="md-icon-button md-raised ml-3 mb-3"
             :class="`button-${button}`"
-            @click.stop=""
+            @click.stop="$emit('buttonClicked', { button: index, id })"
           >
-            <md-icon style="color: #ffffff">{{button}}</md-icon>
+            <md-icon style="color: #ffffff">{{ button }}</md-icon>
           </md-button>
         </div>
       </md-ripple>
@@ -43,29 +44,32 @@
   </a>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: {
-    title:{
-    type:String
+    title: {
+      type: String,
     },
-    subtitle:{
-    type:String
+    subtitle: {
+      type: String,
     },
-    contents:{
-    type:Array
+    contents: {
+      type: Array,
     },
-    buttons:{
-    type:Array
-  }
-}
+    buttons: {
+      type: Array,
+    },
+    id: {
+      type: String,
+    },
+  },
 };
 </script>
 <style scoped>
-.button-delete{
-  background-color: #A61A11 !important;
+.button-delete {
+  background-color: #a61a11 !important;
 }
-.button-edit{
-  background-color: #1F3F77 !important;
+.button-edit {
+  background-color: #1f3f77 !important;
 }
 </style>

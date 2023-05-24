@@ -38,5 +38,8 @@ export default {
   methods: {
     ...mapActions(["uploadImage"]),
   },
+   destroyed() {
+   this.$store.commit("clearImageState")
+  },
 };
 </script>

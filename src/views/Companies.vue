@@ -109,9 +109,9 @@ export default {
     await this.fetchCompanies(this.id);
   },
   watch: {
-    // async id() {
-    //   await this.fetchCompanies(this.id);
-    // },
+    async id() {
+      await this.fetchCompanies(this.id);
+    },
   },
   methods: {
     ...mapActions([

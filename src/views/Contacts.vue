@@ -11,16 +11,20 @@
               class="form-control"
               placeholder="Ieškoti kontakto"
               style="background-color: #f1f2f4"
+              v-debounce:1500="searching"
             />
           </input-box-icon>
         </div>
-        <div class="col-4 col-md-1 align-self-center" style="display: flex">
+        <div
+          class="col-4 col-md-1 align-self-center margin"
+          style="display: flex"
+        >
           <div class="d-flex flex-wrap">
             <md-button
               v-for="(button, index) in buttons"
               :key="index"
               class="md-icon-button md-raised ml-3"
-              @click=""
+              @click="filtering"
               style="background-color: #0054a6 !important"
             >
               <md-icon style="color: #ffffff">{{ button }}</md-icon>
@@ -97,14 +101,31 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["contacts"]),
+    ...mapGetters(["contacts", "companyDetails"]),
   },
   methods: {
-    ...mapActions(["triggerDialog", "fetchContacts"]),
+    ...mapActions([
+      "triggerDialog",
+      "fetchContacts",
+      "searchContactByText",
+      "searchContactBySelections",
+    ]),
     showCalendar() {
       this.calendarVisible = true;
+    },
+    async searching(value) {
+      await this.searchContactByText(value);
+    },
+    filtering() {
+      this.searchContactBySelections();
     },
   },
 };
 </script>
-
+<style scoped>
+@media (max-width: 767px) {
+  .margin {
+    margin: 10px 0 15px 0;
+  }
+}
+</style>

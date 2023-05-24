@@ -1,13 +1,15 @@
 <template>
   <div class="md-layout-item m-3">
     <h5 class="mt-5" style="width: 32rem; text-align: center">
-      {{ `${office.id!=null ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
+      {{ `${office.id != null ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
     </h5>
     <input-box-icon
       v-for="(input, index) in inputs"
       :key="index"
       :title="`${input.title}: `"
       class="mb-3"
+      :bottom-text="messageById({ [input.id]: office[inputs[index].id] })"
+      :is-not-valid="isInvalid(office[inputs[index].id])"
     >
       <input
         v-model="office[inputs[index].id]"
@@ -15,6 +17,7 @@
         class="form-control"
         :placeholder="input.placeholder"
         style="background-color: #f1f2f4"
+        :class="{ 'is-invalid': isInvalid(office[inputs[index].id]) }"
       />
     </input-box-icon>
 
@@ -30,23 +33,23 @@
       "
       @click="add"
     >
-      {{ office.id!=null ? "Pakeisti" : "Pridėti" }}
+      {{ office.id != null ? "Pakeisti" : "Pridėti" }}
     </md-button>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
 import InputBoxIcon from "./InputBoxIcon.vue";
+import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
   components: {
     InputBoxIcon,
   },
+  mixins: [LoginMixin],
   computed: {
     ...mapGetters(["office"]),
   },
-  mounted() {
-    console.log(ths.office.id);
-  },
+
   data() {
     return {
       inputs: [
@@ -66,12 +69,12 @@ export default {
           placeholder: "Įveskite gatvės numerį...",
         },
         {
-          id: "country",
+          id: "city",
           title: "Miestas",
           placeholder: "Įveskite miestą...",
         },
         {
-          id: "city",
+          id: "country",
           title: "Šalis",
           placeholder: "Įveskite šalį...",
         },
@@ -84,8 +87,17 @@ export default {
       "dismissDialog",
       "fetchOffices",
       "editOffice",
+      "findOffice",
     ]),
     async add() {
+      if (
+        this.inputs
+          .map(({ id }) => this.office[id])
+          .some((item) => item == null)
+      ) {
+        this.submit = true;
+        return;
+      }
       try {
         if (this.office.id) {
           await this.editOffice();
@@ -98,6 +110,9 @@ export default {
         console.log(error);
       }
     },
+  },
+  destroyed() {
+    this.$store.commit("clearOfficeState");
   },
 };
 </script>

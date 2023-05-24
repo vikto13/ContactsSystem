@@ -1,14 +1,19 @@
 <template>
   <div class="m-3 mt-5" style="width: 30rem">
-    <h5 class="pb-3">{{ showTitle }}</h5>
-    {{ companyDetails[routeId].whose }} pavadinimas:
-    <input
-      v-model="company.name"
-      type="text"
-      class="form-control"
-      :placeholder="`Įveskite ${companyDetails[routeId].whose} pavadinimą...`"
-      style="background-color: #f1f2f4; width: 20rem"
-    />
+        <input-box-icon
+      :title="`${companyDetails[routeId].whose} pavadinimas:`"
+      :bottom-text="'Įveskite pavadinimą'"  
+          :is-not-valid="isInvalid(company.name)"
+    >
+      <input
+        v-model="company.name"
+        type="text"
+        class="form-control"
+        :class="{ 'is-invalid': isInvalid(company.name) }"
+        :placeholder="`Įveskite ${companyDetails[routeId].whose} pavadinimą...`"
+        style="background-color: #f1f2f4; width: 20rem"
+      />
+    </input-box-icon>
 
     <md-button
       style="
@@ -29,10 +34,14 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DivideComponents from "./DivideComponents.vue";
+import { LoginMixin } from "../views/mixins/LoginMixin";
+import InputBoxIcon from "./InputBoxIcon.vue";
 export default {
   components: {
     DivideComponents,
+    InputBoxIcon,
   },
+  mixins: [LoginMixin],
   computed: {
     ...mapGetters(["company", "companyDetails"]),
     routeId: {
@@ -57,6 +66,10 @@ export default {
       "editCompany",
     ]),
     async save() {
+      if (!this.submit && !this.company.name) {
+        this.submit = true;
+        return;
+      }
       try {
         this.company.id
           ? await this.editCompany(this.routeId)
