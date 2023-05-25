@@ -1,8 +1,13 @@
 <template>
   <div style="width: 42rem">
     <div :class="true ? 'md-layout' : null">
+<<<<<<< HEAD
       <contact-fields v-show="true"></contact-fields>
       <company-details-select></company-details-select>
+=======
+     <contact-fields v-show="true"></contact-fields>
+     <company-details-select></company-details-select>
+>>>>>>> newOne
     </div>
     <md-button
       style="
@@ -35,6 +40,12 @@ export default {
   computed: {
     ...mapGetters(["contact"]),
   },
+  beforeDestroy() {
+    this.$store.commit("clearContact");
+  },
+  computed: {
+    ...mapGetters(["contact"]),
+   },
   methods: {
     ...mapActions([
       "saveContact",

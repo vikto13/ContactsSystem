@@ -9,6 +9,11 @@
         v-for="(column, index) in table.boxs"
         :key="index"
         :icon-name="column.icon"
+<<<<<<< HEAD
+=======
+        :bottom-text="messageById({[column.input]:contact[column.input]})"
+        :is-not-valid="true"
+>>>>>>> newOne
         :title="`${column.title}:`"
       >
         <input

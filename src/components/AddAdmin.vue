@@ -4,10 +4,17 @@
       <div v-show="admin.whatDo != 0" class="md-layout-item m-2">
         <h3 class="mb-3 mt-3">{{ title[admin.whatDo] }}:</h3>
         <input-box-icon
+<<<<<<< HEAD
           :title="'Vardas:'"
           :bottom-text="'Įveskite vardą'"
           :is-not-valid="isInvalid(admin.name)"
         >
+=======
+         :title="'Vardas:'"  
+        :bottom-text="'Įveskite vardą'"
+         :is-not-valid="isInvalid(admin.name)"
+       >
+>>>>>>> newOne
           <input
             v-model="admin.name"
             type="text"
@@ -27,6 +34,11 @@
           <input
             v-model="admin.email"
             type="text"
+<<<<<<< HEAD
+=======
+            class="form-control"
+            :class="{ 'is-invalid': showEmailMessage(admin.email) }"
+>>>>>>> newOne
             :placeholder="'Įveskite el.paštą...'"
             class="form-control"
             :class="{ 'is-invalid': showEmailMessage(admin.email) }"
@@ -113,6 +125,10 @@ export default {
         this.submit = true;
         return;
       }
+<<<<<<< HEAD
+=======
+
+>>>>>>> newOne
       try {
         if (this.admin.whatDo != null) {
           await this.updateAdmin();
@@ -122,12 +138,15 @@ export default {
       } catch (err) {
         console.log(err);
       }
-
       await this.fetchAdmins();
       this.dismissDialog();
     },
   },
+<<<<<<< HEAD
   beforeDestroy() {
+=======
+  beforeDestroy()  {
+>>>>>>> newOne
     this.clearAdminData();
   },
 };

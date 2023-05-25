@@ -4,4 +4,8 @@ export const MessageState = {
     title: "",
     content: "",
     action: null,
+<<<<<<< HEAD
+=======
+    cancelAction: null
+>>>>>>> newOne
 }

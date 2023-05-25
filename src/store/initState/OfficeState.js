@@ -1,6 +1,7 @@
 export const OfficeState = {
     offices: [],
     office: {
+        id: null,
         name: '',
         street: '',
         country: '',
