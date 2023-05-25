@@ -101,8 +101,12 @@ export default {
         content: `Ofiso pavadinimas: ${this.office.name}`,
         action: async () => {
           await this.deleteOffice();
+          this.$store.commit('clearOfficeState')
           await this.fetchOffices();
         },
+        cancelAction: () => {
+         this.$store.commit('clearOfficeState')
+       }
       });
     },
   },

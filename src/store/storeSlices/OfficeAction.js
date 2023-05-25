@@ -6,19 +6,14 @@ export default {
     mutations: {
         setOffice(state, data) {
             if (data) {
-                state.office.name = data.name
-                state.office.street = data.street
-                state.office.country = data.country
-                state.office.city = data.city
-                state.office.street_number = data.street_number
-                state.office.id = data.id
-            } else {
-                state.office.name = ''
-                state.office.street = ''
-                state.office.country = ''
-                state.office.city = ''
-                state.office.street_number = null
-                state.office.id = null
+                for (let office in state.office) {
+                    state.office[office] = data[office]
+                }
+            }
+        },
+        clearOfficeState(state) {
+            for (let value in state.office) {
+                state.office[value] = null
             }
         },
         setOffices(state, list) {
@@ -35,7 +30,7 @@ export default {
         },
         async saveOffice({ state, commit }) {
             await pocketBase.collection("office").create(state.office)
-            commit('setOffice', null)
+
         },
         async fetchOffices({ commit }) {
             let allOffice = await pocketBase.collection("office").getFullList({ sort: '-created', });
@@ -50,7 +45,7 @@ export default {
             await pocketBase
                 .collection("office")
                 .delete(state.office.id)
-            commit("setOffice", null)
+
         },
 
     },

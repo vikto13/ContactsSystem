@@ -20,7 +20,9 @@ export default {
     async onConfirm() {
       await this.message.action();
     },
-    onCancel() {},
+    onCancel() {
+      this.message.cancelAction()
+    },
   },
 };
 </script>
