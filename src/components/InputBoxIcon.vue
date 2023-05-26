@@ -12,11 +12,7 @@
       </span>
       <slot></slot>
     </div>
-    <div
-      v-if="bottomText"
-      :class="{ 'invalid-feedback': !isNotValid }"
-      style="color: #dc3545"
-    >
+    <div style="color: #dc3545" :style="{ opacity: isNotValid ? 1 : 0 }">
       {{ bottomText }}
     </div>
   </div>

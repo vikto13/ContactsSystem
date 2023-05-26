@@ -115,6 +115,7 @@ export default {
     getters: {
         adminRoles: (state) => state.roles,
         admin: (state) => state.admin,
-        admins: (state) => state.admins
+        admins: (state) => state.admins,
+        adminPages: (state) => state.pages
     }
 }

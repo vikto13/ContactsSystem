@@ -1,9 +1,13 @@
 <template>
   <div>
     <h1>Admin prisijungimas</h1>
-    <div class="forms-inputs mb-4">
-      <span>Elektroninis paštas: </span>
-      <input-box-icon :icon-name="'mail'">
+    <div class="forms-inputs">
+      <input-box-icon
+        :icon-name="'mail'"
+        :title="'Elektroninis paštas:'"
+        :bottom-text="messageById({ email })"
+        :is-not-valid="isInvalid(email)"
+      >
         <input
           v-model="email"
           type="text"
@@ -13,13 +17,14 @@
           style="background-color: #f1f2f4; border-left-width: 0"
         />
       </input-box-icon>
-      <span v-show="showEmailMessage" style="color: red">
-        {{ emailMessage }}
-      </span>
     </div>
     <div class="forms-inputs mb-4">
-      <span>Slaptažodis:</span>
-      <input-box-icon :icon-name="'lock'">
+      <input-box-icon
+        :icon-name="'lock'"
+        :title="'Slaptažodis:'"
+        :bottom-text="messageById({ password })"
+        :is-not-valid="isInvalid(password)"
+      >
         <input
           v-model="password"
           type="password"
@@ -29,9 +34,6 @@
           style="background-color: #f1f2f4; border-left-width: 0"
         />
       </input-box-icon>
-      <span v-show="showPasswordMessage" style="color: red">
-        {{ passwordMessage }}
-      </span>
     </div>
     <div style="padding-bottom: 1rem">
       Pamiršote slaptažodį?
@@ -44,25 +46,30 @@
 </template>
 <script>
 import { LoginMixin } from "../views/mixins/LoginMixin";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   mixins: [LoginMixin],
+
   methods: {
     ...mapActions(["authWithPassword"]),
     async login() {
-      if (!this.emailMessage && !this.passwordMessage) {
-        try {
-          await this.authWithPassword({
-            email: this.email,
-            password: this.password,
-          });
-          this.$router.push("/users/records");
-          return;
-        } catch (err) {
-          console.log(err);
+      if (!(this.password && this.email)) {
+        this.submit = true;
+        return;
+      }
+      try {
+        await this.authWithPassword({
+          email: this.email,
+          password: this.password,
+        });
+        this.$router.push("/contacts/records");
+      } catch (err) {
+        if (err.status == 400) {
+          console.log("not authorized");
+        } else {
+          console.log("something went wrong");
         }
       }
-      this.submit = true;
     },
   },
 };

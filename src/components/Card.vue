@@ -28,7 +28,7 @@
           <p v-for="(content, index) in contents" :key="index">{{ content }}</p>
         </md-card-content>
 
-        <div class="mb-4">
+        <div v-show="user.token" class="mb-4">
           <md-button
             v-for="(button, index) in buttons"
             :key="index"
@@ -46,6 +46,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
+  computed: {
+    ...mapGetters(["user"]),
+  },
   props: {
     title: {
       type: String,

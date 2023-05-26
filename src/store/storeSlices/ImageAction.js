@@ -7,6 +7,11 @@ export default {
         setImage(state, image) {
             state.file = image
             state.name = image.name
+        },
+        clearImageState(state) {
+            for (let value in state) {
+                state[value] = null
+            }
         }
     },
     actions: {

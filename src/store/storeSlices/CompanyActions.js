@@ -52,7 +52,8 @@ export default {
     getters: {
         company: (state) => state.company,
         companyList: (state) => state.details.companies.all,
-        companyDetails: (state) => state.details
+        companyDetails: (state) => state.details,
+
 
     },
 }

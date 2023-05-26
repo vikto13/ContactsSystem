@@ -6,5 +6,10 @@ export const AdminState = {
         roles: [],
         whatDo: null
     },
-    admins: []
+    admins: [],
+    pages: {
+        "authLogin": "auth-with-password",
+        "authRefresh": "auth-refresh",
+        "updatePassword": "users/update-password",
+    },
 }

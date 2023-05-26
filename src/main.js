@@ -12,6 +12,7 @@ import { router } from './router/router';
 import { initializeStore } from './store/initializeStore';
 
 
+
 Vue.use(Vuex);
 Vue.use(vueDebounce, {
     listenTo: ['input']

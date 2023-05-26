@@ -3,7 +3,7 @@
     <div class="md-layout md-gutter md-alignment-center" style="height: 100%">
       <md-button
         class="md-icon-button md-raised"
-        @click="$router.push('/')"
+        @click="$router.push(goBackPath)"
         style="
           background-color: white !important;
           position: absolute;
@@ -25,7 +25,7 @@
           style="padding-top: 5%"
           :style="{ 'padding-bottom': addingBottom }"
         >
-          <component :is="screens[$route.params.info]"></component>
+          <router-view></router-view>
         </div>
       </divide-components>
     </div>
@@ -36,6 +36,7 @@ import AdminLogin from "../components/AdminLogin.vue";
 import RemindPassword from "../components/RemindPassword.vue";
 import UpdatePassword from "../components/UpdatePassword.vue";
 import DivideComponents from "../components/DivideComponents.vue";
+import { mapGetters } from "vuex";
 export default {
   components: {
     DivideComponents,
@@ -43,18 +44,17 @@ export default {
     RemindPassword,
     UpdatePassword,
   },
-  data() {
-    return {
-      screens: {
-        "auth-with-password": "admin-login",
-        "auth-refresh": "remind-password",
-        "update-password": "update-password",
-      },
-    };
-  },
   computed: {
+    ...mapGetters(["adminPages"]),
     addingBottom() {
-      return this.$route.params.info == "auth-with-password" ? "25%" : "5%";
+      return this.$route.path.split("/")[2] == this.adminPages.authLogin
+        ? "25%"
+        : "5%";
+    },
+    goBackPath() {
+      return this.$route.path.split("/")[2] == this.adminPages.authRefresh
+        ? `/users/${this.adminPages.authLogin}`
+        : "/contacts/records";
     },
   },
 };

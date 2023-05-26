@@ -1,9 +1,28 @@
 <template>
+  <!-- <input-box-icon
+        :icon-name="'mail'"
+        :title="'Elektroninis paštas:'"
+        :bottom-text="messageById({ email })"
+        :is-not-valid="isInvalid(email)"
+      >
+        <input
+          v-model="email"
+          type="text"
+          class="form-control"
+          :class="{ 'is-invalid': isInvalid(email) }"
+          placeholder="Įveskite el pašto adresą..."
+          style="background-color: #f1f2f4; border-left-width: 0"
+        />
+      </input-box-icon> -->
   <div v-if="!isSended">
     <h1>Priminti slaptažodį</h1>
     <div class="forms-inputs mb-4">
-      <span>Elektroninis paštas: </span>
-      <input-box-icon :icon-name="'mail'">
+      <input-box-icon
+        :icon-name="'mail'"
+        :title="'Elektroninis paštas:'"
+        :bottom-text="messageById({ email })"
+        :is-not-valid="isInvalid(email)"
+      >
         <input
           v-model="email"
           type="text"
@@ -12,9 +31,6 @@
           placeholder="Įveskite el pašto adresą..."
         />
       </input-box-icon>
-      <span v-show="showEmailMessage" class="cr">
-        {{ emailMessage }}
-      </span>
     </div>
     <div class="mb-3">
       <button class="btn w-100" @click="() => send()">Pateikti</button>
@@ -38,16 +54,13 @@ export default {
   methods: {
     ...mapActions(["resetPassword"]),
     async send() {
-      if (this.emailMessage) {
-        this.submit = true;
-        return;
-      }
+      this.submit = true;
 
-      try {
-        await this.resetPassword(this.email);
-        this.isSended = true;
-        return;
-      } catch {}
+      // try {
+      //   await this.resetPassword(this.email);
+      //   this.isSended = true;
+      //   return;
+      // } catch {}
     },
   },
 };

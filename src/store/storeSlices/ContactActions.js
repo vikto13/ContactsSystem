@@ -1,6 +1,5 @@
 import { ContactState } from "../initState/ContactState"
 import { pocketBase } from "../../../services/pocketBase";
-import { list } from "postcss";
 
 export default {
     state: ContactState,
@@ -22,17 +21,20 @@ export default {
         }
     },
     actions: {
-        async findContact({ commit }, id) {
+        async findContact({ commit, getters }, id) {
             const data = await pocketBase
                 .collection("contacts")
-                .getFirstListItem(`id="${id}"`);
+                .getFirstListItem(`id="${id}"`, {
+                    expand: 'companies,companies,divisions,groups,departments'
+                });
+
             commit("setContact", data)
 
         },
         async saveContact({ state }) {
             await pocketBase.collection("contacts").create(state.contact)
         },
-        async fetchContacts({ commit }) {
+        async fetchContacts({ commit, getters }) {
             let list = await pocketBase.collection("contacts").getFullList({ sort: '-created', });
             commit('setContacts', list)
         },
@@ -73,6 +75,7 @@ export default {
     getters: {
         contact: (state) => state.contact,
         contacts: (state) => state.contacts,
+
 
     },
 }

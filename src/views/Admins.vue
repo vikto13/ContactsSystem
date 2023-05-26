@@ -100,6 +100,9 @@ export default {
           await this.deleteAdmin();
           await this.fetchAdmins();
         },
+        cancelAction: () => {
+          this.clearAdminData();
+        },
       });
     },
     async change(id, action) {

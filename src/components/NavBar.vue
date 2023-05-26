@@ -1,65 +1,81 @@
 <template>
-  <ul class="nav nav-fill dialog-box" style="
- padding: 0 2% 0 1%;
-  top: 0;
- left: 0;
-  position: relative;
-    background-color: #1F3F77;
-    align-items: center;
-    ">
-    <router-link :to="'/users/records'">
+  <ul
+    class="nav nav-fill dialog-box"
+    style="
+      padding: 0 2% 0 1%;
+      top: 0;
+      left: 0;
+      position: relative;
+      background-color: #1f3f77;
+      align-items: center;
+    "
+  >
+    <router-link :to="'/contacts/records'">
       <img
         id="logo-icon"
         src="../assets/teltonika_logo.png"
         style="height: 3rem"
       />
     </router-link>
-
-    <li
-      v-for="(tab, index) in tabItems"
-      :key="index"
-      class="nav-item d-flex flex-row"
-      style="padding: 1%"
-    >
-      <router-link
-        :to="`${tab.path}`"
-        class="nav-link"
-        :class="'active'"
-        style="color: white"
-        >{{ tab.title }}</router-link
+    <template v-if="user.token">
+      <li
+        v-for="(tab, index) in tabItems"
+        :key="index"
+        class="nav-item d-flex flex-row"
+        style="padding: 1%"
       >
-    </li>
-    <md-menu md-size="medium" md-align-trigger>
-      <md-button md-menu-trigger class="md-icon-button md-raised" style="background-color: white !important;">
-        <md-icon class="cb">person</md-icon>
-      </md-button>
+        <router-link
+          :to="`${tab.path}`"
+          class="nav-link"
+          :class="'active'"
+          style="color: white"
+          >{{ tab.title }}</router-link
+        >
+      </li>
+      <md-menu md-size="medium" md-align-trigger>
+        <md-button
+          md-menu-trigger
+          class="md-icon-button md-raised"
+          style="background-color: white !important"
+        >
+          <md-icon class="cb">person</md-icon>
+        </md-button>
 
-      <md-menu-content>
-        <md-menu-item @click="$router.push('/users/update-password')"
-          >Pakeisti slaptažodį
-          <md-icon style="color: #414042"
-            >arrow_drop_down</md-icon
-          ></md-menu-item
-        >
-        <md-menu-item @click="$router.push('/users/auth-with-password')"
-          >Atsijungti</md-menu-item
-        >
-      </md-menu-content>
-    </md-menu>
+        <md-menu-content>
+          <md-menu-item @click="$router.push('/users/update-password')"
+            >Pakeisti slaptažodį
+            <md-icon style="color: #414042"
+              >arrow_drop_down</md-icon
+            ></md-menu-item
+          >
+          <md-menu-item @click="signOut">Atsijungti</md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </template>
   </ul>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
+  computed: {
+    ...mapGetters(["user"]),
+  },
   data() {
     return {
       tabItems: [
-        { title: "Kontaktai", path: "/users/records" },
+        { title: "Kontaktai", path: "/contacts/records" },
         { title: "Įmonės", path: "/companies/records" },
         { title: "Struktūra", path: "/relationship/record" },
         { title: "Būstinės", path: "/offices/records" },
         { title: "Paskyros", path: "/admins/records" },
       ],
     };
+  },
+  methods: {
+    signOut() {
+      this.$router.push("/users/auth-with-password");
+      this.$store.commit("clearUserData");
+    },
   },
 };
 </script>

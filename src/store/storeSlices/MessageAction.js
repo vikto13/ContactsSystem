@@ -4,7 +4,6 @@ export default {
     mutations: {
         setToShowMessage(state, add) {
             for (let action in state) {
-                state.title = info.title
                 state[action] = add[action]
             }
 

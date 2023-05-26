@@ -1,16 +1,9 @@
 <template>
   <div class="m-3 mt-5" style="width: 30rem">
-<<<<<<< HEAD
     <input-box-icon
       :title="`${companyDetails[routeId].whose} pavadinimas:`"
       :bottom-text="'Įveskite pavadinimą'"
       :is-not-valid="isInvalid(company.name)"
-=======
-        <input-box-icon
-      :title="`${companyDetails[routeId].whose} pavadinimas:`"
-      :bottom-text="'Įveskite pavadinimą'"  
-          :is-not-valid="isInvalid(company.name)"
->>>>>>> newOne
     >
       <input
         v-model="company.name"
@@ -41,13 +34,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DivideComponents from "./DivideComponents.vue";
-<<<<<<< HEAD
-import InputBoxIcon from "./InputBoxIcon.vue";
-import { LoginMixin } from "../views/mixins/LoginMixin";
-=======
+
 import { LoginMixin } from "../views/mixins/LoginMixin";
 import InputBoxIcon from "./InputBoxIcon.vue";
->>>>>>> newOne
 export default {
   components: {
     DivideComponents,
@@ -78,11 +67,7 @@ export default {
       "editCompany",
     ]),
     async save() {
-<<<<<<< HEAD
-      if (!this.submit || !this.company.name) {
-=======
-      if (!this.submit && !this.company.name) {
->>>>>>> newOne
+      if (!this.company.name) {
         this.submit = true;
         return;
       }

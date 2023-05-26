@@ -4,17 +4,10 @@
       <div v-show="admin.whatDo != 0" class="md-layout-item m-2">
         <h3 class="mb-3 mt-3">{{ title[admin.whatDo] }}:</h3>
         <input-box-icon
-<<<<<<< HEAD
           :title="'Vardas:'"
           :bottom-text="'Įveskite vardą'"
           :is-not-valid="isInvalid(admin.name)"
         >
-=======
-         :title="'Vardas:'"  
-        :bottom-text="'Įveskite vardą'"
-         :is-not-valid="isInvalid(admin.name)"
-       >
->>>>>>> newOne
           <input
             v-model="admin.name"
             type="text"
@@ -29,19 +22,13 @@
           :bottom-text="emailMessage(admin.email)"
           :title="'Elektroninis paštas:'"
           :is-not-valid="showEmailMessage(admin.email)"
-          class="mt-3"
         >
           <input
             v-model="admin.email"
             type="text"
-<<<<<<< HEAD
-=======
-            class="form-control"
             :class="{ 'is-invalid': showEmailMessage(admin.email) }"
->>>>>>> newOne
             :placeholder="'Įveskite el.paštą...'"
             class="form-control"
-            :class="{ 'is-invalid': showEmailMessage(admin.email) }"
             style="background-color: #f1f2f4"
             :style="{ 'border-left-width': 0 }"
           />
@@ -125,10 +112,6 @@ export default {
         this.submit = true;
         return;
       }
-<<<<<<< HEAD
-=======
-
->>>>>>> newOne
       try {
         if (this.admin.whatDo != null) {
           await this.updateAdmin();
@@ -142,11 +125,8 @@ export default {
       this.dismissDialog();
     },
   },
-<<<<<<< HEAD
+
   beforeDestroy() {
-=======
-  beforeDestroy()  {
->>>>>>> newOne
     this.clearAdminData();
   },
 };

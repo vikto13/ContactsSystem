@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot></slot>
-    <div style="margin: 2% 8% 2% 8%">
+    <div style="margin: 2%">
       <h1>Kontaktų sistema</h1>
       <div class="row">
         <div class="col-md-6 col-lg-5 col-xl-4">
@@ -19,39 +19,33 @@
           class="col-4 col-md-1 align-self-center margin"
           style="display: flex"
         >
-          <div class="d-flex flex-wrap">
+          <md-menu md-size="medium" md-align-trigger class="d-flex flex-wrap">
             <md-button
-              v-for="(button, index) in buttons"
+              class="md-icon-button md-raised ml-3"
+              md-menu-trigger
+              style="background-color: #0054a6 !important"
+            >
+              <md-icon style="color: #ffffff">filter_alt</md-icon>
+            </md-button>
+            <md-menu-content>
+              <md-menu-item
+                v-for="(option, index) in optionsForPaginate"
+                :disabled="sizeOfPaginate == option"
+                :key="index"
+                @click="() => setPaginate(option)"
+                >{{ option }}</md-menu-item
+              >
+            </md-menu-content>
+          </md-menu>
+
+          <div v-for="(button, index) in buttons" class="d-flex flex-wrap">
+            <md-button
               :key="index"
               class="md-icon-button md-raised ml-3"
-              @click="filtering"
+              @click="() => button.action(index)"
               style="background-color: #0054a6 !important"
             >
-              <md-icon style="color: #ffffff">{{ button }}</md-icon>
-            </md-button>
-          </div>
-
-          <div class="d-flex flex-wrap">
-            <VueDatePicker v-model="date">
-              <template #activator>
-                <md-button
-                  class="md-icon-button md-raised ml-3"
-                  style="background-color: #0054a6 !important"
-                  ref="activator"
-                  type="button"
-                >
-                  <md-icon style="color: #ffffff">calendar_month</md-icon>
-                </md-button>
-              </template>
-            </VueDatePicker>
-          </div>
-          <div class="d-flex flex-wrap">
-            <md-button
-              class="md-icon-button md-raised ml-3"
-              style="background-color: #0054a6 !important"
-              @click="() => triggerDialog('add-contacts')"
-            >
-              <md-icon style="color: #ffffff">add</md-icon>
+              <md-icon style="color: #ffffff">{{ button.title }}</md-icon>
             </md-button>
           </div>
         </div>
@@ -61,7 +55,7 @@
         <span style="font-weight: bold">{{ contacts.length }}</span> kontaktai
       </p>
       <filter-sections></filter-sections>
-      <contact-cards></contact-cards>
+      <component :is="showComponents[buttons[0].title]"></component>
       <pagination></pagination>
     </div>
   </div>
@@ -70,6 +64,7 @@
 import NavBar from "../components/NavBar.vue";
 import FilterSections from "../components/FilterSections.vue";
 import ContactCards from "../components/ContactCards.vue";
+import ContactTables from "../components/ContactTables.vue";
 import Pagination from "../components/Pagination.vue";
 import InputBoxIcon from "../components/InputBoxIcon.vue";
 import { mapActions, mapGetters } from "vuex";
@@ -80,6 +75,7 @@ export default {
     FilterSections,
     ContactCards,
     Pagination,
+    ContactTables,
   },
   async mounted() {
     try {
@@ -90,18 +86,38 @@ export default {
   },
   data() {
     return {
-      date: new Date(),
-      buttons: ["filter_alt"],
-      showBox: false,
-      showPicker: true,
-      selectedDate: "",
-      date: new Date(2016, 9, 16),
-      selectedDate: null,
-      calendarVisible: false,
+      showComponents: {
+        table_rows: "contact-cards",
+        grid_view: "contact-tables",
+      },
+      buttons: [
+        {
+          title: "table_rows",
+          action: (index) => {
+            let show = {
+              table_rows: "grid_view",
+              grid_view: "table_rows",
+            };
+            this.buttons[index].title = show[this.buttons[index].title];
+          },
+        },
+        {
+          title: "add",
+          action: () => {
+            this.triggerDialog("add-contacts");
+          },
+        },
+      ],
     };
   },
   computed: {
-    ...mapGetters(["contacts", "companyDetails"]),
+    ...mapGetters([
+      "contacts",
+      "companyDetails",
+      "user",
+      "optionsForPaginate",
+      "sizeOfPaginate",
+    ]),
   },
   methods: {
     ...mapActions([
@@ -110,14 +126,14 @@ export default {
       "searchContactByText",
       "searchContactBySelections",
     ]),
-    showCalendar() {
-      this.calendarVisible = true;
-    },
     async searching(value) {
       await this.searchContactByText(value);
     },
     filtering() {
       this.searchContactBySelections();
+    },
+    setPaginate(size) {
+      this.$store.commit("setPagine", size);
     },
   },
 };

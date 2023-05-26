@@ -6,5 +6,5 @@ export const UserState = {
     email: "",
     name: "",
     avatar: "",
-    token: ""
+    token: "",
 }

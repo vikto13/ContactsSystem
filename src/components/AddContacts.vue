@@ -1,28 +1,9 @@
 <template>
   <div style="width: 42rem">
     <div :class="true ? 'md-layout' : null">
-<<<<<<< HEAD
       <contact-fields v-show="true"></contact-fields>
       <company-details-select></company-details-select>
-=======
-     <contact-fields v-show="true"></contact-fields>
-     <company-details-select></company-details-select>
->>>>>>> newOne
     </div>
-    <md-button
-      style="
-        background-color: #1f3f77 !important;
-        color: white;
-        width: 100%;
-        margin: 0;
-        margin-top: 3rem;
-        text-align: start;
-        padding-left: 5%;
-      "
-      @click="save"
-    >
-      {{ contact.id ? "PAKEISTI" : "PRIDĖTI" }}
-    </md-button>
   </div>
 </template>
 <script>
@@ -45,7 +26,7 @@ export default {
   },
   computed: {
     ...mapGetters(["contact"]),
-   },
+  },
   methods: {
     ...mapActions([
       "saveContact",
@@ -54,15 +35,6 @@ export default {
       "clearContact",
       "editContact",
     ]),
-    async save() {
-      try {
-        this.contact.id ? await this.editContact() : await this.saveContact();
-        this.dismissDialog();
-        this.fetchContacts();
-      } catch (error) {
-        console.log(error);
-      }
-    },
   },
 };
 </script>

@@ -9,23 +9,39 @@
         v-for="(column, index) in table.boxs"
         :key="index"
         :icon-name="column.icon"
-<<<<<<< HEAD
-=======
-        :bottom-text="messageById({[column.input]:contact[column.input]})"
-        :is-not-valid="true"
->>>>>>> newOne
+        :bottom-text="messageById({ [column.input]: contact[column.input] })"
         :title="`${column.title}:`"
+        :is-not-valid="isInvalid({ [column.input]: contact[column.input] })"
       >
         <input
           v-model="contact[column.input]"
           type="text"
           class="form-control"
           :placeholder="column.placeholder"
+          :class="{
+            'is-invalid': isInvalid({
+              [column.input]: contact[column.input],
+            }),
+          }"
           style="background-color: #f1f2f4"
           :style="{ 'border-left-width': column.icon ? 0 : null }"
         />
       </input-box-icon>
     </div>
+    <md-button
+      style="
+        background-color: #1f3f77 !important;
+        color: white;
+        width: 100%;
+        margin: 0;
+        margin-top: 3rem;
+        text-align: start;
+        padding-left: 5%;
+      "
+      @click="save"
+    >
+      {{ contact.id ? "PAKEISTI" : "PRIDĖTI" }}
+    </md-button>
   </div>
 </template>
 <script>
@@ -33,6 +49,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 import InputBoxIcon from "./InputBoxIcon.vue";
 import { CompanyState } from "../store/initState/CompanyState.js";
+import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
   components: {
     InputBoxIcon,
@@ -41,6 +58,7 @@ export default {
   computed: {
     ...mapGetters(["companyDetails", "contact"]),
   },
+  mixins: [LoginMixin],
   data() {
     return {
       inputs: [
@@ -83,6 +101,37 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    ...mapActions([
+      "saveContact",
+      "editContact",
+      "dismissDialog",
+      "fetchContacts",
+    ]),
+    async save() {
+      this.submit = true;
+      if (
+        this.inputs
+          .map(({ boxs }) =>
+            boxs.map(({ input }) =>
+              this.isInvalid({
+                [input]: this.contact[input],
+              })
+            )
+          )
+          .some((subArray) => subArray.includes(true))
+      ) {
+        return;
+      }
+      try {
+        this.contact.id ? await this.editContact() : await this.saveContact();
+        this.dismissDialog();
+        this.fetchContacts();
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

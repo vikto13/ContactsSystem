@@ -142,6 +142,7 @@ export default {
           await this.deleteCompany(this.id);
           await this.fetchCompanies(this.id);
         },
+        cancelAction: () => {},
       });
     },
   },

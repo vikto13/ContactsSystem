@@ -24,57 +24,15 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
 import Card from "./Card.vue";
 import DivideComponents from "./DivideComponents.vue";
+import { ContactsMixin } from "../views/mixins/ContactsMixin";
+ContactsMixin;
 export default {
   components: {
     Card,
     DivideComponents,
   },
-  computed: {
-    ...mapGetters(["contacts", "currentPage", "sizeOfPaginate", "contact"]),
-    showCards() {
-      let size = this.currentPage * this.sizeOfPaginate;
-
-      if (this.contacts.length == size && this.currentPage) {
-        this.$store.commit("previuosPage");
-        size = size - this.sizeOfPaginate;
-      }
-      return this.contacts.slice(size, size + this.sizeOfPaginate);
-    },
-  },
-  methods: {
-    ...mapActions([
-      "findContact",
-      "triggerDialog",
-      "deleteContact",
-      "fetchContacts",
-      "triggerMessage",
-    ]),
-    async see(id) {
-      this.$router.push(`/contact/${id}`);
-    },
-    async edit({ button, id }) {
-      try {
-        await this.findContact(id);
-        if (button) {
-          this.triggerMessage({
-            title: "Ar tikrai norite ištrinti kontaktą?",
-            content: `Kontaktas: ${this.contact.name} ${this.contact.surname}`,
-            action: async () => {
-              await this.deleteContact();
-
-              await this.fetchContacts();
-            },
-          });
-        } else {
-          this.triggerDialog("add-contacts");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
+  mixins: [ContactsMixin],
 };
 </script>

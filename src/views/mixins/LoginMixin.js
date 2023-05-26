@@ -3,9 +3,6 @@ export const LoginMixin = {
     components: {
         InputBoxIcon
     },
-    // beforeMount() {
-    //     this.submit = false
-    // },
     data() {
         return {
             submit: false,
@@ -13,26 +10,6 @@ export const LoginMixin = {
             password: '',
             secPassword: '',
 
-<<<<<<< HEAD
-            name: ''
-        }
-    },
-    computed: {
-        passwordMessage() {
-            return !this.password
-                ? `Slaptažodis turi būti įvestas`
-                : this.password.length < 8
-                    ? `Slaptažodis turi būti sudarytas iš 8 raidžių`
-                    : null;
-        },
-        showPasswordMessage() {
-            return this.submit && (!this.password || this.password.length < 8);
-        },
-        nameMessage() {
-            return !this.name ? 'Pavadinimas turi būti įvestas' : null
-        },
-=======
-            name: '',
 
 
 
@@ -43,67 +20,57 @@ export const LoginMixin = {
                 city: 'Miestas turi būti įvestas',
                 country: 'Šalis turi būti įvestas',
                 name: "Pavadinimas turi būti įvestas",
-                surnmae: "Pavardė turi būti įvesta"
+                surname: "Pavardė turi būti įvesta",
+                position: 'Pozicija turi būti įvesta',
+                phone_number: 'Telefono numerys turi būti įvestas',
+                second_password: `Slaptažodžiai turi būti vienodi`,
+                password: 'Įveskite slaptažodį',
             }
         }
     },
-    computed: {
->>>>>>> newOne
-        comparePasswords() {
-            return this.submit
-                ? this.password == this.secPassword
-                    ? null
-                    : `Slaptažodžiai turi būti vienodi`
-                : null
-        },
-    },
     methods: {
-        isInvalid(input) {
-            return !input && this.submit;
+        showCompareMessage(password, secPassword) {
+            return this.submit && password != secPassword
         },
-        emailMessage(email) {
-            return !email
-                ? `Elektroninis paštas turi būti įvestas`
-                : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-                    ? `Elektroninis paštas turi būti validus`
-                    : null;
-        },
-<<<<<<< HEAD
         showEmailMessage(email) {
-=======
-
-
-
-
-
-    },
-    methods: {
-        showEmailMessage() {
->>>>>>> newOne
             return (
                 this.submit &&
                 (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             );
         },
-<<<<<<< HEAD
-=======
+        emailMessage(email) {
+            return !email
+                ? `Elektroninis paštas turi būti įvestas`
+                // : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+                : `Elektroninis paštas turi būti validus`
+
+        },
         showPasswordMessage(password) {
             return this.submit && (!password || password.length < 8);
         },
         passwordMessage(password) {
-            return !password
-                ? `Slaptažodis turi būti įvestas`
-                : password.length < 8
-                    ? `Slaptažodis turi būti sudarytas iš 8 raidžių`
-                    : null;
+            return password.length < 8
+                ? `Slaptažodis turi būti sudarytas iš 8 raidžių`
+                : `Slaptažodis turi būti įvestas`
         },
         isInvalid(input) {
-            return !input && this.submit;
+            console.log(!Object.values(input)[0])
+            switch (Object.keys(input)[0]) {
+                case 'password':
+                    return this.showPasswordMessage(Object.values(input)[0])
+                case 'email':
+                    return this.showEmailMessage(Object.values(input)[0])
+                default:
+                    return !Object.values(input)[0] && this.submit
+            }
         },
-
         messageById(info) {
-            return !Object.values(info)[0] ? this.message[Object.keys(info)[0]] : null
+
+
+            if (Object.keys(info)[0] == 'email') {
+                return this.emailMessage(Object.values(info)[0])
+            }
+            return this.message[Object.keys(info)[0]]
         }
->>>>>>> newOne
     }
 }

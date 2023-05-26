@@ -9,7 +9,7 @@
       :title="`${input.title}: `"
       class="mb-3"
       :bottom-text="messageById({ [input.id]: office[inputs[index].id] })"
-      :is-not-valid="isInvalid(office[inputs[index].id])"
+      :is-not-valid="isInvalid({ [input.id]: office[inputs[index].id] })"
     >
       <input
         v-model="office[inputs[index].id]"
@@ -17,7 +17,9 @@
         class="form-control"
         :placeholder="input.placeholder"
         style="background-color: #f1f2f4"
-        :class="{ 'is-invalid': isInvalid(office[inputs[index].id]) }"
+        :class="{
+          'is-invalid': isInvalid({ [input.id]: office[inputs[index].id] }),
+        }"
       />
     </input-box-icon>
 
