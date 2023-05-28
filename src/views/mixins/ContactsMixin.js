@@ -1,6 +1,5 @@
 import { mapGetters, mapActions } from "vuex";
 
-
 export const ContactsMixin = {
     computed: {
         ...mapGetters(["contacts", "currentPage", "sizeOfPaginate", "contact"]),
@@ -15,7 +14,6 @@ export const ContactsMixin = {
                 return this.contacts.slice(size, size + this.sizeOfPaginate);
             },
             set() {
-
             }
         },
     },

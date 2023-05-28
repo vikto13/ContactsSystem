@@ -6,6 +6,7 @@
       <field-to-create
         :text="'Sukurti naują admin paskyrą'"
         @pressed="triggerDialog('add-admin')"
+        :title="'Sukurti admin paskyrą'"
       >
       </field-to-create>
 
@@ -16,8 +17,7 @@
         md-sort-order="asc"
         md-card
         md-fixed-header
-        class="mt-5"
-        style="background-color: #f1f2f4"
+        class="mt-5 table-footer"
       >
         <md-table-row slot="md-table-row" slot-scope="{ item }">
           <md-table-cell md-label="Name" md-sort-by="name">{{
@@ -29,36 +29,24 @@
 
           <md-table-cell md-label="Veiksmas">
             <md-button
-              class="md-dense md-raised md-primary"
-              style="
-                background-color: #0054a6 !important;
-                border-radius: 5rem;
-                width: 15rem;
-                margin-left: 0;
-              "
+              class="md-dense md-raised md-primary table-btn edit-btn"
               @click="() => change(item.id, 0)"
               >Keisti leidimus</md-button
             >
             <md-button
-              class="md-dense md-raised md-primary"
-              style="
-                background-color: #0054a6 !important;
-                border-radius: 5rem;
-                width: 15rem;
-              "
+              class="md-dense md-raised md-primary table-btn edit-btn"
               @click="() => change(item.id, 1)"
               >Redaguoti</md-button
             >
             <md-button
-              class="md-dense md-raised md-primary"
-              style="background-color: #a61a11 !important; border-radius: 5rem"
+              class="md-dense md-raised md-primary table-btn delete-btn"
               @click="() => deleting(item.id)"
               >Ištrinti</md-button
             >
           </md-table-cell>
         </md-table-row>
       </md-table>
-      <h5 v-else style="text-align: center">Nėra sukurtų admino paskyrų</h5>
+      <h5 v-else class="text-center" >Nėra sukurtų admino paskyrų</h5>
     </div>
   </div>
 </template>

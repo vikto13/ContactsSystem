@@ -18,6 +18,8 @@ export default {
         },
         setContacts(state, list) {
             state.contacts = list
+        }, clearSearch(state) {
+            state.search = null
         }
     },
     actions: {
@@ -27,7 +29,9 @@ export default {
                 .getFirstListItem(`id="${id}"`, {
                     expand: 'companies,companies,divisions,groups,departments'
                 });
-
+            for (let info in data.expand) {
+                data[info] = data.expand[info].name
+            }
             commit("setContact", data)
 
         },
@@ -49,13 +53,13 @@ export default {
                 .delete(state.contact.id)
         },
         async searchContactByText({ commit }, search) {
-            let list = await pocketBase.collection("contacts").getFullList();
-            const filteredItems = search
-                ? list.filter(item =>
-                    item.name.includes(search) ||
-                    item.surname.includes(search) ||
-                    item.position.includes(search)
-                ) : list
+            let { contacts } = getters
+            const filteredItems = state.search
+                ? contacts.filter(item =>
+                    item.name.includes(state.search) ||
+                    item.surname.includes(state.search) ||
+                    item.position.includes(state.search)
+                ) : contacts
             commit('setContacts', filteredItems)
         },
         async searchContactBySelections({ commit, getters }) {

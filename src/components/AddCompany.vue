@@ -82,5 +82,8 @@ export default {
       }
     },
   },
+  destroyed() {
+    this.$store.commit("clearCompanyData")
+  }
 };
 </script>

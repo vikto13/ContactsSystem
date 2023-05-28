@@ -16,9 +16,12 @@
         aria-label="Default select example"
         @click="({ target }) => pressed(target, filter.id)"
       >
-        <option selected :value="null">{{ filter.title }}</option>
+      <option :disabled="null == filter.selected" selected :value="null">
+          {{ filter.title }}
+        </option>
         <option
           v-for="(select, position) in filter.all"
+          :disabled="select.id == filter.selected"
           :key="position"
           :value="select.id"
         >

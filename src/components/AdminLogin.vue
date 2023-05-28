@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form>
     <h1>Admin prisijungimas</h1>
     <div class="forms-inputs">
       <input-box-icon
@@ -15,6 +15,7 @@
           :class="{ 'is-invalid': isInvalid(email) }"
           placeholder="Įveskite el pašto adresą..."
           style="background-color: #f1f2f4; border-left-width: 0"
+          autocomplete="username"
         />
       </input-box-icon>
     </div>
@@ -32,6 +33,7 @@
           class="form-control"
           placeholder="Įveskite slaptažodį..."
           style="background-color: #f1f2f4; border-left-width: 0"
+          autocomplete="current-password"
         />
       </input-box-icon>
     </div>
@@ -42,7 +44,7 @@
     <div class="mb-3">
       <button class="btn w-100" @click="() => login()">Prisijungti</button>
     </div>
-  </div>
+  </form>
 </template>
 <script>
 import { LoginMixin } from "../views/mixins/LoginMixin";

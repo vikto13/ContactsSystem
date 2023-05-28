@@ -4,6 +4,7 @@ export const MessageState = {
     title: "",
     content: "",
     action: null,
+    isAlert: false,
 
     cancelAction: null
 }

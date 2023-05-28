@@ -98,21 +98,21 @@ export const router = new VueRouter({
 
 
 
-router.beforeEach(async (to, from, next) => {
-    if (to.meta.needsAuth) {
-        try {
-            let { token } = initializeStore.modules.User.state
-            var decoded = jwt_decode(token)
-            console.log(decoded)
-            // // await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/confirm-verification`, {
-            // //     token
-            // // })
+// router.beforeEach(async (to, from, next) => {
+//     if (to.meta.needsAuth) {
+//         try {
+//             let { token } = initializeStore.modules.User.state
+//             var decoded = jwt_decode(token)
+//             console.log(decoded)
+//             // // await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/confirm-verification`, {
+//             // //     token
+//             // // })
 
-            // console.log(Jwt.verify(token))
-        } catch {
-            return next({ path: `/users/${adminPages.authLogin}` })
-        }
-    }
+//             // console.log(Jwt.verify(token))
+//         } catch {
+//             return next({ path: `/users/${adminPages.authLogin}` })
+//         }
+//     }
 
-    next()
-})
+//     next()
+// })

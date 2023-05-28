@@ -29,7 +29,7 @@
 
     <md-card>
       <div class="md-layout">
-        <div v-for="box in info" class="md-layout-item">
+        <div v-for="(box, index) in info" :key="index" class="md-layout-item">
           <md-card-header-text
             class="mt-3 text-center font-large"
             style="font-size: large"
@@ -37,7 +37,7 @@
             {{ box.title }}
           </md-card-header-text>
           <md-card-content>
-            <p v-for="column in box.details">
+            <p v-for="(column, position) in box.details" :key="position">
               {{ `${column.field} ${isNoText(contact[column.text])}` }}
             </p>
           </md-card-content>
@@ -56,7 +56,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["contact", "companyList"]),
+    ...mapGetters(["contact"]),
   },
   async mounted() {
     await this.findContact(this.id);

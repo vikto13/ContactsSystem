@@ -25,3 +25,37 @@
     right: 2rem;
     top: 1rem;
   }
+
+  .delete-btn{
+    background-color: #a61a11 !important
+  }
+  .edit-btn{
+    background-color: #1f3f77 !important
+  }
+  
+  .icon-colors{
+    color: white
+  }
+
+  .table-footer{
+    background-color: #f1f2f4 !important
+  }
+
+  .table-btn{
+    border-radius: 5rem !important;
+    width: 15rem;
+  }
+
+  .back-icon{
+    background-color: white !important;
+    top: 5%;
+    left: 5%;
+  }
+  .btn {
+    background-color: #1f3f77 !important;
+    color: white !important;
+  }
+  .btn:hover {
+    background-color: #1f3f77 !important;
+    color: white !important;
+  }

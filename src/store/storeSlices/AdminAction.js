@@ -32,14 +32,14 @@ export default {
             commit("setRoles", data)
         },
         async fetchAdmins({ commit }) {
-            const data = await pocketBase.collection('admin').getFullList()
+            const data = await pocketBase.collection('users').getFullList()
             commit("setAdmins", data)
         },
         async deleteAdmin({ commit, state }) {
-            await pocketBase.collection('admin').delete(state.admin.id)
+            await pocketBase.collection('users').delete(state.admin.id)
         },
         async updateAdmin({ getters, state }) {
-            await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/admin/records/${state.admin.id}`,
+            await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${state.admin.id}`,
                 {
                     ...state.admin,
                     avatar: getters.image.file
@@ -51,7 +51,7 @@ export default {
             commit("clearAdmin")
         },
         async saveAdmin({ state, getters }) {
-            await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/admin/records`,
+            await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records`,
                 {
                     ...state.admin,
                     avatar: getters.image.file
@@ -104,7 +104,7 @@ export default {
         async setAdmin({ commit, getters }, id) {
 
             const data = await pocketBase
-                .collection("admin")
+                .collection("users")
                 .getFirstListItem(`id="${id}"`);
             commit("setAdmin", data)
         },

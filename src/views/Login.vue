@@ -1,15 +1,9 @@
 <template>
-  <div class="darkBlue" style="position: fixed; width: 100%; height: 100%">
-    <div class="md-layout md-gutter md-alignment-center" style="height: 100%">
+  <div class="darkBlue h-100 w-100 position-fixed">
+    <div class="md-layout md-gutter md-alignment-center h-100">
       <md-button
-        class="md-icon-button md-raised"
+        class="md-icon-button md-raised position-absolute back-icon"
         @click="$router.push(goBackPath)"
-        style="
-          background-color: white !important;
-          position: absolute;
-          top: 5%;
-          left: 5%;
-        "
       >
         <md-icon style="color: #1f3f77">reply</md-icon>
       </md-button>
@@ -20,11 +14,7 @@
         :size-l="35"
         :size-xl="20"
       >
-        <div
-          class="card px-4"
-          style="padding-top: 5%"
-          :style="{ 'padding-bottom': addingBottom }"
-        >
+        <div class="card px-4 pt-5" :style="{ 'padding-bottom': addingBottom }">
           <router-view></router-view>
         </div>
       </divide-components>
@@ -59,13 +49,4 @@ export default {
   },
 };
 </script>
-<style>
-.btn {
-  background-color: #1f3f77;
-  color: white;
-}
-.btn:hover {
-  background-color: #1f3f77;
-  color: white;
-}
-</style>
+

@@ -3,6 +3,29 @@
     <h5 class="mt-5" style="width: 32rem; text-align: center">
       {{ `${office.id != null ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
     </h5>
+
+    <input-box-icon
+      :title="`Kompanijos pavadinimas: `"
+      :bottom-text="'Pasirinkite kompaniją'"
+      :is-not-valid="this.submit &&!office.selectedNames.length"
+      class="mb-2"
+    >
+     <md-field>
+      <md-select
+      v-model="office.selectedNames"
+      multiple
+      :disabled="typeof office.id == 'string'"
+      >
+      <md-option
+       v-for="option in companyDetails['companies'].all" 
+       :key="option.id" 
+       :value="option.id">
+        {{ option.name }}
+      </md-option>
+      </md-select>
+    </md-field>
+      </input-box-icon>
+
     <input-box-icon
       v-for="(input, index) in inputs"
       :key="index"
@@ -55,11 +78,6 @@ export default {
   data() {
     return {
       inputs: [
-        {
-          id: "name",
-          title: "Pavadinimas",
-          placeholder: "Įveskite pavadinimą...",
-        },
         {
           id: "street",
           title: "Gatvė",

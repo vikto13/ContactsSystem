@@ -7,6 +7,7 @@
         <div class="col-md-6 col-lg-5 col-xl-4">
           <input-box-icon>
             <input
+              v-model="contactSearch"
               type="text"
               class="form-control"
               placeholder="Ieškoti kontakto"
@@ -15,17 +16,13 @@
             />
           </input-box-icon>
         </div>
-        <div
-          class="col-4 col-md-1 align-self-center margin"
-          style="display: flex"
-        >
+        <div class="col-4 col-md-1 align-self-center margin d-flex">
           <md-menu md-size="medium" md-align-trigger class="d-flex flex-wrap">
             <md-button
-              class="md-icon-button md-raised ml-3"
+              class="md-icon-button md-raised ml-3 edit-btn"
               md-menu-trigger
-              style="background-color: #0054a6 !important"
             >
-              <md-icon style="color: #ffffff">filter_alt</md-icon>
+              <md-icon style="color: white">filter_alt</md-icon>
             </md-button>
             <md-menu-content>
               <md-menu-item
@@ -35,15 +32,24 @@
                 @click="() => setPaginate(option)"
                 >{{ option }}</md-menu-item
               >
+              <md-menu-item
+                :value="contacts.length"
+                :disabled="sizeOfPaginate == contacts.length"
+                @click="() => setPaginate(contacts.length)"
+                >visi</md-menu-item
+              >
             </md-menu-content>
           </md-menu>
 
-          <div v-for="(button, index) in buttons" class="d-flex flex-wrap">
+          <div
+            v-for="(button, index) in buttons"
+            :key="index"
+            class="d-flex flex-wrap"
+          >
             <md-button
               :key="index"
-              class="md-icon-button md-raised ml-3"
+              class="md-icon-button md-raised ml-3 edit-btn"
               @click="() => button.action(index)"
-              style="background-color: #0054a6 !important"
             >
               <md-icon style="color: #ffffff">{{ button.title }}</md-icon>
             </md-button>
@@ -111,13 +117,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "contacts",
-      "companyDetails",
-      "user",
-      "optionsForPaginate",
-      "sizeOfPaginate",
-    ]),
+    ...mapGetters(["contacts", "optionsForPaginate", "sizeOfPaginate"]),
+    contactSearch: {
+      get() {
+        return this.$store.state.Contact.search;
+      },
+      set(text) {
+        this.$store.state.Contact.search = text;
+      },
+    },
   },
   methods: {
     ...mapActions([
@@ -127,7 +135,8 @@ export default {
       "searchContactBySelections",
     ]),
     async searching(value) {
-      await this.searchContactByText(value);
+      await this.searchContactBySelections();
+      await this.searchContactByText();
     },
     filtering() {
       this.searchContactBySelections();

@@ -7,6 +7,7 @@ import Image from "./storeSlices/ImageAction"
 import Office from "./storeSlices/OfficeAction"
 import Contact from "./storeSlices/ContactActions"
 import Paginate from "./storeSlices/PaginateAction"
+import NavBar from "./storeSlices/NavBar"
 
 export const initializeStore = {
     modules: {
@@ -18,6 +19,7 @@ export const initializeStore = {
         Image,
         Office,
         Contact,
-        Paginate
+        Paginate,
+        NavBar
     }
 }

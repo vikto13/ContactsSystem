@@ -34,6 +34,23 @@
           />
         </input-box-icon>
 
+        <input-box-icon
+          :icon-name="'phone'"
+          :bottom-text="emailMessage(admin.email)"
+          :title="'Telefono numeris:'"
+          :is-not-valid="showEmailMessage(admin.email)"
+        >
+          <input
+            v-model="admin.email"
+            type="text"
+            :class="{ 'is-invalid': showEmailMessage(admin.email) }"
+            :placeholder="'Įveskite el.paštą...'"
+            class="form-control"
+            style="background-color: #f1f2f4"
+            :style="{ 'border-left-width': 0 }"
+          />
+        </input-box-icon>
+
         <add-image></add-image>
       </div>
 
@@ -71,6 +88,7 @@ import { mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 import InputBoxIcon from "./InputBoxIcon.vue";
 import { LoginMixin } from "../views/mixins/LoginMixin";
+import generator from "generate-password-browser"
 export default {
   components: {
     InputBoxIcon,
@@ -106,6 +124,7 @@ export default {
       "fetchAdmins",
       "clearAdminData",
       "updateAdmin",
+      'triggerMessage'
     ]),
     async save() {
       if (!this.admin.name || !this.admin.email) {
@@ -118,11 +137,18 @@ export default {
         } else {
           await this.saveAdmin();
         }
+        await this.fetchAdmins();
       } catch (err) {
         console.log(err);
       }
-      await this.fetchAdmins();
       this.dismissDialog();
+      this.triggerMessage({
+        title: "Admin paskyra sukurta sėkmingai",
+        content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${generator.generate({ length: 8, numbers: true })}`,
+        isAlert:true,
+        action: async () => {
+        },
+      });
     },
   },
 

@@ -21,12 +21,6 @@ export default {
   computed: {
     ...mapGetters(["contact"]),
   },
-  beforeDestroy() {
-    this.$store.commit("clearContact");
-  },
-  computed: {
-    ...mapGetters(["contact"]),
-  },
   methods: {
     ...mapActions([
       "saveContact",

@@ -40,7 +40,7 @@
       "
       @click="save"
     >
-      {{ contact.id ? "PAKEISTI" : "PRIDĖTI" }}
+    {{ contact.id ? "Pakeisti" : "Pridėti" }}
     </md-button>
   </div>
 </template>

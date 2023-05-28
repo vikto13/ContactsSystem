@@ -79,7 +79,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .md-button {
   background-color: #1f3f77 !important;
 }

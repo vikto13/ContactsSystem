@@ -17,9 +17,10 @@
         style="height: 3rem"
       />
     </router-link>
-    <template v-if="user.token">
+    <!-- v-if="user.token" -->
+    <template >
       <li
-        v-for="(tab, index) in tabItems"
+        v-for="(tab,index) in navBar"
         :key="index"
         class="nav-item d-flex flex-row"
         style="padding: 1%"
@@ -56,21 +57,12 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import NavBar from "../store/storeSlices/NavBar";
 export default {
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user",'navBar']),
   },
-  data() {
-    return {
-      tabItems: [
-        { title: "Kontaktai", path: "/contacts/records" },
-        { title: "Įmonės", path: "/companies/records" },
-        { title: "Struktūra", path: "/relationship/record" },
-        { title: "Būstinės", path: "/offices/records" },
-        { title: "Paskyros", path: "/admins/records" },
-      ],
-    };
-  },
+
   methods: {
     signOut() {
       this.$router.push("/users/auth-with-password");

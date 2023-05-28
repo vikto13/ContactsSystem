@@ -4,60 +4,45 @@
     <div class="m-5">
       <h1 style="font-weight: normal">Struktūros</h1>
       <field-to-create
-        :text="'Pridėti naują truktūrą'"
+        v-if="show"
+        :text="'Pridėti naują struktūrą'"
         @pressed="triggerDialog('add-relationship')"
       >
       </field-to-create>
-
       <md-table
-        v-model="admins"
+        v-if="show.length"
+        v-model="show"
         md-sort="name"
         md-sort-order="asc"
         md-card
         md-fixed-header
-        class="mt-5"
-        style="background-color: #f1f2f4"
+        class="mt-5 table-footer"
       >
-        <!-- <md-table-row slot="md-table-row" slot-scope="{ item }">
-            <md-table-cell md-label="Name" md-sort-by="name">{{
-              item.name
-            }}</md-table-cell>
-            <md-table-cell md-label="Email" md-sort-by="email">{{
-              item.email
-            }}</md-table-cell>
-  
-            <md-table-cell md-label="Veiksmas">
-              <md-button
-                class="md-dense md-raised md-primary"
-                style="
-                  background-color: #0054a6 !important;
-                  border-radius: 5rem;
-                  width: 15rem;
-                  margin-left: 0;
-                "
-                @click="() => change(item.id, 0)"
-                >Keisti leidimus</md-button
-              >
-              <md-button
-                class="md-dense md-raised md-primary"
-                style="
-                  background-color: #0054a6 !important;
-                  border-radius: 5rem;
-                  width: 15rem;
-                "
-                @click="() => change(item.id, 1)"
-                >Redaguoti</md-button
-              >
-              <md-button
-                class="md-dense md-raised md-primary"
-                style="background-color: #a61a11 !important; border-radius: 5rem"
-                @click="() => deleting(item.id)"
-                >Ištrinti</md-button
-              >
-            </md-table-cell>
-          </md-table-row> -->
+        <md-table-row slot="md-table-row" slot-scope="{ item }">
+          <md-table-cell md-label="Pavadinimas" md-sort-by="name">{{
+            ` ${item.name} `
+          }}</md-table-cell>
+          <md-table-cell md-label="Tipas">{{
+            companyDetails[item.collectionName].title
+          }}</md-table-cell>
+
+          <md-table-cell md-label="Veiksmas">
+            <md-button
+              class="md-dense md-raised md-primary edit-btn table-btn"
+              @click.stop="edit({ entity: item.collectionName, id: item.id })"
+              >Redaguoti</md-button
+            >
+            <md-button
+              class="md-dense md-raised md-primary delete-btn table-btn"
+              @click.stop="
+                () => deleting({ entity: item.collectionName, id: item.id })
+              "
+              >Ištrinti</md-button
+            >
+          </md-table-cell>
+        </md-table-row>
       </md-table>
-      <!-- <h5 v-else style="text-align: center">Nėra sukurtų admino paskyrų</h5> -->
+      <h5 v-else class="text-center">Nėra sukurtų admino paskyrų</h5>
     </div>
   </div>
 </template>
@@ -68,27 +53,61 @@ export default {
   components: {
     FieldToCreate,
   },
-  async mounted() {},
+  async mounted() {
+    await this.fetchAllCompanies();
+    this.getData();
+  },
+  data() {
+    return {
+      show: [],
+    };
+  },
   computed: {
-    ...mapGetters(["admins"]),
-    //   admins: {
-    //     get() {
-    //       return this.$store.getters.admins;
-    //     },
-    //     set() {},
-    //   },
+    ...mapGetters(["admins", "companyDetails", "company"]),
   },
   methods: {
     ...mapActions([
       "triggerDialog",
-      "fetchAdmins",
-      "setAdmin",
-      "setWhatDo",
       "triggerMessage",
-      "deleteAdmin",
-      "clearAdminData",
+      "fetchAllCompanies",
+      "findCompany",
+      "deleteCompany",
     ]),
+    getData() {
+      let fetch = [
+        this.companyDetails.departments,
+        this.companyDetails.groups,
+        this.companyDetails.divisions,
+      ].map(({ all }) => all);
+      this.show = [].concat(...fetch);
+    },
+
+    async edit(find) {
+      await this.findCompany(find);
+
+      this.triggerDialog("add-relationship");
+    },
+    async deleting(find) {
+      await this.findCompany(find);
+
+      this.triggerMessage({
+        title: "Ar tikrai norite ištrinti ryšį?",
+        content: `Rišys yra: ${
+          this.companyDetails[this.company.collectionName].title
+        } su ${this.company.name}`,
+
+        action: async () => {
+          await this.deleteCompany();
+          this.$store.commit("clearCompanyData");
+          await this.fetchAllCompanies();
+          this.getData();
+        },
+
+        cancelAction: () => {
+          this.$store.commit("clearCompanyData");
+        },
+      });
+    },
   },
 };
 </script>
-<style scoped></style>

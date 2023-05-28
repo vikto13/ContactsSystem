@@ -1,8 +1,9 @@
 import { OfficeState } from "../initState/OfficeState"
 import { pocketBase } from "../../../services/pocketBase";
+import axios from "axios";
 
 export default {
-    state: OfficeState,
+    state: OfficeState(),
     mutations: {
         setOffice(state, data) {
             if (data) {
@@ -12,8 +13,9 @@ export default {
             }
         },
         clearOfficeState(state) {
-            for (let value in state.office) {
-                state.office[value] = null
+            let { office } = OfficeState();
+            for (let value in office) {
+                state.office[value] = office[value]
             }
         },
         setOffices(state, list) {
@@ -24,16 +26,23 @@ export default {
         async findOffice({ commit }, id) {
             const data = await pocketBase
                 .collection("office")
-                .getFirstListItem(`id="${id}"`);
-            commit("setOffice", data)
+                .getFirstListItem(`id="${id}"`, { expand: 'name' });
+            commit("setOffice", { ...data, selectedNames: [data.name] })
 
         },
         async saveOffice({ state, commit }) {
-            await pocketBase.collection("office").create(state.office)
-
+            await Promise.all(state.office.selectedNames.map(save => {
+                return axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/office/records`, convertOfficeData(state.office, save))
+            }))
         },
         async fetchOffices({ commit }) {
-            let allOffice = await pocketBase.collection("office").getFullList({ sort: '-created', });
+            let allOffice = await pocketBase.collection("office").getFullList({ sort: '-created', expand: 'name' });
+            allOffice.map((data) => {
+                for (let info in data.expand) {
+                    data[info] = data.expand[info].name
+                }
+                return data
+            })
             commit('setOffices', allOffice)
         },
         async editOffice({ state }) {
@@ -53,4 +62,13 @@ export default {
         office: (state) => state.office,
         offices: (state) => state.offices
     },
+}
+function convertOfficeData(office, id) {
+    return {
+        city: office.city,
+        country: office.country,
+        name: id,
+        street: office.street,
+        street_number: office.street_number
+    }
 }

@@ -10,6 +10,7 @@
       </field-to-create>
 
       <md-table
+        v-if="offices.length"
         v-model="offices"
         md-sort="name"
         md-sort-order="asc"
@@ -28,31 +29,25 @@
           <md-table-cell md-label="Miestas" md-sort-by="city">{{
             item.city
           }}</md-table-cell>
-          <md-table-cell md-label="Šalia" md-sort-by="country">{{
+          <md-table-cell md-label="Šalis" md-sort-by="country">{{
             item.country
           }}</md-table-cell>
 
           <md-table-cell md-label="Veiksmas">
             <md-button
-              class="md-dense md-raised md-primary"
-              style="
-                background-color: #0054a6 !important;
-                border-radius: 5rem;
-                width: 15rem;
-              "
+              class="md-dense md-raised md-primary edit-btn table-btn"
               @click="() => edit(item.id)"
               >Redaguoti</md-button
             >
             <md-button
-              class="md-dense md-raised md-primary"
-              style="background-color: #a61a11 !important; border-radius: 5rem"
+              class="md-dense md-raised md-primary delete-btn table-btn"
               @click="() => deleting(item.id)"
               >Ištrinti</md-button
             >
           </md-table-cell>
         </md-table-row>
       </md-table>
-      <!-- <h5 v-else style="text-align: center">Nėra sukurtų admino paskyrų</h5> -->
+      <h5 v-else style="text-align: center">Nėra sukurtų admino paskyrų</h5>
     </div>
   </div>
 </template>
@@ -67,7 +62,7 @@ export default {
     this.fetchOffices();
   },
   computed: {
-    ...mapGetters(["admins", "office"]),
+    ...mapGetters(["office"]),
     offices: {
       get() {
         return this.$store.getters.offices;
@@ -80,17 +75,12 @@ export default {
     ...mapActions([
       "triggerDialog",
       "fetchOffices",
-      "setAdmin",
-      "setWhatDo",
       "triggerMessage",
-      "deleteAdmin",
-      "clearAdminData",
       "findOffice",
       "deleteOffice",
     ]),
     async edit(id) {
       await this.findOffice(id);
-
       this.triggerDialog("add-office");
     },
     async deleting(id) {
@@ -98,18 +88,18 @@ export default {
 
       this.triggerMessage({
         title: "Ar tikrai norite ištrinti ofiso duomenis?",
-        content: `Ofiso pavadinimas: ${this.office.name}`,
+        content: `Ofiso pavadinimas: ${this.office.expand.name.name}`,
         action: async () => {
           await this.deleteOffice();
-          this.$store.commit('clearOfficeState')
+          this.$store.commit("clearOfficeState");
           await this.fetchOffices();
         },
         cancelAction: () => {
-         this.$store.commit('clearOfficeState')
-       }
+          this.$store.commit("clearOfficeState");
+        },
       });
     },
   },
 };
 </script>
-<style scoped></style>
+

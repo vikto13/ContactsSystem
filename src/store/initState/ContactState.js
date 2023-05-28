@@ -15,4 +15,5 @@ export const ContactState = {
 
         image: null
     },
+    search: ''
 }
