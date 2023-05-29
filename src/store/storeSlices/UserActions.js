@@ -1,6 +1,7 @@
 import { pocketBase } from "../../../services/pocketBase";
 import { UserState } from "../initState/UserState";
 import axios from "axios";
+
 export default {
     state: UserState,
     mutations: {
@@ -23,22 +24,23 @@ export default {
             await commit("setUser", { ...data.record, token: data.token })
             await dispatch("setUserAvatar")
         },
-        async authWithToken({ commit }, user) {
-            console.log("aaaaaaa", user)
-            let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${user.id}`, user.token)
-            console.log(data)
-            await commit("setUser", { ...data.record, token: data.token })
+        async authWithToken({ commit, dispatch }, user) {
+            let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${user.id}`, { headers: { Authorization: `Bearer ${user.token}` } })
+            await commit("setUser", { ...data, token: user.token })
             await dispatch("setUserAvatar")
         },
         async setUserAvatar({ commit, state }) {
-            let image = await axios.get(
-                `${import.meta.env.VITE_POCKET_BASE_URL}/api/files/users/${state.id
-                }/${state.avatar}?thumb=100x300`,
-                { responseType: "blob" }
-            );
-            let avatar = new FileReader();
-            avatar.readAsDataURL(image.data);
-            commit("setUser", { avatar })
+            if (state.avatar) {
+                let image = await axios.get(
+                    `${import.meta.env.VITE_POCKET_BASE_URL}/api/files/users/${state.id
+                    }/${state.avatar}?thumb=100x300`,
+                    { responseType: "blob" }
+                );
+                let avatar = new FileReader();
+                avatar.readAsDataURL(image.data);
+                commit("setUser", { avatar })
+            }
+
         },
         async resetPassword(_, email) {
             await pocketBase.collection('users').requestPasswordReset(email)

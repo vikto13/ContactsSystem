@@ -13,8 +13,10 @@ import RemindPassword from "../components/RemindPassword.vue";
 import UpdatePassword from "../components/UpdatePassword.vue";
 import { pocketBase } from "../../services/pocketBase";
 import axios from "axios";
+import { store } from "../main";
 
 import jwt_decode from "jwt-decode";
+
 
 export const router = new VueRouter({
     routes: [
@@ -57,7 +59,7 @@ export const router = new VueRouter({
             component: Login,
             children: [
                 {
-                    path: initializeStore.modules.Admin.state.pages.updatePassword,
+                    path: initializeStore.modules.Admin.state.pages.authRefresh,
                     component: RemindPassword
 
                 },
@@ -96,23 +98,19 @@ export const router = new VueRouter({
     ]
 })
 
-
-
 router.beforeEach(async (to, from, next) => {
 
-    // if (to.meta.needsAuth) {
-    try {
-        let { token } = initializeStore.modules.User.state
-        let { id } = jwt_decode(token)
-
-        await initializeStore.modules.User.actions.authWithToken({ id, token })
-
-
-        // console.log(Jwt.verify(token))
-    } catch {
-        //return next({ path: `/users/${initializeStore.modules.Admin.state.pages.authLogin}` })
+    if (to.meta.needsAuth) {
+        try {
+            let { token } = initializeStore.modules.User.state;
+            if (!token) {
+                let { model, token } = JSON.parse(localStorage.getItem('pocketbase_auth'))
+                await store.dispatch("authWithToken", { id: model.id, token })
+            }
+        } catch {
+            next({ path: `/users/${initializeStore.modules.Admin.state.pages.authLogin}` });
+        }
     }
-    // }
+    next();
 
-    next()
-})
+});

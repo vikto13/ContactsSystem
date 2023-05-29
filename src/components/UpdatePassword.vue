@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form>
     <h1 class="mb-4">Pakeisti slaptažodį</h1>
     <div class="forms-inputs">
       <span> Nujas slaptažodis: </span>
@@ -14,6 +14,8 @@
           class="form-control input-w"
           :class="{ 'is-invalid': isInvalid({ password }) }"
           placeholder="Įveskite naują slaptažodį..."
+          autocomplete="new-password"
+          
         />
       </input-box-icon>
     </div>
@@ -30,13 +32,14 @@
           class="form-control input-w"
           :class="{ 'is-invalid': showCompareMessage(password, secPassword) }"
           placeholder="Pakartoti naują slaptažodį..."
+          autocomplete="new-password"
         />
       </input-box-icon>
     </div>
     <div class="mb-3">
       <button class="btn w-100" @click="() => change()">Keisti</button>
     </div>
-  </div>
+  </form>
 </template>
 <script>
 import { LoginMixin } from "../views/mixins/LoginMixin";
@@ -50,6 +53,11 @@ export default {
       ) {
         this.submit = true;
         return;
+      }
+      try {
+        
+      } catch {
+        
       }
     },
   },

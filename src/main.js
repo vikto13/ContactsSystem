@@ -21,7 +21,7 @@ Vue.use(VueMaterial)
 Vue.use(VueRouter);
 Vue.use(VueDatePicker);
 
-const store = new Vuex.Store(initializeStore)
+export const store = new Vuex.Store(initializeStore)
 
 new Vue({
     store,

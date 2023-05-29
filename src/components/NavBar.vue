@@ -65,8 +65,9 @@ export default {
   },
   methods: {
     signOut() {
-      this.$router.push("/users/auth-with-password");
+      this.$router.push("/users/auth-refresh");
       this.$store.commit("clearUserData");
+      localStorage.removeItem('pocketbase_auth');
     },
   },
   async mounted() {},
