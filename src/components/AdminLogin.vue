@@ -51,7 +51,9 @@ import { LoginMixin } from "../views/mixins/LoginMixin";
 import { mapActions, mapGetters } from "vuex";
 export default {
   mixins: [LoginMixin],
-
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
     ...mapActions(["authWithPassword"]),
     async login() {
@@ -64,7 +66,9 @@ export default {
           email: this.email,
           password: this.password,
         });
-        this.$router.push("/contacts/records");
+        setTimeout(() => {
+          this.$router.push("/contacts/records");
+        }, 1);
       } catch (err) {
         if (err.status == 400) {
           console.log("not authorized");

@@ -48,13 +48,14 @@ export default {
             commit('setCompanies', { list, entity })
         },
         async fetchAllCompanies({ commit, state }, entity) {
-            let search = [state.details.departments, state.details.divisions, state.details.groups]
+            let search = [state.details.departments, state.details.divisions, state.details.groups, state.details.companies]
 
             let list = await Promise.all(search.map(({ id }) => {
                 return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${id}/records`)
             }))
             search.map(({ id }, index) => {
                 let { items } = list[index].data
+                console.log({ list: items, entity: id })
                 commit('setCompanies', { list: items, entity: id })
             })
 
@@ -77,6 +78,13 @@ export default {
         companyList: (state) => state.details.companies.all,
         companyDetails: (state) => state.details,
 
+        showCompaniesRealations: (state) => {
+            let all = [state.details.departments,
+            state.details.groups,
+            state.details.divisions,
+            ].map(({ all }) => all);
+            return [].concat(...all);
 
+        }
     },
 }

@@ -1,8 +1,10 @@
 import { pocketBase } from "../../../services/pocketBase";
 import { AdminState } from "../initState/AdminState";
 import axios from 'axios';
+import generator from "generate-password-browser";
+
 export default {
-    state: AdminState,
+    state: AdminState(),
     mutations: {
         setRoles(state, roles) {
             state.roles = roles
@@ -11,16 +13,20 @@ export default {
             state.admins = admins
         },
         clearAdmin(state) {
-            state.admin.name = ''
-            state.admin.email = ''
-            state.admin.roles = []
-            state.admin.whatDo = null
+            let { admin } = AdminState();
+            for (let adminState in admin) {
+                state.admin[adminState] = admin[adminState]
+            }
+
+        },
+        setPassword(state, password) {
+            state.admin.password = password
+            state.admin.passwordConfirm = password
         },
         setAdmin(state, admin) {
-            state.admin.name = admin.name
-            state.admin.email = admin.email
-            state.admin.roles = admin.roles
-            state.admin.id = admin.id
+            for (let adminState in admin) {
+                state.admin[adminState] = admin[adminState]
+            }
         },
         setAdminAction(state, action) {
             state.admin.whatDo = action
@@ -50,11 +56,15 @@ export default {
         clearAdminData({ commit }) {
             commit("clearAdmin")
         },
-        async saveAdmin({ state, getters }) {
+        async saveAdmin({ state, getters, commit }) {
+            await commit("setPassword", generator.generate({
+                length: 8,
+                numbers: true,
+            }))
             await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records`,
                 {
                     ...state.admin,
-                    avatar: getters.image.file
+                    avatar: getters.image.file,
                 },
                 { headers: { 'Content-Type': 'multipart/form-data' } }
             )
@@ -70,20 +80,11 @@ export default {
             //     },
             //     { headers: { 'Content-Type': 'multipart/form-data', } });
 
-            // commit({ base64: e.target.result, name: image.name })
-
-            //     };
-            // },
-            // async fetchRoles({ commit }) {
-            //     const data = await pocketBase.collection('admin_roles').getFullList()
-            //     commit("setRoles", data)
-            // },
-            // async saveAdmin({ commit, state }, image) {
-            //     await pocketBase.collection('admin').create({ ...state.admin, avatar: image });
-            // }
 
 
-            // const reader = new FileReader();
+
+
+            const reader = new FileReader();
             // const blob = new Blob([getters.image.previewImage]);
             // await reader.readAsBinaryString(blob)
             // console.log(await reader.arrayBuffer)

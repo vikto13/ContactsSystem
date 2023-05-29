@@ -8,12 +8,12 @@ import NotFound from "../views/NotFound.vue"
 import Admins from "../views/Admins.vue"
 import Relationship from "../views/Relationship.vue"
 import Offices from "../views/Offices.vue"
-const { pages: adminPages } = initializeStore.modules.Admin.state
 import AdminLogin from "../components/AdminLogin.vue"
 import RemindPassword from "../components/RemindPassword.vue";
 import UpdatePassword from "../components/UpdatePassword.vue";
 import { pocketBase } from "../../services/pocketBase";
 import axios from "axios";
+
 import jwt_decode from "jwt-decode";
 
 export const router = new VueRouter({
@@ -57,17 +57,17 @@ export const router = new VueRouter({
             component: Login,
             children: [
                 {
-                    path: adminPages.authRefresh,
+                    path: initializeStore.modules.Admin.state.pages.updatePassword,
                     component: RemindPassword
 
                 },
                 {
-                    path: adminPages.authLogin,
+                    path: initializeStore.modules.Admin.state.pages.authLogin,
                     component: AdminLogin
 
                 },
                 {
-                    path: adminPages.updatePassword,
+                    path: initializeStore.modules.Admin.state.pages.updatePassword,
                     component: UpdatePassword
 
                 }
@@ -98,21 +98,21 @@ export const router = new VueRouter({
 
 
 
-// router.beforeEach(async (to, from, next) => {
-//     if (to.meta.needsAuth) {
-//         try {
-//             let { token } = initializeStore.modules.User.state
-//             var decoded = jwt_decode(token)
-//             console.log(decoded)
-//             // // await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/confirm-verification`, {
-//             // //     token
-//             // // })
+router.beforeEach(async (to, from, next) => {
 
-//             // console.log(Jwt.verify(token))
-//         } catch {
-//             return next({ path: `/users/${adminPages.authLogin}` })
-//         }
-//     }
+    // if (to.meta.needsAuth) {
+    try {
+        let { token } = initializeStore.modules.User.state
+        let { id } = jwt_decode(token)
 
-//     next()
-// })
+        await initializeStore.modules.User.actions.authWithToken({ id, token })
+
+
+        // console.log(Jwt.verify(token))
+    } catch {
+        //return next({ path: `/users/${initializeStore.modules.Admin.state.pages.authLogin}` })
+    }
+    // }
+
+    next()
+})

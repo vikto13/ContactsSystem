@@ -1,15 +1,21 @@
-export const AdminState = {
-    roles: [],
-    admin: {
-        name: '',
-        email: '',
+export function AdminState() {
+    return {
         roles: [],
-        whatDo: null
-    },
-    admins: [],
-    pages: {
-        "authLogin": "auth-with-password",
-        "authRefresh": "auth-refresh",
-        "updatePassword": "users/update-password",
-    },
+        admin: {
+            name: '',
+            email: '',
+            phone_number: '',
+            roles: [],
+            whatDo: null,
+            id: null,
+            password: '',
+            passwordConfirm: ''
+        },
+        admins: [],
+        pages: {
+            "authLogin": "auth-with-password",
+            "authRefresh": "auth-refresh",
+            "updatePassword": "users/update-password",
+        },
+    }
 }

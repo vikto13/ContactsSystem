@@ -7,24 +7,25 @@
     <input-box-icon
       :title="`Kompanijos pavadinimas: `"
       :bottom-text="'Pasirinkite kompaniją'"
-      :is-not-valid="this.submit &&!office.selectedNames.length"
+      :is-not-valid="this.submit && !office.selectedNames.length"
       class="mb-2"
     >
-     <md-field>
-      <md-select
-      v-model="office.selectedNames"
-      multiple
-      :disabled="typeof office.id == 'string'"
-      >
-      <md-option
-       v-for="option in companyDetails['companies'].all" 
-       :key="option.id" 
-       :value="option.id">
-        {{ option.name }}
-      </md-option>
-      </md-select>
-    </md-field>
-      </input-box-icon>
+      <md-field>
+        <md-select
+          v-model="office.selectedNames"
+          multiple
+          :disabled="typeof office.id == 'string'"
+        >
+          <md-option
+            v-for="option in companyDetails['companies'].all"
+            :key="option.id"
+            :value="option.id"
+          >
+            {{ option.name }}
+          </md-option>
+        </md-select>
+      </md-field>
+    </input-box-icon>
 
     <input-box-icon
       v-for="(input, index) in inputs"
@@ -72,7 +73,7 @@ export default {
   },
   mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["office"]),
+    ...mapGetters(["office", "companyDetails"]),
   },
 
   data() {
@@ -136,3 +137,9 @@ export default {
   },
 };
 </script>
+<style>
+.md-list-item-text {
+  padding-left: 10%;
+  padding-top: 3%;
+}
+</style>

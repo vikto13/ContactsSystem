@@ -4,14 +4,13 @@
     <div class="m-5">
       <h1 style="font-weight: normal">Struktūros</h1>
       <field-to-create
-        v-if="show"
         :text="'Pridėti naują struktūrą'"
         @pressed="triggerDialog('add-relationship')"
       >
       </field-to-create>
       <md-table
-        v-if="show.length"
-        v-model="show"
+        v-if="showCompanies.length"
+        v-model="showCompanies"
         md-sort="name"
         md-sort-order="asc"
         md-card
@@ -42,7 +41,7 @@
           </md-table-cell>
         </md-table-row>
       </md-table>
-      <h5 v-else class="text-center">Nėra sukurtų admino paskyrų</h5>
+      <h5 v-else class="text-center">Nėra sukurtų struktūrų</h5>
     </div>
   </div>
 </template>
@@ -55,7 +54,7 @@ export default {
   },
   async mounted() {
     await this.fetchAllCompanies();
-    this.getData();
+    console.log(this.showCompaniesRealations);
   },
   data() {
     return {
@@ -63,7 +62,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["admins", "companyDetails", "company"]),
+    ...mapGetters([
+      "admins",
+      "companyDetails",
+      "company",
+      "showCompaniesRealations",
+    ]),
+    showCompanies: {
+      get() {
+        return this.showCompaniesRealations;
+      },
+      set() {},
+    },
   },
   methods: {
     ...mapActions([
@@ -74,6 +84,7 @@ export default {
       "deleteCompany",
     ]),
     getData() {
+      console.log("aaaaaaaa");
       let fetch = [
         this.companyDetails.departments,
         this.companyDetails.groups,

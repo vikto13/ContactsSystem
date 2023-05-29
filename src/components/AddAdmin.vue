@@ -36,15 +36,15 @@
 
         <input-box-icon
           :icon-name="'phone'"
-          :bottom-text="emailMessage(admin.email)"
+          :bottom-text="messageById({ phone_number: admin.phone_number })"
           :title="'Telefono numeris:'"
-          :is-not-valid="showEmailMessage(admin.email)"
+          :is-not-valid="isInvalid(admin.phone_number)"
         >
           <input
-            v-model="admin.email"
+            v-model="admin.phone_number"
             type="text"
-            :class="{ 'is-invalid': showEmailMessage(admin.email) }"
-            :placeholder="'Įveskite el.paštą...'"
+            :class="{ 'is-invalid': isInvalid(admin.phone_number) }"
+            :placeholder="'Įveskite telefono numerį...'"
             class="form-control"
             style="background-color: #f1f2f4"
             :style="{ 'border-left-width': 0 }"
@@ -88,7 +88,6 @@ import { mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 import InputBoxIcon from "./InputBoxIcon.vue";
 import { LoginMixin } from "../views/mixins/LoginMixin";
-import generator from "generate-password-browser"
 export default {
   components: {
     InputBoxIcon,
@@ -124,31 +123,37 @@ export default {
       "fetchAdmins",
       "clearAdminData",
       "updateAdmin",
-      'triggerMessage'
+      "triggerMessage",
     ]),
     async save() {
-      if (!this.admin.name || !this.admin.email) {
+      if (
+        !(
+          this.admin.name &&
+          this.admin.email &&
+          !this.showEmailMessage(this.admin.email)
+        )
+      ) {
         this.submit = true;
         return;
       }
+
       try {
         if (this.admin.whatDo != null) {
           await this.updateAdmin();
         } else {
           await this.saveAdmin();
+          this.dismissDialog();
+          this.triggerMessage({
+            title: "Admin paskyra sukurta sėkmingai",
+            content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
+            isAlert: true,
+            action: async () => {},
+          });
         }
         await this.fetchAdmins();
       } catch (err) {
         console.log(err);
       }
-      this.dismissDialog();
-      this.triggerMessage({
-        title: "Admin paskyra sukurta sėkmingai",
-        content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${generator.generate({ length: 8, numbers: true })}`,
-        isAlert:true,
-        action: async () => {
-        },
-      });
     },
   },
 

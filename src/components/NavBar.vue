@@ -18,9 +18,9 @@
       />
     </router-link>
     <!-- v-if="user.token" -->
-    <template >
+    <template>
       <li
-        v-for="(tab,index) in navBar"
+        v-for="(tab, index) in navBar"
         :key="index"
         class="nav-item d-flex flex-row"
         style="padding: 1%"
@@ -33,13 +33,15 @@
           >{{ tab.title }}</router-link
         >
       </li>
+
       <md-menu md-size="medium" md-align-trigger>
         <md-button
           md-menu-trigger
           class="md-icon-button md-raised"
           style="background-color: white !important"
         >
-          <md-icon class="cb">person</md-icon>
+          <img v-if="user.avatar" :src="user.avatar.result" />
+          <md-icon v-else class="cb">person</md-icon>
         </md-button>
 
         <md-menu-content>
@@ -57,18 +59,17 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import NavBar from "../store/storeSlices/NavBar";
 export default {
   computed: {
-    ...mapGetters(["user",'navBar']),
+    ...mapGetters(["user", "navBar"]),
   },
-
   methods: {
     signOut() {
       this.$router.push("/users/auth-with-password");
       this.$store.commit("clearUserData");
     },
   },
+  async mounted() {},
 };
 </script>
 

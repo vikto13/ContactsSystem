@@ -1,5 +1,6 @@
 import { ContactState } from "../initState/ContactState"
 import { pocketBase } from "../../../services/pocketBase";
+import axios from "axios";
 
 export default {
     state: ContactState,
@@ -35,11 +36,31 @@ export default {
             commit("setContact", data)
 
         },
-        async saveContact({ state }) {
-            await pocketBase.collection("contacts").create(state.contact)
+        async saveContact({ state, getters }) {
+            await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/contacts/records`,
+                {
+                    ...state.contact,
+                    image: getters.image.file
+                },
+                { headers: { 'Content-Type': 'multipart/form-data' } }
+            )
         },
         async fetchContacts({ commit, getters }) {
             let list = await pocketBase.collection("contacts").getFullList({ sort: '-created', });
+
+            // let paths = {}
+            // list.map(({ image, id, collectionName }, index) => {
+            //     if (image) {
+            //         paths[index] = `${import.meta.env.VITE_POCKET_BASE_URL}/api/files/${collectionName}/${id}/${image}?thumb=100x300`
+            //     }
+            // })
+
+            // let data = await Promise.all(Object.values(paths).map(url => axios.get(url, { responseType: "blob" })))
+            // let image = new FileReader();
+            // for (let index in paths) {
+            //     image.readAsDataURL(data[Number(index)].data);
+            //     list[Number(index)].image = image
+            // }
             commit('setContacts', list)
         },
         async editContact({ state }) {

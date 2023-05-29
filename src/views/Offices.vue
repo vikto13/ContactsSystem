@@ -60,6 +60,7 @@ export default {
   },
   async mounted() {
     this.fetchOffices();
+    this.fetchAllCompanies();
   },
   computed: {
     ...mapGetters(["office"]),
@@ -78,6 +79,7 @@ export default {
       "triggerMessage",
       "findOffice",
       "deleteOffice",
+      "fetchAllCompanies",
     ]),
     async edit(id) {
       await this.findOffice(id);
@@ -102,4 +104,3 @@ export default {
   },
 };
 </script>
-
