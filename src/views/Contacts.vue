@@ -45,6 +45,7 @@
             v-for="(button, index) in buttons"
             :key="index"
             class="d-flex flex-wrap"
+            v-if="user.token || index == 0"
           >
             <md-button
               :key="index"
@@ -86,8 +87,8 @@ export default {
   async mounted() {
     try {
       await this.fetchContacts();
-    } catch (err) {
-      console.log(err);
+    } catch {
+      this.showAlert(404);
     }
   },
   data() {
@@ -117,7 +118,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["contacts", "optionsForPaginate", "sizeOfPaginate"]),
+    ...mapGetters(["contacts", "optionsForPaginate", "sizeOfPaginate", "user"]),
     contactSearch: {
       get() {
         return this.$store.state.Contact.search;
@@ -133,6 +134,7 @@ export default {
       "fetchContacts",
       "searchContactByText",
       "searchContactBySelections",
+      "showAlert",
     ]),
     async searching(value) {
       await this.searchContactBySelections();

@@ -16,7 +16,7 @@ export function CompanyState() {
                 emptyText: "Nėra pridėta kompanijų",
                 title: 'Įmonė',
                 all: [],
-
+                selected: ''
             },
             divisions: {
                 id: "divisions",
@@ -26,7 +26,8 @@ export function CompanyState() {
                 emptyText: "Nėra pridėta divizijų",
                 title: 'Divizija',
                 all: [],
-                relationship: 'companies'
+                relationship: 'companies',
+                selected: ''
             },
             groups: {
                 id: "groups",
@@ -36,7 +37,8 @@ export function CompanyState() {
                 emptyText: "Nėra pridėta grupių",
                 title: 'Grupė',
                 all: [],
-                relationship: 'departments'
+                relationship: 'departments',
+                selected: ''
             },
             departments: {
                 id: "departments",
@@ -46,7 +48,8 @@ export function CompanyState() {
                 emptyText: "Nėra pridėta departamentų",
                 title: 'Departamentai',
                 all: [],
-                relationship: 'divisions'
+                relationship: 'divisions',
+                selected: ''
             },
         }
     }

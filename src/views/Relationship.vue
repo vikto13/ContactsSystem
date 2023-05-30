@@ -84,7 +84,6 @@ export default {
       "deleteCompany",
     ]),
     getData() {
-      console.log("aaaaaaaa");
       let fetch = [
         this.companyDetails.departments,
         this.companyDetails.groups,

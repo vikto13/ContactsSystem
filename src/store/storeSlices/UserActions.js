@@ -14,6 +14,9 @@ export default {
             for (let user in state) {
                 state[user] = null
             }
+        },
+        setImage(state, image) {
+            state.avatar = image
         }
     },
     actions: {
@@ -26,6 +29,8 @@ export default {
         },
         async authWithToken({ commit, dispatch }, user) {
             let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${user.id}`, { headers: { Authorization: `Bearer ${user.token}` } })
+            console.log(data)
+
             await commit("setUser", { ...data, token: user.token })
             await dispatch("setUserAvatar")
         },
@@ -38,7 +43,7 @@ export default {
                 );
                 let avatar = new FileReader();
                 avatar.readAsDataURL(image.data);
-                commit("setUser", { avatar })
+                commit("setImage", avatar)
             }
 
         },

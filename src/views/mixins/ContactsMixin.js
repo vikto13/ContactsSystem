@@ -24,6 +24,7 @@ export const ContactsMixin = {
             "deleteContact",
             "fetchContacts",
             "triggerMessage",
+            "showAlert"
         ]),
         async see(id) {
             this.$router.push(`/contact/${id}`);
@@ -45,7 +46,7 @@ export const ContactsMixin = {
                     this.triggerDialog("add-contacts");
                 }
             } catch (error) {
-                console.log(error);
+                this.showAlert(400)
             }
         },
     },

@@ -2,7 +2,10 @@
   <div>
     <dialog-box></dialog-box>
     <message></message>
-    <router-view> <nav-bar></nav-bar> </router-view>
+    <router-view>
+      <nav-bar> </nav-bar>
+      <alert-message class="m-4"></alert-message>
+    </router-view>
   </div>
 </template>
 
@@ -10,12 +13,14 @@
 import NavBar from "./components/NavBar.vue";
 import DialogBox from "./components/DialogBox.vue";
 import Message from "./components/Message.vue";
+import AlertMessage from "./components/AlertMessage.vue";
 
 export default {
   components: {
     NavBar,
     DialogBox,
     Message,
+    AlertMessage,
   },
 };
 </script>

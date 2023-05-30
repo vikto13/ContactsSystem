@@ -24,7 +24,6 @@ export default {
         }
     },
     actions: {
-
         async findCompany({ commit, state }, { id, entity }) {
             const data = await pocketBase
                 .collection(entity)
@@ -39,8 +38,6 @@ export default {
         async saveCompanyRelation({ state }) {
             let { collectionName } = state.company
             let { relationship } = state.details[collectionName]
-            console.log(collectionName, relationship)
-            console.log(state.company)
             await pocketBase.collection(collectionName).create({ name: state.company.name, [relationship]: state.company.relation })
         },
         async fetchCompanies({ commit }, entity) {
@@ -55,7 +52,6 @@ export default {
             }))
             search.map(({ id }, index) => {
                 let { items } = list[index].data
-                console.log({ list: items, entity: id })
                 commit('setCompanies', { list: items, entity: id })
             })
 

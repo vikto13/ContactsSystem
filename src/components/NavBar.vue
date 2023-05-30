@@ -17,8 +17,8 @@
         style="height: 3rem"
       />
     </router-link>
-    <!-- v-if="user.token" -->
-    <template>
+
+    <template v-if="user.token">
       <li
         v-for="(tab, index) in navBar"
         :key="index"
@@ -65,9 +65,9 @@ export default {
   },
   methods: {
     signOut() {
-      this.$router.push("/users/auth-refresh");
+      this.$router.push("/users/auth-with-password");
       this.$store.commit("clearUserData");
-      localStorage.removeItem('pocketbase_auth');
+      localStorage.removeItem("pocketbase_auth");
     },
   },
   async mounted() {},

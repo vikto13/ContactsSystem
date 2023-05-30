@@ -8,6 +8,7 @@ import Office from "./storeSlices/OfficeAction"
 import Contact from "./storeSlices/ContactActions"
 import Paginate from "./storeSlices/PaginateAction"
 import NavBar from "./storeSlices/NavBar"
+import AlertMessage from "./storeSlices/AlertMessage"
 
 export const initializeStore = {
     modules: {
@@ -20,6 +21,7 @@ export const initializeStore = {
         Office,
         Contact,
         Paginate,
-        NavBar
+        NavBar,
+        AlertMessage
     }
 }

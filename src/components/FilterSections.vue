@@ -16,7 +16,7 @@
         aria-label="Default select example"
         @click="({ target }) => pressed(target, filter.id)"
       >
-      <option :disabled="null == filter.selected" selected :value="null">
+        <option :disabled="'' == filter.selected" selected :value="null">
           {{ filter.title }}
         </option>
         <option
@@ -51,13 +51,13 @@ export default {
           this.companyDetails.groups,
         ].map(({ id }) => this.fetchCompanies(id))
       );
-    } catch (error) {
-      console.log(error);
+    } catch {
+      this.showAlert(404);
     }
   },
   methods: {
-    ...mapActions(["fetchCompanies", "selectCompany"]),
-    pressed(select, id) {
+    ...mapActions(["fetchCompanies", "selectCompany", "showAlert"]),
+    async pressed(select, id) {
       this.$store.commit("selectCompany", { select: select.value, id });
     },
   },

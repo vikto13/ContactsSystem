@@ -55,7 +55,7 @@ export default {
     ...mapGetters(["user"]),
   },
   methods: {
-    ...mapActions(["authWithPassword"]),
+    ...mapActions(["authWithPassword", "showAlert"]),
     async login() {
       if (!(this.password && this.email)) {
         this.submit = true;
@@ -66,14 +66,13 @@ export default {
           email: this.email,
           password: this.password,
         });
-    
-          this.$router.push("/contacts/records");
-      
+
+        this.$router.push("/contacts/records");
       } catch (err) {
         if (err.status == 400) {
-          console.log("not authorized");
+          this.showAlert(400);
         } else {
-          console.log("something went wrong");
+          this.showAlert(404);
         }
       }
     },

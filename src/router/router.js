@@ -49,9 +49,6 @@ export const router = new VueRouter({
         {
             path: '/contacts/records',
             component: Contacts,
-            meta: {
-                needsAuth: true
-            }
         },
         {
             path: '/users/',
@@ -99,7 +96,8 @@ export const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-
+    initializeStore.modules.AlertMessage.state.showAlert && store.commit("setToNotShowAlert")
+    console.log(to.meta)
     if (to.meta.needsAuth) {
         try {
             let { token } = initializeStore.modules.User.state;

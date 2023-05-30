@@ -25,7 +25,7 @@
         item.email
       }}</md-table-cell>
 
-      <md-table-cell md-label="Veiksmas">
+      <md-table-cell v-if="user.token" md-label="Veiksmas">
         <md-button
           class="md-dense md-raised md-primary"
           style="
@@ -47,8 +47,12 @@
   </md-table>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import { ContactsMixin } from "../views/mixins/ContactsMixin";
 export default {
   mixins: [ContactsMixin],
+  computed: {
+    ...mapGetters(["user"]),
+  },
 };
 </script>
