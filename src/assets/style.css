@@ -2,6 +2,16 @@
 .darkBlue {
     background-color: #1F3F77;
   }
+
+  .navigation-bar{
+    padding: 0 2% 0 1%;
+    top: 0 !important;
+    left: 0;
+    position: relative !important;
+    background-color: #1f3f77;
+    align-items: center;
+  }
+
   .md-dialog .md-dialog-container {
     max-width: 768px;
   }
@@ -27,10 +37,12 @@
   }
 
   .delete-btn{
-    background-color: #a61a11 !important
+    background-color: #a61a11 !important;
+    border-radius: 5rem !important;
   }
   .edit-btn{
-    background-color: #1f3f77 !important
+    background-color: #1f3f77 !important;
+    border-radius: 5rem !important;
   }
   
   .icon-colors{

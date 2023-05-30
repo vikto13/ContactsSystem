@@ -5,8 +5,7 @@
     md-sort-order="asc"
     md-card
     md-fixed-header
-    class="mt-5"
-    style="background-color: #f1f2f4"
+    class="mt-5 table-footer"
   >
     <md-table-row slot="md-table-row" slot-scope="{ item }" @click="see">
       <md-table-cell md-label="Vardas ir Pavardė" md-sort-by="name">{{
@@ -27,18 +26,12 @@
 
       <md-table-cell v-if="user.token" md-label="Veiksmas">
         <md-button
-          class="md-dense md-raised md-primary"
-          style="
-            background-color: #0054a6 !important;
-            border-radius: 5rem;
-            width: 15rem;
-          "
+          class="md-dense md-raised md-primary edit-btn"
           @click.stop="edit({ button: 0, id: item.id })"
           >Redaguoti</md-button
         >
         <md-button
-          class="md-dense md-raised md-primary"
-          style="background-color: #a61a11 !important; border-radius: 5rem"
+          class="md-dense md-raised md-primary delete-btn"
           @click.stop="() => edit({ button: 1, id: item.id })"
           >Ištrinti</md-button
         >

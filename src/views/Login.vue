@@ -15,7 +15,6 @@
         :size-xl="20"
       >
         <div class="card px-4 pt-5" :style="{ 'padding-bottom': addingBottom }">
-          <alert-message></alert-message>
           <router-view></router-view>
         </div>
       </divide-components>
@@ -25,17 +24,13 @@
 <script>
 import AdminLogin from "../components/AdminLogin.vue";
 import RemindPassword from "../components/RemindPassword.vue";
-
 import DivideComponents from "../components/DivideComponents.vue";
 import { mapGetters } from "vuex";
-import AlertMessage from "../components/AlertMessage.vue";
 export default {
   components: {
     DivideComponents,
     AdminLogin,
     RemindPassword,
-
-    AlertMessage,
   },
   computed: {
     ...mapGetters(["adminPages"]),

@@ -6,6 +6,7 @@
         companyDetails.divisions,
         companyDetails.departments,
         companyDetails.groups,
+        companyDetails.office
       ]"
       :key="index"
     >
@@ -49,6 +50,7 @@ export default {
           this.companyDetails.departments,
           this.companyDetails.divisions,
           this.companyDetails.groups,
+          this.companyDetails.office
         ].map(({ id }) => this.fetchCompanies(id))
       );
     } catch {

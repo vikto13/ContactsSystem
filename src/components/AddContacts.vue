@@ -7,7 +7,6 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
 import CompanyDetailsSelect from "./CompanyDetailsSelect.vue";
 import ContactFields from "./ContactFields.vue";
 export default {
@@ -17,18 +16,6 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit("clearContact");
-  },
-  computed: {
-    ...mapGetters(["contact"]),
-  },
-  methods: {
-    ...mapActions([
-      "saveContact",
-      "fetchContacts",
-      "dismissDialog",
-      "clearContact",
-      "editContact",
-    ]),
   },
 };
 </script>

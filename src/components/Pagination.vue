@@ -1,12 +1,11 @@
 <template>
-  <div class="md-layout md-gutter md-alignment-center" style="margin-top: 2rem">
+  <div class="md-layout md-gutter md-alignment-center mt-4 pb-5">
     <divide-components :size-l="30" :size-m="30" :size-xl="20">
       <md-button
-        class="md-dense md-raised md-primary text-uppercase"
-        style="width: 100%; "
-        :style="{'opacity':currentPage?null:0}"
+        class="md-dense md-raised md-primary text-uppercase w-100 btn"
+        :style="{ opacity: currentPage ? null : 0 }"
         :disabled="!currentPage"
-        @click="currentPage=0"
+        @click="currentPage = 0"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -27,10 +26,10 @@
     </divide-components>
     <divide-components :size-l="30" :size-m="30" :size-xl="20">
       <md-button
-        class="md-dense md-raised md-primary text-uppercase"
+        class="md-dense md-raised md-primary text-uppercase btn"
         style="width: 100%"
-        @click="currentPage=1"
-        :style="{'opacity':!goNext?null:0}"
+        @click="currentPage = 1"
+        :style="{ opacity: !goNext ? null : 0 }"
         :disabled="goNext"
       >
         Kitas puslapis
@@ -53,34 +52,30 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import DivideComponents from "./DivideComponents.vue";
 
 export default {
   components: {
-    DivideComponents
+    DivideComponents,
   },
   computed: {
-    ...mapGetters(['contacts','sizeOfPaginate']),
+    ...mapGetters(["contacts", "sizeOfPaginate"]),
     goNext() {
-      return this.contacts.length<=(this.currentPage*this.sizeOfPaginate+this.sizeOfPaginate)
+      return (
+        this.contacts.length <=
+        this.currentPage * this.sizeOfPaginate + this.sizeOfPaginate
+      );
     },
     currentPage: {
       set(isNext) {
-        this.$store.commit(isNext?"nextPage":'previuosPage')
-      }, get() {
-      return this.$store.getters.currentPage
-    }
-   }
-  },
-  data() {
-    return {};
+        this.$store.commit(isNext ? "nextPage" : "previuosPage");
+      },
+      get() {
+        return this.$store.getters.currentPage;
+      },
+    },
   },
 };
 </script>
 
-<style scoped>
-.md-button {
-  background-color: #1f3f77 !important;
-}
-</style>

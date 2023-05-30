@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout md-gutter md-alignment-center" style="margin-top: 2rem">
+  <div class="md-layout md-gutter md-alignment-center mt-5">
     <divide-components
       v-for="(contact, index) in showCards"
       :key="index"

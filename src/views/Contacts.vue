@@ -42,19 +42,37 @@
           </md-menu>
 
           <div
-            v-for="(button, index) in buttons"
-            :key="index"
+       
             class="d-flex flex-wrap"
-            v-if="user.token || index == 0"
           >
             <md-button
-              :key="index"
               class="md-icon-button md-raised ml-3 edit-btn"
-              @click="() => button.action(index)"
+              @click="() => isSelected=buttons[isSelected]"
             >
-              <md-icon style="color: #ffffff">{{ button.title }}</md-icon>
+              <md-icon style="color: #ffffff">{{ isSelected }}</md-icon>
             </md-button>
           </div>
+
+
+          <div
+          v-if="user.token"
+            class="d-flex flex-wrap"
+          >
+            <md-button
+              class="md-icon-button md-raised ml-3 edit-btn"
+              @click="() => triggerDialog('add-contacts')"
+            >
+              <md-icon style="color: #ffffff">add</md-icon>
+            </md-button>
+          </div>
+
+
+
+
+
+
+         
+          
         </div>
       </div>
       <p style="display: inline">
@@ -62,7 +80,7 @@
         <span style="font-weight: bold">{{ contacts.length }}</span> kontaktai
       </p>
       <filter-sections></filter-sections>
-      <component :is="showComponents[buttons[0].title]"></component>
+      <component :is="showComponents[isSelected]"></component>
       <pagination></pagination>
     </div>
   </div>
@@ -97,24 +115,12 @@ export default {
         table_rows: "contact-cards",
         grid_view: "contact-tables",
       },
-      buttons: [
-        {
-          title: "table_rows",
-          action: (index) => {
-            let show = {
-              table_rows: "grid_view",
+      isSelected: "grid_view",
+      buttons: {
+        table_rows: "grid_view",
               grid_view: "table_rows",
-            };
-            this.buttons[index].title = show[this.buttons[index].title];
-          },
-        },
-        {
-          title: "add",
-          action: () => {
-            this.triggerDialog("add-contacts");
-          },
-        },
-      ],
+      }
+     
     };
   },
   computed: {

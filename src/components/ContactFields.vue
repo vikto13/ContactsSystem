@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout-item m-2" style="">
+  <div class="md-layout-item m-2">
     <h3 class="mb-5 mt-3">
       {{ contact.id ? "Pakeisti kontaktą" : "Pridėti naują kontaktą:" }}
     </h3>
@@ -28,27 +28,15 @@
         />
       </input-box-icon>
     </div>
-    <md-button
-      style="
-        background-color: #1f3f77 !important;
-        color: white;
-        width: 100%;
-        margin: 0;
-        margin-top: 3rem;
-        text-align: start;
-        padding-left: 5%;
-      "
-      @click="save"
-    >
-    {{ contact.id ? "Pakeisti" : "Pridėti" }}
+    <md-button class="btn w-100 m-0 mt-4" @click="save">
+      {{ contact.id ? "Pakeisti" : "Pridėti" }}
     </md-button>
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 import InputBoxIcon from "./InputBoxIcon.vue";
-import { CompanyState } from "../store/initState/CompanyState.js";
 import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
   components: {
@@ -56,7 +44,7 @@ export default {
     AddImage,
   },
   computed: {
-    ...mapGetters(["companyDetails", "contact"]),
+    ...mapGetters(["contact"]),
   },
   mixins: [LoginMixin],
   data() {

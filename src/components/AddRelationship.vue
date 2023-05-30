@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout-item m-3">
-    <h5 class="mt-5" style="text-align: center">Pridėti struktūrą</h5>
+    <h5 class="mt-5 text-center">Pridėti struktūrą</h5>
 
     <input-box-icon
       :title="`Tipas:`"
@@ -38,9 +38,8 @@
       <input
         v-model="company.name"
         type="text"
-        class="form-control"
+        class="form-control table-footer"
         :placeholder="'Įveskite pavadinimą...'"
-        style="background-color: #f1f2f4"
       />
     </input-box-icon>
 
@@ -79,15 +78,7 @@
 
     <md-button
       :disabled="!company.collectionName"
-      style="
-        background-color: #1f3f77 !important;
-        color: white;
-        width: 100%;
-        margin: 0;
-        margin-top: 1rem;
-        text-align: start;
-        padding-left: 5%;
-      "
+      class="btn w-100"
       :style="{ opacity: company.collectionName ? 1 : 0.4 }"
       @click="add"
     >

@@ -14,5 +14,4 @@ function middlewarePipeline(context, middleware, index) {
 
     }
 }
-
 export default middlewarePipeline

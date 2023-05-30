@@ -2,11 +2,10 @@
   <div class="mb-3" style="display: flex; align-items: center">
     <md-button
       md-menu-trigger
-      class="md-icon-button md-raised"
-      style="background-color: #0054a6ff !important"
+      class="md-icon-button md-raised btn"
       @click="$emit('pressed')"
     >
-      <md-icon style="color: #ffff">add</md-icon>
+      <md-icon class="text-white">add</md-icon>
     </md-button>
     {{ text }}
   </div>

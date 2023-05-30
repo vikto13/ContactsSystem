@@ -1,9 +1,8 @@
 <template>
   <div class="md-layout-item m-3">
-    <h5 class="mt-5" style="width: 32rem; text-align: center">
+    <h5 class="mt-5 text-center" style="width: 32rem; ">
       {{ `${office.id != null ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
     </h5>
-
     <input-box-icon
       :title="`Kompanijos pavadinimas: `"
       :bottom-text="'Pasirinkite kompaniją'"
@@ -38,9 +37,8 @@
       <input
         v-model="office[inputs[index].id]"
         type="text"
-        class="form-control"
+        class="form-control table-footer"
         :placeholder="input.placeholder"
-        style="background-color: #f1f2f4"
         :class="{
           'is-invalid': isInvalid({ [input.id]: office[inputs[index].id] }),
         }"
@@ -48,15 +46,7 @@
     </input-box-icon>
 
     <md-button
-      style="
-        background-color: #1f3f77 !important;
-        color: white;
-        width: 100%;
-        margin: 0;
-        margin-top: 1rem;
-        text-align: start;
-        padding-left: 5%;
-      "
+      class="btn w-100 m-0 "
       @click="add"
     >
       {{ office.id != null ? "Pakeisti" : "Pridėti" }}
@@ -75,7 +65,6 @@ export default {
   computed: {
     ...mapGetters(["office", "companyDetails"]),
   },
-
   data() {
     return {
       inputs: [
@@ -108,7 +97,6 @@ export default {
       "dismissDialog",
       "fetchOffices",
       "editOffice",
-      "findOffice",
     ]),
     async add() {
       if (

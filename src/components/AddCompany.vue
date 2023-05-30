@@ -1,32 +1,20 @@
 <template>
   <div class="m-3 mt-5" style="width: 30rem">
     <input-box-icon
-      :title="`${companyDetails[routeId].whose} pavadinimas:`"
+      :title="`${companyDetails['companies'].whose} pavadinimas:`"
       :bottom-text="'Įveskite pavadinimą'"
       :is-not-valid="isInvalid(company.name)"
     >
       <input
         v-model="company.name"
         type="text"
-        class="form-control"
+        class="form-control table-footer"
         :class="{ 'is-invalid': isInvalid(company.name) }"
-        :placeholder="`Įveskite ${companyDetails[routeId].whose} pavadinimą...`"
-        style="background-color: #f1f2f4; width: 20rem"
+        :placeholder="`Įveskite ${companyDetails['companies'].whose} pavadinimą...`"
       />
     </input-box-icon>
 
-    <md-button
-      style="
-        background-color: #1f3f77 !important;
-        color: white;
-        width: 50%;
-        margin: 0;
-        margin-top: 1rem;
-        text-align: start;
-        padding-left: 5%;
-      "
-      @click="save()"
-    >
+    <md-button class="w-50 btn" @click="save()">
       {{ buttonTitle }}
     </md-button>
   </div>
@@ -34,9 +22,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DivideComponents from "./DivideComponents.vue";
-
 import { LoginMixin } from "../views/mixins/LoginMixin";
 import InputBoxIcon from "./InputBoxIcon.vue";
+
 export default {
   components: {
     DivideComponents,
@@ -45,15 +33,10 @@ export default {
   mixins: [LoginMixin],
   computed: {
     ...mapGetters(["company", "companyDetails"]),
-    routeId: {
-      get() {
-        return this.$route.params.id;
-      },
-    },
     showTitle() {
       return this.company.id != null
-        ? `Redaguoti ${this.companyDetails[this.routeId].what}: `
-        : `Pridėti naują ${this.companyDetails[this.routeId].what}:`;
+        ? `Redaguoti ${this.companyDetails["companies"].what}: `
+        : `Pridėti naują ${this.companyDetails["companies"].what}:`;
     },
     buttonTitle() {
       return this.company.id != null ? "Redaguoti" : "Pridėti";
@@ -73,9 +56,9 @@ export default {
       }
       try {
         this.company.id
-          ? await this.editCompany(this.routeId)
-          : await this.saveCompany(this.routeId);
-        await this.fetchCompanies(this.routeId);
+          ? await this.editCompany("companies")
+          : await this.saveCompany("companies");
+        await this.fetchCompanies("companies");
         this.dismissDialog();
       } catch (err) {
         console.log(err);
@@ -83,7 +66,7 @@ export default {
     },
   },
   destroyed() {
-    this.$store.commit("clearCompanyData")
-  }
+    this.$store.commit("clearCompanyData");
+  },
 };
 </script>

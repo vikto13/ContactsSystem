@@ -1,15 +1,5 @@
 <template>
-  <ul
-    class="nav nav-fill dialog-box"
-    style="
-      padding: 0 2% 0 1%;
-      top: 0;
-      left: 0;
-      position: relative;
-      background-color: #1f3f77;
-      align-items: center;
-    "
-  >
+  <ul class="nav nav-fill dialog-box navigation-bar">
     <router-link :to="'/contacts/records'">
       <img
         id="logo-icon"
@@ -22,14 +12,12 @@
       <li
         v-for="(tab, index) in navBar"
         :key="index"
-        class="nav-item d-flex flex-row"
-        style="padding: 1%"
+        class="nav-item d-flex flex-row p-3"
       >
         <router-link
           :to="`${tab.path}`"
-          class="nav-link"
+          class="nav-link text-white"
           :class="'active'"
-          style="color: white"
           >{{ tab.title }}</router-link
         >
       </li>

@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout-item m-3">
-    <h5 style="text-align: center; margin-top: 13%">Kompanijos detalės:</h5>
+    <h5 class="text-center" style="margin-top: 13%">Kompanijos detalės:</h5>
     <div
       v-for="(select, position) in [
         companyDetails.companies,

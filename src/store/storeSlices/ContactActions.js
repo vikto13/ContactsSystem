@@ -42,7 +42,13 @@ export default {
                     ...state.contact,
                     image: getters.image.file
                 },
-                { headers: { 'Content-Type': 'multipart/form-data' } }
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${getters.user.token}`
+
+                    }
+                }
             )
         },
         async fetchContacts({ commit, getters }) {

@@ -1,21 +1,7 @@
 <template>
-  <!-- <input-box-icon
-        :icon-name="'mail'"
-        :title="'Elektroninis paštas:'"
-        :bottom-text="messageById({ email })"
-        :is-not-valid="isInvalid(email)"
-      >
-        <input
-          v-model="email"
-          type="text"
-          class="form-control"
-          :class="{ 'is-invalid': isInvalid(email) }"
-          placeholder="Įveskite el pašto adresą..."
-          style="background-color: #f1f2f4; border-left-width: 0"
-        />
-      </input-box-icon> -->
   <div v-if="!isSended">
     <h1>Priminti slaptažodį</h1>
+    <alert-message></alert-message>
     <div class="forms-inputs mb-4">
       <input-box-icon
         :icon-name="'mail'"
@@ -44,8 +30,13 @@
 <script>
 import { LoginMixin } from "../views/mixins/LoginMixin";
 import { mapActions } from "vuex";
+import AlertMessage from './AlertMessage.vue';
+
 export default {
   mixins: [LoginMixin],
+  components: {
+    AlertMessage
+  },
   data() {
     return {
       isSended: false,
@@ -56,11 +47,13 @@ export default {
     async send() {
       this.submit = true;
 
-      // try {
-      //   await this.resetPassword(this.email);
-      //   this.isSended = true;
-      //   return;
-      // } catch {}
+      try {
+        await this.resetPassword(this.email);
+        this.isSended = true;
+        return;
+      } catch {
+
+      }
     },
   },
 };

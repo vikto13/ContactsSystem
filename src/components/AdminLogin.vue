@@ -1,6 +1,7 @@
 <template>
   <form>
     <h1>Admin prisijungimas</h1>
+    <alert-message></alert-message>
     <div class="forms-inputs">
       <input-box-icon
         :icon-name="'mail'"
@@ -11,10 +12,9 @@
         <input
           v-model="email"
           type="text"
-          class="form-control"
+          class="form-control table-footer border-left-0"
           :class="{ 'is-invalid': isInvalid(email) }"
           placeholder="Įveskite el pašto adresą..."
-          style="background-color: #f1f2f4; border-left-width: 0"
           autocomplete="username"
         />
       </input-box-icon>
@@ -30,9 +30,8 @@
           v-model="password"
           type="password"
           :class="{ 'is-invalid': isInvalid(password) }"
-          class="form-control"
+          class="form-control table-footer border-left-0"
           placeholder="Įveskite slaptažodį..."
-          style="background-color: #f1f2f4; border-left-width: 0"
           autocomplete="current-password"
         />
       </input-box-icon>
@@ -49,13 +48,18 @@
 <script>
 import { LoginMixin } from "../views/mixins/LoginMixin";
 import { mapActions, mapGetters } from "vuex";
+import AlertMessage from './AlertMessage.vue';
+
 export default {
+  components: {
+    AlertMessage
+  },
   mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user","alert"]),
   },
   methods: {
-    ...mapActions(["authWithPassword", "showAlert"]),
+    ...mapActions(["authWithPassword", "showAlert","disableAlert"]),
     async login() {
       if (!(this.password && this.email)) {
         this.submit = true;
@@ -77,5 +81,8 @@ export default {
       }
     },
   },
+  destroyed() {
+    this.alert.showAlert && this.disableAlert();
+  }
 };
 </script>

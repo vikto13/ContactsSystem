@@ -68,8 +68,11 @@ export default {
       type: String,
     },
   },
+  computed: {
+    ...mapActions(["showAlert"])
+  },
   methods: {
-    ...mapActions(["changePassword"]),
+    ...mapActions(["changePassword","alert"]),
     async change() {
       this.submit = true;
 
@@ -86,9 +89,12 @@ export default {
           passwordConfirm: this.secPassword,
         });
       } catch (err) {
-        console.log(err);
+        this.showAlert(404);
       }
     },
+  },
+  destroyed() {
+    this.alert.showAlert && this.disableAlert();
   },
 };
 </script>

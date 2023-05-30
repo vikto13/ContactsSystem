@@ -1,6 +1,6 @@
 <template>
   <a style="text-decoration: none" @click="$emit('cardClicked', id)">
-    <md-card style="margin-top: 1rem" md-with-hover>
+    <md-card class="mt-1" md-with-hover>
       <md-ripple>
         <md-card-header>
           <md-avatar>
@@ -33,10 +33,10 @@
             v-for="(button, index) in buttons"
             :key="index"
             class="md-icon-button md-raised ml-3 mb-3"
-            :class="`button-${button}`"
+            :class="`${button}-btn`"
             @click.stop="$emit('buttonClicked', { button: index, id })"
           >
-            <md-icon style="color: #ffffff">{{ button }}</md-icon>
+            <md-icon class="text-white">{{ button }}</md-icon>
           </md-button>
         </div>
       </md-ripple>
@@ -69,10 +69,5 @@ export default {
 };
 </script>
 <style scoped>
-.button-delete {
-  background-color: #a61a11 !important;
-}
-.button-edit {
-  background-color: #1f3f77 !important;
-}
+
 </style>

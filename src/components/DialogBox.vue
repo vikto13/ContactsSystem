@@ -9,8 +9,8 @@
         top: 1rem;
       "
     >
-      <md-button class="md-icon-button" @click="dialog.show = false">
-        <md-icon style="color: white">close</md-icon>
+      <md-button class="md-icon-button btn" @click="dialog.show = false">
+        <md-icon class="text-white">close</md-icon>
       </md-button>
     </div>
     <md-dialog-content>
@@ -19,7 +19,7 @@
   </md-dialog>
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import AddContacts from "./AddContacts.vue";
 import AddCompany from "./AddCompany.vue";
 import AddAdmin from "./AddAdmin.vue";
@@ -39,8 +39,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.md-button {
-  background-color: #1f3f77 !important;
-}
-</style>

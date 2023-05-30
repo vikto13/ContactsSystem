@@ -11,10 +11,9 @@
           <input
             v-model="admin.name"
             type="text"
-            class="form-control"
+            class="form-control table-footer"
             :class="{ 'is-invalid': isInvalid(admin.name) }"
             :placeholder="'Įveskite vardą...'"
-            style="background-color: #f1f2f4"
           />
         </input-box-icon>
         <input-box-icon
@@ -28,8 +27,7 @@
             type="text"
             :class="{ 'is-invalid': showEmailMessage(admin.email) }"
             :placeholder="'Įveskite el.paštą...'"
-            class="form-control"
-            style="background-color: #f1f2f4"
+            class="form-control table-footer"
             :style="{ 'border-left-width': 0 }"
           />
         </input-box-icon>
@@ -45,8 +43,7 @@
             type="text"
             :class="{ 'is-invalid': isInvalid(admin.phone_number) }"
             :placeholder="'Įveskite telefono numerį...'"
-            class="form-control"
-            style="background-color: #f1f2f4"
+            class="form-control table-footer"
             :style="{ 'border-left-width': 0 }"
           />
         </input-box-icon>
@@ -61,24 +58,12 @@
           :key="item.id"
           v-model="admin.roles"
           :value="item.id"
-          class="md-primary"
-          style="display: flex"
+          class="md-primary d-flex"
           >{{ item.title }}</md-checkbox
         >
       </div>
     </div>
-    <md-button
-      style="
-        background-color: #1f3f77 !important;
-        color: white;
-        width: 100%;
-        margin: 0;
-        margin-top: 1rem;
-        text-align: start;
-        padding-left: 5%;
-      "
-      @click="save"
-    >
+    <md-button class="btn m-0 mt-1 pl-2 text-start w-100" @click="save">
       {{ button[admin.whatDo] }}
     </md-button>
   </div>
@@ -98,7 +83,7 @@ export default {
     ...mapGetters(["adminRoles", "admin", "admins"]),
   },
   async mounted() {
-    this.admin.whatDo == null ? this.clearAdminData() : null;
+    this.admin.whatDo == null && this.clearAdminData();
     await this.fetchRoles();
   },
   data() {
@@ -156,12 +141,12 @@ export default {
       }
     },
   },
-
   beforeDestroy() {
     this.clearAdminData();
   },
 };
 </script>
+
 <style>
 .md-checkbox {
   margin: 3% 0 0 0 !important;
