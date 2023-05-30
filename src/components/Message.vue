@@ -1,15 +1,15 @@
 <template>
- 
-     <md-dialog-alert
-     v-if="message.isAlert"
-     :md-active.sync="message.active"
-      :md-content="message.content"
-      md-confirm-text="Supratau"
-      @md-confirm="onConfirm"
-      />
+  <md-dialog-alert
+    v-if="message.isAlert"
+    :md-active.sync="message.active"
+    :md-title="message.title"
+    :md-content="message.content"
+    md-confirm-text="Supratau"
+    @md-confirm="onConfirm"
+  />
 
   <md-dialog-confirm
-  v-else
+    v-else
     :md-active.sync="message.active"
     :md-title="message.title"
     :md-content="message.content"
@@ -26,20 +26,19 @@ export default {
     ...mapGetters(["message", "company", "admin"]),
   },
   data: () => ({
-      first: true,
-      second: false
-    }),
+    first: true,
+    second: false,
+  }),
   methods: {
     ...mapActions(["clearContact"]),
     async onConfirm() {
       await this.message.action();
     },
-   async onCancel() {
-    await  this.message.cancelAction()
+    async onCancel() {
+      await this.message.cancelAction();
     },
   },
 };
 </script>
 
-<style scoped >
-</style>
+<style scoped></style>

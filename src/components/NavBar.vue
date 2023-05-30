@@ -45,7 +45,7 @@
         </md-button>
 
         <md-menu-content>
-          <md-menu-item @click="$router.push('/users/update-password')"
+          <md-menu-item @click="updatePassword"
             >Pakeisti slaptažodį
             <md-icon style="color: #414042"
               >arrow_drop_down</md-icon
@@ -58,19 +58,21 @@
   </ul>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
+import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
   computed: {
     ...mapGetters(["user", "navBar"]),
   },
+  mixins: [LoginMixin],
   methods: {
+    ...mapActions(["triggerMessage", "resetPassword"]),
     signOut() {
       this.$router.push("/users/auth-with-password");
       this.$store.commit("clearUserData");
       localStorage.removeItem("pocketbase_auth");
     },
   },
-  async mounted() {},
 };
 </script>
 

@@ -58,9 +58,15 @@ export default {
   computed: {
     ...mapGetters(["contact"]),
   },
-  async mounted() {
-    await this.findContact(this.id);
-  },
+  // async mounted() {
+  //   if(!this.contact.id) {
+  //     try{
+  //       await this.findContact(this.id)
+  //     }catch{
+
+  //     }
+  //   }
+  // },
   data() {
     return {
       info: [

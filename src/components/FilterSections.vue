@@ -39,7 +39,7 @@ export default {
     DivideComponents,
   },
   computed: {
-    ...mapGetters(["companyDetails"]),
+    ...mapGetters(["companyDetails", "alert"]),
   },
   async mounted() {
     try {
@@ -56,9 +56,23 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["fetchCompanies", "selectCompany", "showAlert"]),
+    ...mapActions([
+      "fetchCompanies",
+      "selectCompany",
+      "showAlert",
+      "searchContactBySelections",
+      "searchContactByText",
+      "disableAlert",
+    ]),
     async pressed(select, id) {
       this.$store.commit("selectCompany", { select: select.value, id });
+      try {
+        await this.searchContactBySelections();
+        await this.searchContactByText();
+        this.alert.showAlert && this.disableAlert();
+      } catch {
+        this.showAlert(404);
+      }
     },
   },
 };

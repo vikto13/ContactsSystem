@@ -6,7 +6,7 @@
       <field-to-create :text="'Pridėti naują kompaniją'" @pressed="edit(null)">
       </field-to-create>
       <divide-components
-        v-for="company in companyDetails[id].all"
+        v-for="company in companyDetails['companies'].all"
         :key="company.id"
         :size-xl="40"
         :size-l="50"
@@ -26,7 +26,6 @@
             {{ company.name }}
           </div>
           <div>
-
             <md-button
               md-with-hover
               class="md-icon-button md-raised edit-btn"
@@ -42,7 +41,6 @@
             >
               <md-icon style="color: white">delete</md-icon>
             </md-button>
-
           </div>
         </md-card>
       </divide-components>
@@ -56,21 +54,16 @@ import DivideComponents from "../components/DivideComponents.vue";
 import FieldToCreate from "../components/FieldToCreate.vue";
 
 export default {
-  props: {
-    id: {
-      type: String,
-    },
-  },
   components: {
     Card,
     DivideComponents,
     FieldToCreate,
   },
   computed: {
-    ...mapGetters([ "company", "companyDetails"]),
+    ...mapGetters(["company", "companyDetails"]),
   },
   async mounted() {
-    await this.fetchCompanies(this.id);
+    await this.fetchCompanies("companies");
   },
   methods: {
     ...mapActions([
@@ -81,24 +74,20 @@ export default {
       "findCompany",
     ]),
     async edit(id) {
-      id ? await this.findCompany({ id, entity: this.id }) : null;
+      id ? await this.findCompany({ id, entity: "companies" }) : null;
 
       this.triggerDialog("add-company");
     },
     async deleteIt(id) {
-      await this.findCompany({ id, entity: this.id });
+      await this.findCompany({ id, entity: "companies" });
 
       this.triggerMessage({
-        title: `Ar tikrai norite ištrinti ${
-          this.companyDetails[this.id].what
-        }?`,
-        content: `${this.companyDetails[this.id].whose} pavadinimas: ${
-          this.company.name
-        }`,
+        title: `Ar tikrai norite ištrinti ${this.companyDetails["companies"].what}?`,
+        content: `${this.companyDetails["companies"].whose} pavadinimas: ${this.company.name}`,
         action: async () => {
           await this.deleteCompany();
           this.$store.commit("clearCompanyData");
-          await this.fetchCompanies(this.id);
+          await this.fetchCompanies("companies");
         },
         cancelAction: () => {
           this.$store.commit("clearCompanyData");

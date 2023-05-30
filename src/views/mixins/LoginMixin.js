@@ -30,7 +30,7 @@ export const LoginMixin = {
     },
     methods: {
         showCompareMessage(password, secPassword) {
-            return this.submit && password != secPassword
+            return this.submit && (password !== secPassword)
         },
         showEmailMessage(email) {
             return (
@@ -54,7 +54,6 @@ export const LoginMixin = {
                 : `Slaptažodis turi būti įvestas`
         },
         isInvalid(input) {
-            console.log(!Object.values(input)[0])
             switch (Object.keys(input)[0]) {
                 case 'password':
                     return this.showPasswordMessage(Object.values(input)[0])
@@ -65,12 +64,32 @@ export const LoginMixin = {
             }
         },
         messageById(info) {
-
-
             if (Object.keys(info)[0] == 'email') {
                 return this.emailMessage(Object.values(info)[0])
             }
             return this.message[Object.keys(info)[0]]
-        }
+        },
+
+
+        async updatePassword() {
+            let message;
+            try {
+                await this.resetPassword();
+                message = {
+                    title: "Žinutė išsiųsta",
+                    content: `Patikrinkite savo elektroninį paštą`,
+                };
+            } catch {
+                message = {
+                    title: "Įvyko klaida",
+                    content: `Pabandykite dar kartą`,
+                };
+            }
+            this.triggerMessage({
+                ...message,
+                isAlert: true,
+                action: async () => { },
+            });
+        },
     }
 }

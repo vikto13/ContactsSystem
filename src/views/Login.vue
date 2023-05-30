@@ -25,7 +25,7 @@
 <script>
 import AdminLogin from "../components/AdminLogin.vue";
 import RemindPassword from "../components/RemindPassword.vue";
-import UpdatePassword from "../components/UpdatePassword.vue";
+
 import DivideComponents from "../components/DivideComponents.vue";
 import { mapGetters } from "vuex";
 import AlertMessage from "../components/AlertMessage.vue";
@@ -34,7 +34,7 @@ export default {
     DivideComponents,
     AdminLogin,
     RemindPassword,
-    UpdatePassword,
+
     AlertMessage,
   },
   computed: {

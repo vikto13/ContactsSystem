@@ -11,12 +11,9 @@ import Offices from "../views/Offices.vue"
 import AdminLogin from "../components/AdminLogin.vue"
 import RemindPassword from "../components/RemindPassword.vue";
 import UpdatePassword from "../components/UpdatePassword.vue";
-import { pocketBase } from "../../services/pocketBase";
-import axios from "axios";
 import { store } from "../main";
-
-import jwt_decode from "jwt-decode";
-
+import middlewarePipeline from "./middlewares/middlewarePipeline"
+import { authenticate, needsAuth, checkContact, isCategory, verifyToken } from "./middlewares/middlewares"
 
 export const router = new VueRouter({
     routes: [
@@ -24,31 +21,62 @@ export const router = new VueRouter({
             path: '/admins/records',
             component: Admins,
             meta: {
-                needsAuth: true
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
+            }
+        },
+        {
+            path: '/auth-update-password/:token',
+            component: UpdatePassword,
+            props: true,
+            meta: {
+                middleware: [
+                    verifyToken
+                ]
             }
         },
         {
             path: '/contact/:id',
             component: ContactDetails,
-            props: true
+            props: true,
+            meta: {
+                middleware: [
+                    checkContact,
+                    authenticate,
+                    needsAuth
+                ]
+            }
         },
         {
             path: '/relationship/record',
             component: Relationship,
             meta: {
-                needsAuth: true
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
             }
         },
         {
             path: '/offices/records',
             component: Offices,
             meta: {
-                needsAuth: true
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
             }
         },
         {
             path: '/contacts/records',
             component: Contacts,
+            meta: {
+                middleware: [
+                    authenticate,
+                ]
+            }
         },
         {
             path: '/users/',
@@ -57,7 +85,7 @@ export const router = new VueRouter({
             children: [
                 {
                     path: initializeStore.modules.Admin.state.pages.authRefresh,
-                    component: RemindPassword
+                    component: RemindPassword,
 
                 },
                 {
@@ -65,50 +93,40 @@ export const router = new VueRouter({
                     component: AdminLogin
 
                 },
-                {
-                    path: initializeStore.modules.Admin.state.pages.updatePassword,
-                    component: UpdatePassword
-
-                }
             ]
         },
         {
-            path: '/:id/records',
+            path: '/companies/records',
             component: Companies,
-            props: true,
-            beforeEnter: (to, from, next) => {
-                const { id } = to.params;
-                if (id == 'companies' || id == 'divisions' || id == "groups" || id == "departaments") {
-                    return next({ path: to })
-                }
-
-                return next({ path: "notFound" })
-            },
             meta: {
-                needsAuth: true
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
             }
         },
         {
             path: '*',
+            name: 'notFound',
             component: NotFound
         }
     ]
 })
 
 router.beforeEach(async (to, from, next) => {
-    initializeStore.modules.AlertMessage.state.showAlert && store.commit("setToNotShowAlert")
-    console.log(to.meta)
-    if (to.meta.needsAuth) {
-        try {
-            let { token } = initializeStore.modules.User.state;
-            if (!token) {
-                let { model, token } = JSON.parse(localStorage.getItem('pocketbase_auth'))
-                await store.dispatch("authWithToken", { id: model.id, token })
-            }
-        } catch {
-            next({ path: `/users/${initializeStore.modules.Admin.state.pages.authLogin}` });
-        }
+    if (!to.meta.middleware) {
+        return next()
     }
-    next();
+    const { middleware } = to.meta
 
+    const context = {
+        to, from, next, store
+    }
+
+    return middleware[0]({
+        ...context,
+        next: middlewarePipeline(context, middleware, 1)
+    })
 });
+
+

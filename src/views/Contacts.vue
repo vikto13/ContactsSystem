@@ -118,7 +118,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["contacts", "optionsForPaginate", "sizeOfPaginate", "user"]),
+    ...mapGetters([
+      "contacts",
+      "optionsForPaginate",
+      "sizeOfPaginate",
+      "user",
+      "alert",
+    ]),
     contactSearch: {
       get() {
         return this.$store.state.Contact.search;
@@ -134,11 +140,16 @@ export default {
       "fetchContacts",
       "searchContactByText",
       "searchContactBySelections",
-      "showAlert",
+      "disableAlert",
     ]),
-    async searching(value) {
-      await this.searchContactBySelections();
-      await this.searchContactByText();
+    async searching() {
+      try {
+        await this.searchContactBySelections();
+        await this.searchContactByText();
+        this.alert.showAlert && this.disableAlert();
+      } catch {
+        this.showAlert(404);
+      }
     },
     filtering() {
       this.searchContactBySelections();

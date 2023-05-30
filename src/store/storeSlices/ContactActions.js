@@ -73,7 +73,7 @@ export default {
                 .collection("contacts")
                 .delete(state.contact.id)
         },
-        async searchContactByText({ commit }, search) {
+        async searchContactByText({ commit, getters, state }) {
             let { contacts } = getters
             const filteredItems = state.search
                 ? contacts.filter(item =>

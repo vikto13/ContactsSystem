@@ -15,7 +15,6 @@ export function AdminState() {
         pages: {
             "authLogin": "auth-with-password",
             "authRefresh": "auth-refresh",
-            "updatePassword": "update-password",
         },
     }
 }

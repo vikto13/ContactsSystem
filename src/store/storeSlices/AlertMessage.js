@@ -20,8 +20,8 @@ export default {
         }
     },
     actions: {
-        triggerAlert({ commit }) {
-            commit("setToTriggerAlert")
+        disableAlert({ commit }) {
+            commit("setToNotShowAlert")
         },
         showAlert({ commit }, status) {
             commit("setToShowAlert", status)
