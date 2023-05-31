@@ -2,7 +2,7 @@
   <div>
     <slot></slot>
     <div style="margin: 2%">
-      <h1>Kontaktų sistema</h1>
+      <h1>{{ navBar.contacts.systemText }}</h1>
       <div class="row">
         <div class="col-md-6 col-lg-5 col-xl-4">
           <input-box-icon>
@@ -62,10 +62,17 @@
       </div>
       <p style="display: inline">
         Iš viso rasta:
-        <span style="font-weight: bold">{{ contacts.length }}</span> kontaktai
+        <span style="font-weight: bold">{{ contacts.length }}</span>
+        {{ navBar.title }}
       </p>
       <filter-sections></filter-sections>
-      <component :is="showComponents[isSelected]"></component>
+      <component
+        v-if="contacts.length"
+        :is="contacts != null ? showComponents[isSelected] : null"
+      ></component>
+      <h5 v-else style="text-align: center">
+        {{ navBar.contacts.textEmpty }}
+      </h5>
       <pagination></pagination>
     </div>
   </div>
@@ -78,6 +85,7 @@ import ContactTables from "../components/ContactTables.vue";
 import Pagination from "../components/Pagination.vue";
 import InputBoxIcon from "../components/InputBoxIcon.vue";
 import { mapActions, mapGetters } from "vuex";
+import { LoginMixin } from "./mixins/LoginMixin";
 export default {
   components: {
     NavBar,
@@ -87,12 +95,9 @@ export default {
     Pagination,
     ContactTables,
   },
+  mixins: [LoginMixin],
   async mounted() {
-    try {
-      await this.fetchContacts();
-    } catch {
-      this.showAlert(404);
-    }
+    await this.tryCatchForAPIAction(this.fetchContacts);
   },
   data() {
     return {
@@ -114,6 +119,7 @@ export default {
       "sizeOfPaginate",
       "user",
       "alert",
+      "navBar",
     ]),
     contactSearch: {
       get() {
@@ -132,18 +138,13 @@ export default {
       "searchContactBySelections",
       "disableAlert",
       "showAlert",
+      "showLoading",
     ]),
     async searching() {
-      try {
+      this.tryCatchForAPIAction(async () => {
         await this.searchContactBySelections();
         await this.searchContactByText();
-        this.alert.showAlert && this.disableAlert();
-      } catch (err) {
-        this.showAlert(404);
-      }
-    },
-    filtering() {
-      this.searchContactBySelections();
+      });
     },
     setPaginate(size) {
       this.$store.commit("setPagine", size);

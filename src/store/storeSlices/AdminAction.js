@@ -39,6 +39,7 @@ export default {
         },
         async fetchAdmins({ commit }) {
             const data = await pocketBase.collection('users').getFullList()
+            console.log(data)
             commit("setAdmins", data)
         },
         async deleteAdmin({ commit, state }) {
@@ -63,10 +64,17 @@ export default {
             commit("clearAdmin")
         },
         async saveAdmin({ state, getters, commit }) {
-            await commit("setPassword", generator.generate({
-                length: 8,
-                numbers: true,
-            }))
+            let password =
+                generator.generate({
+                    length: 8,
+                    numbers: true,
+                })
+
+            await commit("setPassword", password)
+            console.log({
+                ...state.admin,
+                avatar: getters.image.file,
+            },)
             await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records`,
                 {
                     ...state.admin,
@@ -80,45 +88,14 @@ export default {
                     }
                 }
             )
-            // const reader = new FileReader();
-            // reader.readAsDataURL(image);
-            // reader.onload = async (e) => {
 
-            // await axios.post('http://127.0.0.1:8090/api/collections/admin/records',
-            //     {
-            //         name: "test",
-            //         email: "test",
-            //         avatar: image
-            //     },
-            //     { headers: { 'Content-Type': 'multipart/form-data', } });
-
-
-
-
-
-            const reader = new FileReader();
-            // const blob = new Blob([getters.image.previewImage]);
-            // await reader.readAsBinaryString(blob)
-            // console.log(await reader.arrayBuffer)
-            // const fd = new FormData();
-            // fd.append('image', getters.image.previewImage, getters.image.previewImage.name)
-            // console.log(getters.image)
-            // const formData = new FormData();
-            // formData.append('documents', getters.image.i);
-            // console.log(getters.image.i)
-
-            // for (let file of getters.image.i) {
-            //     console.log(file)
-            //     formData.append('documents', file);
-            // }
-            // console.log({ ...state.admin, avatar: imageData })
-            // await pocketBase.collection('admin').create({ ...state.admin, avatar: getters.image.base64 });
         },
         async setAdmin({ commit, getters }, id) {
 
             const data = await pocketBase
                 .collection("users")
                 .getFirstListItem(`id="${id}"`);
+            console.log(data)
             commit("setAdmin", data)
         },
         setWhatDo({ commit }, what) {

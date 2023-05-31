@@ -29,7 +29,7 @@ export default {
             const data = await pocketBase
                 .collection(entity)
                 .getFirstListItem(`id="${id}"`);
-
+            console.log(data)
             commit("setCompany", { ...data, relation: data[state.details[entity].relationship] })
         },
         async saveCompany({ state }, entity) {
@@ -69,12 +69,14 @@ export default {
         },
         async getOfficesAddress({ commit, getters, dispatch }) {
             await dispatch("fetchOffices");
-            let address = getters.offices.map(({ street, street_number, city, country, expand }) => {
+
+            let address = getters.offices.lenght ? getters.offices.map(({ street, street_number, city, country, expand }) => {
                 return ({
                     name: `${country}, ${city}, ${street} ${street_number}`,
                     id: expand.companies[0].id
                 })
-            })
+            }) : []
+
             commit('setCompanies', { list: address, entity: "office" })
 
         },

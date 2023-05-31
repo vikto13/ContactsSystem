@@ -10,51 +10,30 @@ export function CompanyState() {
         details: {
             companies: {
                 id: "companies",
-                what: "kompaniją",
-                whose: "kompanijos",
-                addText: "Pridėti naują kompaniją",
-                emptyText: "Nėra pridėta kompanijų",
-                title: 'Įmonė',
-                all: [],
+                all: null,
                 selected: ''
             },
             divisions: {
                 id: "divisions",
-                what: "diviziją",
-                whose: "divizijos",
-                addText: "Pridėti naują diviziją",
-                emptyText: "Nėra pridėta divizijų",
-                title: 'Divizija',
-                all: [],
+                all: null,
                 relationship: 'companies',
                 selected: ''
             },
             groups: {
                 id: "groups",
-                what: "grupę",
-                whose: "grupės",
-                addText: "Pridėti naują grupę",
-                emptyText: "Nėra pridėta grupių",
-                title: 'Grupė',
-                all: [],
+                all: null,
                 relationship: 'departments',
                 selected: ''
             },
             departments: {
                 id: "departments",
-                what: "departamentą",
-                whose: "departamentai",
-                addText: "Pridėti naują departamentą",
-                emptyText: "Nėra pridėta departamentų",
-                title: 'Departamentai',
-                all: [],
+                all: null,
                 relationship: 'divisions',
                 selected: ''
             },
             office: {
                 id: "office",
-                title: 'Adresus',
-                all: [],
+                all: null,
                 selected: ''
             },
         }

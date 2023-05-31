@@ -126,14 +126,16 @@ export default {
         if (this.admin.whatDo != null) {
           await this.updateAdmin();
         } else {
+          console.log(this.admin)
           await this.saveAdmin();
-          this.dismissDialog();
-          this.triggerMessage({
-            title: "Admin paskyra sukurta sėkmingai",
-            content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
-            isAlert: true,
-            action: async () => {},
-          });
+
+          // this.dismissDialog();
+          // this.triggerMessage({
+          //   title: "Admin paskyra sukurta sėkmingai",
+          //   content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
+          //   isAlert: true,
+          //   action: async () => {},
+          // });
         }
         await this.fetchAdmins();
       } catch (err) {

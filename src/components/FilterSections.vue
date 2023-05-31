@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout md-gutter md-alignment-center">
+  <div class="md-layout md-gutter md-alignment-center mb-4">
     <divide-components
       v-for="(filter, index) in [
         companyDetails.companies,
@@ -10,7 +10,7 @@
       ]"
       :key="index"
     >
-      <label class="form-label">{{ filter.title }}: </label>
+      <label class="form-label">{{  navBar[filter.id].title}}: </label>
       <select
         :v-model="filter.selected"
         class="form-select elipses"
@@ -18,7 +18,7 @@
         @click="({ target }) => pressed(target, filter.id)"
       >
         <option :disabled="'' == filter.selected" selected :value="null">
-          {{ filter.title }}
+          {{ navBar[filter.id].title }}
         </option>
 
         <option
@@ -41,7 +41,7 @@ export default {
     DivideComponents,
   },
   computed: {
-    ...mapGetters(["companyDetails", "alert"]),
+    ...mapGetters(["companyDetails", "alert","navBar"]),
   },
   async mounted() {
     try {

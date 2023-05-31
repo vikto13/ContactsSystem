@@ -2,12 +2,21 @@
   <div>
     <slot></slot>
     <div class="m-5">
-      <h1 style="font-weight: normal">Kompanijos</h1>
-      <field-to-create :text="'Pridėti naują kompaniją'" @pressed="edit(null)">
+      <h1 style="font-weight: normal">{{ navBar.companies.whose }}</h1>
+      <field-to-create :text="navBar.companies.textAdd" @pressed="edit(null)">
       </field-to-create>
-      <div v-if="companyDetails['companies'].all.length">
+      <h5
+        v-if="
+          companyDetails[companyDetails.companies.id] != null &&
+          companyDetails[companyDetails.companies.id].length
+        "
+        style="text-align: center"
+      >
+        {{ navBar.companies.textEmpty }}
+      </h5>
+      <div v-else>
         <divide-components
-          v-for="company in companyDetails['companies'].all"
+          v-for="company in companyDetails[companyDetails.companies.id].all"
           :key="company.id"
           :size-xl="40"
           :size-l="50"
@@ -23,6 +32,7 @@
               justify-content: flex-end;
             "
           >
+            ž
             <div style="overflow: hidden; text-overflow: ellipsis; flex: 1">
               {{ company.name }}
             </div>
@@ -46,7 +56,6 @@
           </md-card>
         </divide-components>
       </div>
-      <h5 v-else style="text-align: center">Nėra sukurtų kompanijų</h5>
     </div>
   </div>
 </template>
@@ -55,6 +64,7 @@ import { mapActions, mapGetters } from "vuex";
 import Card from "../components/Card.vue";
 import DivideComponents from "../components/DivideComponents.vue";
 import FieldToCreate from "../components/FieldToCreate.vue";
+import { LoginMixin } from "./mixins/LoginMixin";
 
 export default {
   components: {
@@ -62,11 +72,14 @@ export default {
     DivideComponents,
     FieldToCreate,
   },
+  mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["company", "companyDetails"]),
+    ...mapGetters(["company", "companyDetails", "navBar"]),
   },
   async mounted() {
-    await this.fetchCompanies("companies");
+    this.tryCatchForAPIAction(
+   this.fetchCompanies(this.companyDetails.companies.id)
+    );
   },
   methods: {
     ...mapActions([
@@ -77,25 +90,42 @@ export default {
       "findCompany",
     ]),
     async edit(id) {
-      id ? await this.findCompany({ id, entity: "companies" }) : null;
+      this.tryCatchForAPIAction(async () => {
+        id &&
+          (await this.findCompany({
+            id,
+            entity: this.companyDetails.companies.id,
+          }));
 
-      this.triggerDialog("add-company");
+        this.triggerDialog("add-company");
+      });
     },
     async deleteIt(id) {
-      await this.findCompany({ id, entity: "companies" });
+      this.tryCatchForAPIAction(async () => {
+        await this.findCompany({
+          id,
+          entity: this.companyDetails.companies.id,
+        });
 
-      this.triggerMessage({
-        title: `Ar tikrai norite ištrinti ${this.companyDetails["companies"].what}?`,
-        content: `${this.companyDetails["companies"].whose} pavadinimas: ${this.company.name}`,
-        action: async () => {
-          await this.deleteCompany();
-          this.$store.commit("clearCompanyData");
-          await this.fetchCompanies("companies");
-        },
-        cancelAction: () => {
-          this.$store.commit("clearCompanyData");
-        },
-      });
+        this.triggerMessage({
+          title: `Ar tikrai norite ištrinti ${
+            this.navBar[this.companyDetails.companies.id].what
+          }?`,
+          content: `${
+            this.navBar[this.companyDetails.companies.id].whose
+          } pavadinimas: ${this.company.name}`,
+          action: async () => {
+            this.tryCatchForAPIAction(async () => {
+              await this.deleteCompany();
+              this.$store.commit("clearCompanyData");
+              await this.fetchCompanies(this.companyDetails.companies.id);
+            })
+          },
+          cancelAction: () => {
+            this.$store.commit("clearCompanyData");
+          },
+        });
+      })
     },
   },
 };

@@ -63,7 +63,7 @@ export default {
                     let { city, country, street, street_number } = value.data.items[0]
                     list[index].address = ` ${country}, ${city}, ${street} ${street_number}`
                 } else {
-                    list[index].address = "-"
+                    list[index].address = ""
                 }
 
             })

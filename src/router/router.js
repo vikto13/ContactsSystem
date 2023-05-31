@@ -84,12 +84,12 @@ export const router = new VueRouter({
             component: Login,
             children: [
                 {
-                    path: initializeStore.modules.Admin.state.pages.authRefresh,
+                    path: "auth-refresh",
                     component: RemindPassword,
 
                 },
                 {
-                    path: initializeStore.modules.Admin.state.pages.authLogin,
+                    path: "auth-with-password",
                     component: AdminLogin
 
                 },

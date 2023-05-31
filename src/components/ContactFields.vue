@@ -38,6 +38,7 @@ import { mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 import InputBoxIcon from "./InputBoxIcon.vue";
 import { LoginMixin } from "../views/mixins/LoginMixin";
+
 export default {
   components: {
     InputBoxIcon,
@@ -112,13 +113,12 @@ export default {
       ) {
         return;
       }
-      try {
+
+      this.tryCatchForAPIAction(async () => {
         this.contact.id ? await this.editContact() : await this.saveContact();
         this.dismissDialog();
         this.fetchContacts();
-      } catch (error) {
-        console.log(error);
-      }
+      });
     },
   },
 };

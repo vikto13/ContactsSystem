@@ -1,7 +1,7 @@
 <template>
   <div class="m-3 mt-5" style="width: 30rem">
     <input-box-icon
-      :title="`${companyDetails['companies'].whose} pavadinimas:`"
+      :title="`${navBar['companies'].whose} pavadinimas:`"
       :bottom-text="'Įveskite pavadinimą'"
       :is-not-valid="isInvalid(company.name)"
     >
@@ -10,7 +10,7 @@
         type="text"
         class="form-control table-footer"
         :class="{ 'is-invalid': isInvalid(company.name) }"
-        :placeholder="`Įveskite ${companyDetails['companies'].whose} pavadinimą...`"
+        :placeholder="`Įveskite ${navBar['companies'].whose} pavadinimą...`"
       />
     </input-box-icon>
 
@@ -32,7 +32,7 @@ export default {
   },
   mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["company", "companyDetails"]),
+    ...mapGetters(["company", "companyDetails", "navBar"]),
     showTitle() {
       return this.company.id != null
         ? `Redaguoti ${this.companyDetails["companies"].what}: `
@@ -54,15 +54,13 @@ export default {
         this.submit = true;
         return;
       }
-      try {
+      this.tryCatchForAPIAction(async () => {
         this.company.id
           ? await this.editCompany("companies")
           : await this.saveCompany("companies");
         await this.fetchCompanies("companies");
         this.dismissDialog();
-      } catch (err) {
-        console.log(err);
-      }
+      });
     },
   },
   destroyed() {

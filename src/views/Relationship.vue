@@ -2,7 +2,7 @@
   <div>
     <slot></slot>
     <div class="m-5">
-      <h1 style="font-weight: normal">Struktūros</h1>
+      <h1 style="font-weight: normal">{{ navBar.relationship.title }}</h1>
       <field-to-create
         :text="'Pridėti naują struktūrą'"
         @pressed="triggerDialog('add-relationship')"
@@ -22,7 +22,7 @@
             ` ${item.name} `
           }}</md-table-cell>
           <md-table-cell md-label="Tipas">{{
-            companyDetails[item.collectionName].title
+            navBar[item.collectionName].title
           }}</md-table-cell>
 
           <md-table-cell md-label="Veiksmas">
@@ -41,7 +41,7 @@
           </md-table-cell>
         </md-table-row>
       </md-table>
-      <h5 v-else class="text-center">Nėra sukurtų struktūrų</h5>
+      <h5 v-else class="text-center">{{ navBar.relationship.textEmpty }}</h5>
     </div>
   </div>
 </template>
@@ -67,6 +67,7 @@ export default {
       "companyDetails",
       "company",
       "showCompaniesRealations",
+      "navBar"
     ]),
     showCompanies: {
       get() {
@@ -103,7 +104,7 @@ export default {
       this.triggerMessage({
         title: "Ar tikrai norite ištrinti ryšį?",
         content: `Rišys yra: ${
-          this.companyDetails[this.company.collectionName].title
+          this.navBar[this.company.collectionName].title
         } su ${this.company.name}`,
 
         action: async () => {

@@ -33,16 +33,16 @@ export default {
     RemindPassword,
   },
   computed: {
-    ...mapGetters(["adminPages"]),
+    ...mapGetters(["adminPages","navBar"]),
     addingBottom() {
-      return this.$route.path.split("/")[2] == this.adminPages.authLogin
-        ? "25%"
-        : "5%";
+      return this.$route.path.split("/")[2] == this.navBar.admins.loginPath 
+        ? "5%"
+        : "25%";
     },
     goBackPath() {
-      return this.$route.path.split("/")[2] == this.adminPages.authRefresh
-        ? `/users/${this.adminPages.authLogin}`
-        : "/contacts/records";
+      return this.$route.path === this.navBar.admins.loginPath
+        ? this.navBar.contacts.path
+        : this.navBar.admins.loginPath 
     },
   },
 };

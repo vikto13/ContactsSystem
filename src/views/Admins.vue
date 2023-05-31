@@ -2,7 +2,7 @@
   <div>
     <slot></slot>
     <div class="m-5">
-      <h1 style="font-weight: normal">Sukurti admin paskyrą</h1>
+      <h1 style="font-weight: normal">{{ navBar.admins.textCreate }}</h1>
       <field-to-create
         :text="'Sukurti naują admin paskyrą'"
         @pressed="triggerDialog('add-admin')"
@@ -19,7 +19,8 @@
         class="mt-5 table-footer"
       >
         <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="Name" md-sort-by="name">{{
+        
+          <md-table-cell md-label="Vardas" md-sort-by="name">{{
             item.name
           }}</md-table-cell>
           <md-table-cell md-label="Email" md-sort-by="email">{{
@@ -46,7 +47,7 @@
         </md-table-row>
       </md-table>
       <h5 v-if="!isLoading && !admins.length" style="text-align: center">
-        Nėra sukurtų admino struktūrų
+      {{ navBar.admins.textEmpty }}
       </h5>
     </div>
   </div>
@@ -64,12 +65,12 @@ export default {
       console.log(this.isLoading, this.admins.length);
       await this.fetchAdmins();
     } catch {
-      this.showMessage;
+      this.showMessage();
     }
     this.showLoading(false);
   },
   computed: {
-    ...mapGetters(["admin", "isLoading"]),
+    ...mapGetters(["admin", "isLoading","companyDetail","navBar"]),
     admins: {
       get() {
         return this.$store.getters.admins;

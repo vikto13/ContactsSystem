@@ -6,7 +6,7 @@ export default {
         message: {
             404: "Kažkas nutiko, pabandykite dar kartą",
             400: "Neteisingas elektroninis paštas arba slaptažodis",
-            405: 'Kažkas nutiko arba jums leidimas tokiam veiksmui nėra duotas'
+            405: 'Jums leidimas tokiam veiksmui nėra duotas'
         },
     },
     mutations: {

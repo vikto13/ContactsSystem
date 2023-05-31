@@ -1,7 +1,7 @@
 export function OfficeState() {
 
     return {
-        offices: [],
+        offices: null,
         office: {
             id: null,
             street: '',
@@ -9,7 +9,7 @@ export function OfficeState() {
             city: '',
             street_number: null,
             expand: null,
-            companies: []
+            companies: null
         }
     }
 

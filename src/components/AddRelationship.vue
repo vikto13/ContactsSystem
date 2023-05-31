@@ -23,14 +23,14 @@
           :key="index"
           :value="component.id"
         >
-          {{ component.title }}
+          {{ navBar[ component.id].title }}
         </option>
       </select>
     </input-box-icon>
 
     <input-box-icon
       v-if="company.collectionName"
-      :title="`${companyDetails[company.collectionName].whose} pavadinimas:`"
+      :title="`${navBar[company.collectionName].whose} pavadinimas:`"
       :bottom-text="'Įrašykite pavadinimą'"
       :is-not-valid="submit && !company.name"
       class="mb-2"
@@ -96,7 +96,7 @@ export default {
   },
   mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["companyDetails", "company"]),
+    ...mapGetters(["companyDetails", "company","navBar"]),
   },
   methods: {
     ...mapActions([

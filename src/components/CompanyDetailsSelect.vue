@@ -11,10 +11,10 @@
       :key="position"
       class="mt-4"
     >
-      <label class="form-label">{{ `${select.title}:` }}</label>
+      <label class="form-label">{{ `${navBar[select.id].title}:` }}</label>
       <select v-model="contact[inputs[position].input]" class="form-select">
         <option selected disabled :value="null">
-          {{ `Pasirinkite ${select.what}...` }}
+          {{ `Pasirinkite ${navBar[select.id].what}...` }}
         </option>
         <option
           v-for="option in select.all"
@@ -46,7 +46,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["companyDetails", "contact"]),
+    ...mapGetters(["companyDetails", "contact","navBar"]),
   },
 };
 </script>

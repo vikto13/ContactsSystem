@@ -1,7 +1,11 @@
+import { mapActions, mapGetters } from "vuex";
 import InputBoxIcon from "../../components/InputBoxIcon.vue"
 export const LoginMixin = {
     components: {
         InputBoxIcon
+    },
+    computed: {
+        ...mapGetters(["alert"])
     },
     data() {
         return {
@@ -29,6 +33,7 @@ export const LoginMixin = {
         }
     },
     methods: {
+        ...mapActions(["showAlert", "disableAlert", "triggerMessage"]),
         showCompareMessage(password, secPassword) {
             return this.submit && (password !== secPassword)
         },
@@ -80,7 +85,7 @@ export const LoginMixin = {
                     content: `Patikrinkite savo elektroninį paštą`,
                 };
             } catch (err) {
-                console.log(err)
+
                 message = {
                     title: "Įvyko klaida",
                     content: `Pabandykite dar kartą`,
@@ -92,5 +97,24 @@ export const LoginMixin = {
                 action: async () => { },
             });
         },
+
+        async tryCatchForAPIAction(action) {
+            try {
+                await action()
+                this.alert.showAlert && this.disableAlert();
+            } catch (err) {
+                if (err.status == 404 || err.response.status == 400) {
+                    this.triggerMessage({
+                        title: "Jums leidimas tokiam veiksmui nėra duotas",
+                        content: `Paprašykite admino, jog suteiktų tokią galimybę`,
+                        isAlert: true,
+                        action: async () => { },
+                    });
+
+                } else {
+                    this.showAlert(404);
+                }
+            }
+        }
     }
 }

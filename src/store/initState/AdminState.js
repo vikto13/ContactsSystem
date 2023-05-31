@@ -9,12 +9,10 @@ export function AdminState() {
             whatDo: null,
             id: null,
             password: '',
-            passwordConfirm: ''
+            passwordConfirm: '',
+            emailVisibility: true,
+            username: null
         },
         admins: [],
-        pages: {
-            "authLogin": "auth-with-password",
-            "authRefresh": "auth-refresh",
-        },
     }
 }

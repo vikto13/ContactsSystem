@@ -10,7 +10,12 @@
 
     <template v-if="user.token">
       <li
-        v-for="(tab, index) in navBar"
+        v-for="(tab, index) in [ 
+          navBar.contacts,
+           navBar.companies,
+            navBar.relationship
+            ,navBar.office,
+            navBar.admins]"
         :key="index"
         class="nav-item d-flex flex-row p-3"
       >
