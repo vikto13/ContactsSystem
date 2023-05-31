@@ -1,20 +1,16 @@
 <template>
   <div class="md-layout-item m-3">
-    <h5 class="mt-5 text-center" style="width: 32rem; ">
+    <h5 class="mt-5 text-center" style="width: 32rem">
       {{ `${office.id != null ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
     </h5>
     <input-box-icon
       :title="`Kompanijos pavadinimas: `"
       :bottom-text="'Pasirinkite kompaniją'"
-      :is-not-valid="this.submit && !office.selectedNames.length"
+      :is-not-valid="this.submit && !office.companies.length"
       class="mb-2"
     >
       <md-field>
-        <md-select
-          v-model="office.selectedNames"
-          multiple
-          :disabled="typeof office.id == 'string'"
-        >
+        <md-select v-model="office.companies" multiple>
           <md-option
             v-for="option in companyDetails['companies'].all"
             :key="option.id"
@@ -45,10 +41,7 @@
       />
     </input-box-icon>
 
-    <md-button
-      class="btn w-100 m-0 "
-      @click="add"
-    >
+    <md-button class="btn w-100 m-0" @click="add">
       {{ office.id != null ? "Pakeisti" : "Pridėti" }}
     </md-button>
   </div>

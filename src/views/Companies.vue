@@ -5,45 +5,48 @@
       <h1 style="font-weight: normal">Kompanijos</h1>
       <field-to-create :text="'Pridėti naują kompaniją'" @pressed="edit(null)">
       </field-to-create>
-      <divide-components
-        v-for="company in companyDetails['companies'].all"
-        :key="company.id"
-        :size-xl="40"
-        :size-l="50"
-        :size-s="90"
-        :size-m="60"
-      >
-        <md-card
-          class="pl-5 mt-3"
-          style="
-            height: 5rem;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-          "
+      <div v-if="companyDetails['companies'].all.length">
+        <divide-components
+          v-for="company in companyDetails['companies'].all"
+          :key="company.id"
+          :size-xl="40"
+          :size-l="50"
+          :size-s="90"
+          :size-m="60"
         >
-          <div style="overflow: hidden; text-overflow: ellipsis; flex: 1">
-            {{ company.name }}
-          </div>
-          <div>
-            <md-button
-              md-with-hover
-              class="md-icon-button md-raised edit-btn"
-              @click="() => edit(company.id)"
-            >
-              <md-icon style="color: white">edit</md-icon>
-            </md-button>
+          <md-card
+            class="pl-5 mt-3"
+            style="
+              height: 5rem;
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+            "
+          >
+            <div style="overflow: hidden; text-overflow: ellipsis; flex: 1">
+              {{ company.name }}
+            </div>
+            <div>
+              <md-button
+                md-with-hover
+                class="md-icon-button md-raised edit-btn"
+                @click="() => edit(company.id)"
+              >
+                <md-icon style="color: white">edit</md-icon>
+              </md-button>
 
-            <md-button
-              md-with-hover
-              class="md-icon-button md-raised ml-3 delete-btn"
-              @click="() => deleteIt(company.id)"
-            >
-              <md-icon style="color: white">delete</md-icon>
-            </md-button>
-          </div>
-        </md-card>
-      </divide-components>
+              <md-button
+                md-with-hover
+                class="md-icon-button md-raised ml-3 delete-btn"
+                @click="() => deleteIt(company.id)"
+              >
+                <md-icon style="color: white">delete</md-icon>
+              </md-button>
+            </div>
+          </md-card>
+        </divide-components>
+      </div>
+      <h5 v-else style="text-align: center">Nėra sukurtų kompanijų</h5>
     </div>
   </div>
 </template>

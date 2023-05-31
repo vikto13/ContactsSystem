@@ -53,10 +53,6 @@ export function CompanyState() {
             },
             office: {
                 id: "office",
-                what: "ofisą",
-                whose: "ofisai",
-                addText: "Pridėti naują ofisą",
-                emptyText: "Nėra pridėta ofisų",
                 title: 'Adresus',
                 all: [],
                 selected: ''

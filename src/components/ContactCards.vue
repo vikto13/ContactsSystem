@@ -14,7 +14,7 @@
         :contents="[
           `Telefono nr:  ${contact.phone_number}`,
           `El paštas: ${contact.email} `,
-          `Adresas: `,
+          `Adresas: ${contact.address}`,
         ]"
         :id="contact.id"
         @buttonClicked="edit"

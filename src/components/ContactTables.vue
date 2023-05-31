@@ -17,12 +17,10 @@
       <md-table-cell md-label="Telefono numeris" md-sort-by="phone_number">{{
         item.phone_number
       }}</md-table-cell>
-      <md-table-cell md-label="Elektroninis paštas" md-sort-by="address">{{
+      <md-table-cell md-label="Elektroninis paštas" md-sort-by="email">{{
         item.email
       }}</md-table-cell>
-      <md-table-cell md-label="Adresas" md-sort-by="email">{{
-        item.email
-      }}</md-table-cell>
+      <md-table-cell md-label="Adresas">{{ item.address }}</md-table-cell>
 
       <md-table-cell v-if="user.token" md-label="Veiksmas">
         <md-button

@@ -41,23 +41,16 @@
             </md-menu-content>
           </md-menu>
 
-          <div
-       
-            class="d-flex flex-wrap"
-          >
+          <div class="d-flex flex-wrap">
             <md-button
               class="md-icon-button md-raised ml-3 edit-btn"
-              @click="() => isSelected=buttons[isSelected]"
+              @click="() => (isSelected = buttons[isSelected])"
             >
               <md-icon style="color: #ffffff">{{ isSelected }}</md-icon>
             </md-button>
           </div>
 
-
-          <div
-          v-if="user.token"
-            class="d-flex flex-wrap"
-          >
+          <div v-if="user.token" class="d-flex flex-wrap">
             <md-button
               class="md-icon-button md-raised ml-3 edit-btn"
               @click="() => triggerDialog('add-contacts')"
@@ -65,14 +58,6 @@
               <md-icon style="color: #ffffff">add</md-icon>
             </md-button>
           </div>
-
-
-
-
-
-
-         
-          
         </div>
       </div>
       <p style="display: inline">
@@ -118,9 +103,8 @@ export default {
       isSelected: "grid_view",
       buttons: {
         table_rows: "grid_view",
-              grid_view: "table_rows",
-      }
-     
+        grid_view: "table_rows",
+      },
     };
   },
   computed: {
@@ -147,13 +131,14 @@ export default {
       "searchContactByText",
       "searchContactBySelections",
       "disableAlert",
+      "showAlert",
     ]),
     async searching() {
       try {
         await this.searchContactBySelections();
         await this.searchContactByText();
         this.alert.showAlert && this.disableAlert();
-      } catch {
+      } catch (err) {
         this.showAlert(404);
       }
     },

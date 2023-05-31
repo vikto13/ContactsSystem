@@ -20,9 +20,9 @@
         style="background-color: #f1f2f4"
       >
         <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="Pavadinimas" md-sort-by="name">{{
-            item.name
-          }}</md-table-cell>
+          <md-table-cell md-label="Pavadinimas" md-sort-by="name">
+            {{ item.companies.map(({ name }) => name).join(", ") }}
+          </md-table-cell>
           <md-table-cell md-label="Gatvė" md-sort-by="street">{{
             ` ${item.street} ${item.street_number}`
           }}</md-table-cell>
@@ -90,7 +90,7 @@ export default {
 
       this.triggerMessage({
         title: "Ar tikrai norite ištrinti ofiso duomenis?",
-        content: `Ofiso pavadinimas: ${this.office.expand.name.name}`,
+        content: `Ofisas yra: ${this.office.country}, ${this.office.city}, ${this.office.street} ${this.office.street_number}`,
         action: async () => {
           await this.deleteOffice();
           this.$store.commit("clearOfficeState");

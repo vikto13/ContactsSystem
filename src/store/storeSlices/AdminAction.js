@@ -50,7 +50,13 @@ export default {
                     ...state.admin,
                     avatar: getters.image.file
                 },
-                { headers: { 'Content-Type': 'multipart/form-data' } }
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${getters.user.token}`
+
+                    }
+                }
             )
         },
         clearAdminData({ commit }) {
@@ -66,7 +72,13 @@ export default {
                     ...state.admin,
                     avatar: getters.image.file,
                 },
-                { headers: { 'Content-Type': 'multipart/form-data' } }
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${getters.user.token}`
+
+                    }
+                }
             )
             // const reader = new FileReader();
             // reader.readAsDataURL(image);

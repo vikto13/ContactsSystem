@@ -30,12 +30,12 @@
 <script>
 import { LoginMixin } from "../views/mixins/LoginMixin";
 import { mapActions } from "vuex";
-import AlertMessage from './AlertMessage.vue';
+import AlertMessage from "./AlertMessage.vue";
 
 export default {
   mixins: [LoginMixin],
   components: {
-    AlertMessage
+    AlertMessage,
   },
   data() {
     return {
@@ -43,16 +43,19 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["resetPassword"]),
+    ...mapActions(["resetPassword", "triggerMessage"]),
     async send() {
-      this.submit = true;
-
       try {
         await this.resetPassword(this.email);
         this.isSended = true;
         return;
       } catch {
-
+        this.triggerMessage({
+          title: "Įvyko klaida",
+          content: `Pabandykite dar kartą`,
+          isAlert: true,
+          action: async () => {},
+        });
       }
     },
   },

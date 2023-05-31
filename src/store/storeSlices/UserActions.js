@@ -28,8 +28,9 @@ export default {
             await dispatch("setUserAvatar")
         },
         async authWithToken({ commit, dispatch }, user) {
-            let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${user.id}`, { headers: { Authorization: `Bearer ${user.token}` } })
-            console.log(data)
+            let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${user.id}`,
+                { headers: { Authorization: `Bearer ${user.token}` } })
+
 
             await commit("setUser", { ...data, token: user.token })
             await dispatch("setUserAvatar")

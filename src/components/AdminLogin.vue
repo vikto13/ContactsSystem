@@ -48,31 +48,40 @@
 <script>
 import { LoginMixin } from "../views/mixins/LoginMixin";
 import { mapActions, mapGetters } from "vuex";
-import AlertMessage from './AlertMessage.vue';
+import AlertMessage from "./AlertMessage.vue";
 
 export default {
   components: {
-    AlertMessage
+    AlertMessage,
   },
   mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["user","alert"]),
+    ...mapGetters(["user", "alert"]),
   },
   methods: {
-    ...mapActions(["authWithPassword", "showAlert","disableAlert"]),
+    ...mapActions([
+      "authWithPassword",
+      "showAlert",
+      "disableAlert",
+      "showLoading",
+    ]),
     async login() {
       if (!(this.password && this.email)) {
         this.submit = true;
         return;
       }
       try {
+        this.showLoading(true);
         await this.authWithPassword({
           email: this.email,
           password: this.password,
         });
-
-        this.$router.push("/contacts/records");
+        setTimeout(() => {
+          this.$router.push("/contacts/records");
+        }, 10);
+        this.showLoading(false);
       } catch (err) {
+        console.log(err);
         if (err.status == 400) {
           this.showAlert(400);
         } else {
@@ -83,6 +92,6 @@ export default {
   },
   destroyed() {
     this.alert.showAlert && this.disableAlert();
-  }
+  },
 };
 </script>

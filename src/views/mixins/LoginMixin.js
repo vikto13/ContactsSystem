@@ -79,7 +79,8 @@ export const LoginMixin = {
                     title: "Žinutė išsiųsta",
                     content: `Patikrinkite savo elektroninį paštą`,
                 };
-            } catch {
+            } catch (err) {
+                console.log(err)
                 message = {
                     title: "Įvyko klaida",
                     content: `Pabandykite dar kartą`,

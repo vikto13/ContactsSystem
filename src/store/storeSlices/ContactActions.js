@@ -52,21 +52,21 @@ export default {
             )
         },
         async fetchContacts({ commit, getters }) {
-            let list = await pocketBase.collection("contacts").getFullList({ sort: '-created', });
+            let list = await pocketBase.collection("contacts").getFullList({ sort: '-created', expand: 'companies' });
+            let fetch = await Promise.all(
+                list.map((value) => {
+                    return value.expand.companies ? axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/office/records?filter=(companies?~'${value.expand.companies.id}')`) : null
 
-            // let paths = {}
-            // list.map(({ image, id, collectionName }, index) => {
-            //     if (image) {
-            //         paths[index] = `${import.meta.env.VITE_POCKET_BASE_URL}/api/files/${collectionName}/${id}/${image}?thumb=100x300`
-            //     }
-            // })
+                }))
+            fetch.map((value, index) => {
+                if (value) {
+                    let { city, country, street, street_number } = value.data.items[0]
+                    list[index].address = ` ${country}, ${city}, ${street} ${street_number}`
+                } else {
+                    list[index].address = "-"
+                }
 
-            // let data = await Promise.all(Object.values(paths).map(url => axios.get(url, { responseType: "blob" })))
-            // let image = new FileReader();
-            // for (let index in paths) {
-            //     image.readAsDataURL(data[Number(index)].data);
-            //     list[Number(index)].image = image
-            // }
+            })
             commit('setContacts', list)
         },
         async editContact({ state }) {
@@ -90,16 +90,15 @@ export default {
             commit('setContacts', filteredItems)
         },
         async searchContactBySelections({ commit, getters }) {
-            const find = [];
+            let find = {};
             for (let company in getters.companyDetails) {
                 let { selected } = getters.companyDetails[company];
-                selected ? find.push({ [company]: selected }) : null;
+                selected ? find[selected] = company === 'office' ? 'companies' : company : null;
             }
+
             let list = await pocketBase.collection("contacts").getFullList({ sort: '-created', });
-            const filteredItems = find.length ? list.filter((value) => {
-                return find.map((check) => value[Object.keys(check)[0]] == Object.values(check)[0]
-                ).every(value => value === true);
-            }) : list
+
+            let filteredItems = Object.keys(find).length ? list.filter(contact => Object.keys(find).filter(search => contact[find[search]] === search).length) : list
             commit('setContacts', filteredItems)
         },
     },

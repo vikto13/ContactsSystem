@@ -6,7 +6,7 @@
         companyDetails.divisions,
         companyDetails.departments,
         companyDetails.groups,
-        companyDetails.office
+        companyDetails.office,
       ]"
       :key="index"
     >
@@ -20,6 +20,7 @@
         <option :disabled="'' == filter.selected" selected :value="null">
           {{ filter.title }}
         </option>
+
         <option
           v-for="(select, position) in filter.all"
           :disabled="select.id == filter.selected"
@@ -50,10 +51,11 @@ export default {
           this.companyDetails.departments,
           this.companyDetails.divisions,
           this.companyDetails.groups,
-          this.companyDetails.office
         ].map(({ id }) => this.fetchCompanies(id))
       );
-    } catch {
+      await this.getOfficesAddress();
+    } catch (err) {
+      console.log(err);
       this.showAlert(404);
     }
   },
@@ -65,6 +67,7 @@ export default {
       "searchContactBySelections",
       "searchContactByText",
       "disableAlert",
+      "getOfficesAddress",
     ]),
     async pressed(select, id) {
       this.$store.commit("selectCompany", { select: select.value, id });

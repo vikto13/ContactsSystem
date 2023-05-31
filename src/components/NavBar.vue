@@ -54,11 +54,15 @@ export default {
   },
   mixins: [LoginMixin],
   methods: {
-    ...mapActions(["triggerMessage", "resetPassword"]),
+    ...mapActions(["triggerMessage", "resetPassword", "showLoading"]),
     signOut() {
-      this.$router.push("/users/auth-with-password");
+      this.showLoading(true);
       this.$store.commit("clearUserData");
       localStorage.removeItem("pocketbase_auth");
+      setTimeout(() => {
+        this.$router.push("/users/auth-with-password");
+        this.showLoading(false);
+      }, 200);
     },
   },
 };

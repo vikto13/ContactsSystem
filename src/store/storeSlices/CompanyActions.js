@@ -14,6 +14,7 @@ export default {
             state.details[entity].all = list
         },
         selectCompany(state, { select, id }) {
+            console.log(select, id)
             state.details[id].selected = select
         },
         clearCompanyData(state) {
@@ -30,7 +31,6 @@ export default {
                 .getFirstListItem(`id="${id}"`);
 
             commit("setCompany", { ...data, relation: data[state.details[entity].relationship] })
-
         },
         async saveCompany({ state }, entity) {
             await pocketBase.collection(entity).create({ name: state.company.name })
@@ -41,20 +41,21 @@ export default {
             await pocketBase.collection(collectionName).create({ name: state.company.name, [relationship]: state.company.relation })
         },
         async fetchCompanies({ commit }, entity) {
-            let list = await pocketBase.collection(entity).getFullList({ sort: '-created', });
+            let list = await pocketBase.collection(entity).getFullList({ sort: '-created' });
             commit('setCompanies', { list, entity })
         },
-        async fetchAllCompanies({ commit, state }, entity) {
+        async fetchAllCompanies({ commit, state, getters }) {
             let search = [state.details.departments, state.details.divisions, state.details.groups, state.details.companies]
 
             let list = await Promise.all(search.map(({ id }) => {
-                return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${id}/records`)
+                return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${id}/records`,
+                    { headers: { Authorization: `Bearer ${getters.user.token}` } }
+                )
             }))
             search.map(({ id }, index) => {
                 let { items } = list[index].data
                 commit('setCompanies', { list: items, entity: id })
             })
-
         },
         async editCompany({ state }, entity) {
             await pocketBase
@@ -65,6 +66,16 @@ export default {
             await pocketBase
                 .collection(state.company.collectionName)
                 .delete(state.company.id)
+        },
+        async getOfficesAddress({ commit, getters, dispatch }) {
+            await dispatch("fetchOffices");
+            let address = getters.offices.map(({ street, street_number, city, country, expand }) => {
+                return ({
+                    name: `${country}, ${city}, ${street} ${street_number}`,
+                    id: expand.companies[0].id
+                })
+            })
+            commit('setCompanies', { list: address, entity: "office" })
 
         },
 

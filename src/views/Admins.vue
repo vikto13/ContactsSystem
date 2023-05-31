@@ -9,7 +9,6 @@
         :title="'Sukurti admin paskyrą'"
       >
       </field-to-create>
-
       <md-table
         v-if="admins.length"
         v-model="admins"
@@ -46,7 +45,9 @@
           </md-table-cell>
         </md-table-row>
       </md-table>
-      <h5 v-else class="text-center" >Nėra sukurtų admino paskyrų</h5>
+      <h5 v-if="!isLoading && !admins.length" style="text-align: center">
+        Nėra sukurtų admino struktūrų
+      </h5>
     </div>
   </div>
 </template>
@@ -58,10 +59,17 @@ export default {
     FieldToCreate,
   },
   async mounted() {
-    await this.fetchAdmins();
+    try {
+      this.admins.length || this.showLoading(true);
+      console.log(this.isLoading, this.admins.length);
+      await this.fetchAdmins();
+    } catch {
+      this.showMessage;
+    }
+    this.showLoading(false);
   },
   computed: {
-    ...mapGetters(["admin"]),
+    ...mapGetters(["admin", "isLoading"]),
     admins: {
       get() {
         return this.$store.getters.admins;
@@ -78,6 +86,7 @@ export default {
       "triggerMessage",
       "deleteAdmin",
       "clearAdminData",
+      "showLoading",
     ]),
     async deleting(id) {
       await this.setAdmin(id);

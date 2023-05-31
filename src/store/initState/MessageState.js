@@ -6,5 +6,6 @@ export const MessageState = {
     action: null,
     isAlert: false,
 
-    cancelAction: null
+    cancelAction: null,
+    loading: false
 }
