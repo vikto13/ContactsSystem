@@ -3,13 +3,13 @@
     <input-box-icon
       :title="`${navBar['companies'].whose} pavadinimas:`"
       :bottom-text="'Įveskite pavadinimą'"
-      :is-not-valid="isInvalid(company.name)"
+      :is-not-valid="isInvalid(employee.name)"
     >
       <input
-        v-model="company.name"
+        v-model="employee.name"
         type="text"
         class="form-control table-footer"
-        :class="{ 'is-invalid': isInvalid(company.name) }"
+        :class="{ 'is-invalid': isInvalid(employee.name) }"
         :placeholder="`Įveskite ${navBar['companies'].whose} pavadinimą...`"
       />
     </input-box-icon>
@@ -32,14 +32,14 @@ export default {
   },
   mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["company", "companyDetails", "navBar"]),
+    ...mapGetters(["employee", "companyDetails", "navBar"]),
     showTitle() {
-      return this.company.id != null
+      return this.employee.id != null
         ? `Redaguoti ${this.companyDetails["companies"].what}: `
         : `Pridėti naują ${this.companyDetails["companies"].what}:`;
     },
     buttonTitle() {
-      return this.company.id != null ? "Redaguoti" : "Pridėti";
+      return this.employee.id != null ? "Redaguoti" : "Pridėti";
     },
   },
   methods: {
@@ -50,12 +50,12 @@ export default {
       "editCompany",
     ]),
     async save() {
-      if (!this.company.name) {
+      if (!this.employee.name) {
         this.submit = true;
         return;
       }
       this.tryCatchForAPIAction(async () => {
-        this.company.id
+        this.employee.id
           ? await this.editCompany("companies")
           : await this.saveCompany("companies");
         await this.fetchCompanies("companies");

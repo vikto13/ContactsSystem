@@ -6,7 +6,6 @@ export function CompanyState() {
             collectionName: '',
             relation: ''
         },
-
         details: {
             companies: {
                 id: "companies",
@@ -31,8 +30,8 @@ export function CompanyState() {
                 relationship: 'divisions',
                 selected: ''
             },
-            office: {
-                id: "office",
+            offices: {
+                id: "offices",
                 all: null,
                 selected: ''
             },

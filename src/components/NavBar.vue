@@ -8,14 +8,15 @@
       />
     </router-link>
 
-    <template v-if="user.token">
+    <template>
       <li
-        v-for="(tab, index) in [ 
+        v-for="(tab, index) in [
           navBar.contacts,
-           navBar.companies,
-            navBar.relationship
-            ,navBar.office,
-            navBar.admins]"
+          navBar.companies,
+          navBar.relationship,
+          navBar.office,
+          navBar.admins,
+        ]"
         :key="index"
         class="nav-item d-flex flex-row p-3"
       >
@@ -28,14 +29,14 @@
       </li>
 
       <md-menu md-size="medium" md-align-trigger>
-        <md-button
+        <!-- <md-button
           md-menu-trigger
           class="md-icon-button md-raised"
           style="background-color: white !important"
         >
           <img v-if="user.avatar" :src="user.avatar.result" />
           <md-icon v-else class="cb">person</md-icon>
-        </md-button>
+        </md-button> -->
 
         <md-menu-content>
           <md-menu-item @click="updatePassword"

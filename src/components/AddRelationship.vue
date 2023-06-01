@@ -23,7 +23,7 @@
           :key="index"
           :value="component.id"
         >
-          {{ navBar[ component.id].title }}
+          {{ navBar[component.id].title }}
         </option>
       </select>
     </input-box-icon>
@@ -96,7 +96,7 @@ export default {
   },
   mixins: [LoginMixin],
   computed: {
-    ...mapGetters(["companyDetails", "company","navBar"]),
+    ...mapGetters(["companyDetails", "company", "navBar"]),
   },
   methods: {
     ...mapActions([
@@ -117,11 +117,13 @@ export default {
         this.submit = true;
         return;
       }
-      this.company.id
-        ? await this.editCompany(this.company.collectionName)
-        : await this.saveCompanyRelation();
-      this.dismissDialog();
-      await this.fetchCompanies(this.company.collectionName);
+      this.tryCatchForAPIAction(async () => {
+        this.company.id
+          ? await this.editCompany(this.company.collectionName)
+          : await this.saveCompanyRelation();
+        this.dismissDialog();
+        await this.fetchCompanies(this.company.collectionName);
+      });
     },
   },
   destroyed() {

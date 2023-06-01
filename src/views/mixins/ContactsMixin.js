@@ -2,52 +2,52 @@ import { mapGetters, mapActions } from "vuex";
 
 export const ContactsMixin = {
     computed: {
-        ...mapGetters(["contacts", "currentPage", "sizeOfPaginate", "contact"]),
+        ...mapGetters(["currentPage", "sizeOfPaginate", "employees", "findEmployee"]),
         showCards: {
             get() {
                 let size = this.currentPage * this.sizeOfPaginate;
 
-                if (this.contacts.length == size && this.currentPage) {
+                if (this.employees.length == size && this.currentPage) {
                     this.$store.commit("previuosPage");
                     size = size - this.sizeOfPaginate;
                 }
-                return this.contacts.slice(size, size + this.sizeOfPaginate);
+
+                return this.employees.slice(size, size + this.sizeOfPaginate);
             },
             set() {
             }
         },
     },
     methods: {
-        ...mapActions([
-            "findContact",
-            "triggerDialog",
-            "deleteContact",
-            "fetchContacts",
-            "triggerMessage",
-            "showAlert"
-        ]),
+
+        getAddress({ office_id }) {
+            let { city, country, street, street_number } = office_id;
+            return ` ${country}, ${city}, ${street} ${street_number}`;
+        },
+
         async see(id) {
             this.$router.push(`/contact/${id}`);
         },
         async edit({ button, id }) {
-            try {
-                await this.findContact(id);
-                if (button) {
-                    this.triggerMessage({
-                        title: "Ar tikrai norite ištrinti kontaktą?",
-                        content: `Kontaktas: ${this.contact.name} ${this.contact.surname}`,
-                        action: async () => {
-                            await this.deleteContact();
-                            await this.fetchContacts();
-                        },
-                        cancelAction: () => { },
-                    });
-                } else {
-                    this.triggerDialog("add-contacts");
-                }
-            } catch (error) {
-                this.showAlert(400)
-            }
+            await this.findEmployee()
+            // this.tryCatchForAPIAction(async () => {
+            //     await this.findContact(id);
+            //     if (button) {
+            //         this.triggerMessage({
+            //             title: "Ar tikrai norite ištrinti kontaktą?",
+            //             content: `Kontaktas: ${this.contact.name} ${this.contact.surname}`,
+            //             action: async () => {
+            //                 this.tryCatchForAPIAction(async () => {
+            //                     await this.deleteContact();
+            //                     await this.fetchContacts();
+            //                 })
+            //             },
+            //             cancelAction: () => { },
+            //         });
+            //     } else {
+            //         this.triggerDialog("add-contacts");
+            //     }
+            // })
         },
     },
 }

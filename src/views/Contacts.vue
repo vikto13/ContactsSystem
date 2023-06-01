@@ -33,9 +33,9 @@
                 >{{ option }}</md-menu-item
               >
               <md-menu-item
-                :value="contacts.length"
-                :disabled="sizeOfPaginate == contacts.length"
-                @click="() => setPaginate(contacts.length)"
+                :value="employees.length"
+                :disabled="sizeOfPaginate == employees.length"
+                @click="() => setPaginate(employees.length)"
                 >visi</md-menu-item
               >
             </md-menu-content>
@@ -50,7 +50,7 @@
             </md-button>
           </div>
 
-          <div v-if="user.token" class="d-flex flex-wrap">
+          <div class="d-flex flex-wrap">
             <md-button
               class="md-icon-button md-raised ml-3 edit-btn"
               @click="() => triggerDialog('add-contacts')"
@@ -62,42 +62,41 @@
       </div>
       <p style="display: inline">
         Iš viso rasta:
-        <span style="font-weight: bold">{{ contacts.length }}</span>
+        <span style="font-weight: bold">{{ employees.length }}</span>
         {{ navBar.title }}
       </p>
-      <filter-sections></filter-sections>
+      <!-- <filter-sections></filter-sections> -->
+      <component :is="showComponents[isSelected]"></component>
+      <pagination></pagination>
+      <!-- <h5 v-if="contacts == null" style="text-align: center">
+        Kontaktų nerasta
+      </h5>
       <component
-        v-if="contacts.length"
+        v-if="contacts != null && contacts.length"
         :is="contacts != null ? showComponents[isSelected] : null"
       ></component>
       <h5 v-else style="text-align: center">
         {{ navBar.contacts.textEmpty }}
-      </h5>
-      <pagination></pagination>
+      </h5> -->
     </div>
   </div>
 </template>
 <script>
-import NavBar from "../components/NavBar.vue";
-import FilterSections from "../components/FilterSections.vue";
+import { mapActions, mapGetters } from "vuex";
 import ContactCards from "../components/ContactCards.vue";
-import ContactTables from "../components/ContactTables.vue";
 import Pagination from "../components/Pagination.vue";
 import InputBoxIcon from "../components/InputBoxIcon.vue";
-import { mapActions, mapGetters } from "vuex";
-import { LoginMixin } from "./mixins/LoginMixin";
+import ContactTables from "../components/ContactTables.vue";
+
 export default {
   components: {
-    NavBar,
-    InputBoxIcon,
-    FilterSections,
     ContactCards,
     Pagination,
+    InputBoxIcon,
     ContactTables,
   },
-  mixins: [LoginMixin],
   async mounted() {
-    await this.tryCatchForAPIAction(this.fetchContacts);
+    await this.fetchEmployees();
   },
   data() {
     return {
@@ -114,32 +113,20 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "contacts",
+      "employees",
+      "navBar",
       "optionsForPaginate",
       "sizeOfPaginate",
-      "user",
-      "alert",
-      "navBar",
     ]),
     contactSearch: {
       get() {
-        return this.$store.state.Contact.search;
+        return this.$store.state.Employee.contactSearch;
       },
-      set(text) {
-        this.$store.state.Contact.search = text;
-      },
+      set(text) {},
     },
   },
   methods: {
-    ...mapActions([
-      "triggerDialog",
-      "fetchContacts",
-      "searchContactByText",
-      "searchContactBySelections",
-      "disableAlert",
-      "showAlert",
-      "showLoading",
-    ]),
+    ...mapActions(["fetchEmployees", "triggerDialog"]),
     async searching() {
       this.tryCatchForAPIAction(async () => {
         await this.searchContactBySelections();

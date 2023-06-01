@@ -13,11 +13,6 @@ export const LoginMixin = {
             email: '',
             password: '',
             secPassword: '',
-
-
-
-
-
             message: {
                 street: 'Gatvė turi būti įvesta',
                 street_number: 'Gatvės numerys turi būti įvestas',
@@ -74,8 +69,6 @@ export const LoginMixin = {
             }
             return this.message[Object.keys(info)[0]]
         },
-
-
         async updatePassword() {
             let message;
             try {
@@ -97,13 +90,12 @@ export const LoginMixin = {
                 action: async () => { },
             });
         },
-
         async tryCatchForAPIAction(action) {
             try {
                 await action()
                 this.alert.showAlert && this.disableAlert();
             } catch (err) {
-                if (err.status == 404 || err.response.status == 400) {
+                if (err.status == 404 || err.status == 400 || err.response.status == 400) {
                     this.triggerMessage({
                         title: "Jums leidimas tokiam veiksmui nėra duotas",
                         content: `Paprašykite admino, jog suteiktų tokią galimybę`,
@@ -117,4 +109,5 @@ export const LoginMixin = {
             }
         }
     }
+
 }

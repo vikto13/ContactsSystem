@@ -20,7 +20,11 @@
           :icon-name="'mail'"
           :bottom-text="emailMessage(admin.email)"
           :title="'Elektroninis paštas:'"
-          :is-not-valid="showEmailMessage(admin.email)"
+          :is-not-valid="
+            isInvalid({
+              email: admin.email,
+            })
+          "
         >
           <input
             v-model="admin.email"
@@ -111,36 +115,35 @@ export default {
       "triggerMessage",
     ]),
     async save() {
+      this.submit = true;
       if (
         !(
           this.admin.name &&
           this.admin.email &&
-          !this.showEmailMessage(this.admin.email)
+          !this.isInvalid({
+            email: this.admin.email,
+          })
         )
       ) {
-        this.submit = true;
         return;
       }
 
-      try {
+      this.tryCatchForAPIAction(async () => {
         if (this.admin.whatDo != null) {
           await this.updateAdmin();
         } else {
-          console.log(this.admin)
           await this.saveAdmin();
 
-          // this.dismissDialog();
-          // this.triggerMessage({
-          //   title: "Admin paskyra sukurta sėkmingai",
-          //   content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
-          //   isAlert: true,
-          //   action: async () => {},
-          // });
+          this.dismissDialog();
+          this.triggerMessage({
+            title: "Admin paskyra sukurta sėkmingai",
+            content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
+            isAlert: true,
+            action: async () => {},
+          });
         }
         await this.fetchAdmins();
-      } catch (err) {
-        console.log(err);
-      }
+      });
     },
   },
   beforeDestroy() {

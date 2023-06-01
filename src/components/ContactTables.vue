@@ -20,9 +20,9 @@
       <md-table-cell md-label="Elektroninis paštas" md-sort-by="email">{{
         item.email
       }}</md-table-cell>
-      <md-table-cell md-label="Adresas">{{ item.address }}</md-table-cell>
+      <md-table-cell md-label="Adresas">{{ getAddress(item) }}</md-table-cell>
 
-      <md-table-cell v-if="user.token" md-label="Veiksmas">
+      <md-table-cell md-label="Veiksmas">
         <md-button
           class="md-dense md-raised md-primary edit-btn"
           @click.stop="edit({ button: 0, id: item.id })"
@@ -40,10 +40,9 @@
 <script>
 import { mapGetters } from "vuex";
 import { ContactsMixin } from "../views/mixins/ContactsMixin";
+import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
-  mixins: [ContactsMixin],
-  computed: {
-    ...mapGetters(["user"]),
-  },
+  mixins: [ContactsMixin, LoginMixin],
+  computed: {},
 };
 </script>

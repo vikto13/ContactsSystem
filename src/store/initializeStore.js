@@ -1,27 +1,21 @@
-import User from "./storeSlices/UserActions"
-import Dialog from "./storeSlices/DialogActions"
-import Message from "./storeSlices/MessageAction"
-import Company from "./storeSlices/CompanyActions"
-import Admin from "./storeSlices/AdminAction"
-import Image from "./storeSlices/ImageAction"
-import Office from "./storeSlices/OfficeAction"
-import Contact from "./storeSlices/ContactActions"
-import Paginate from "./storeSlices/PaginateAction"
+import Employee from "./storeSlices/EmployeeAction"
 import NavBar from "./storeSlices/NavBar"
+import Paginate from "./storeSlices/PaginateAction"
+import DialogActions from "./storeSlices/DialogActions"
+import Company from "./storeSlices/CompanyActions"
 import AlertMessage from "./storeSlices/AlertMessage"
+import Image from "./storeSlices/ImageAction"
+
+
 
 export const initializeStore = {
     modules: {
-        User,
-        Dialog,
-        Message,
-        Company,
-        Admin,
-        Image,
-        Office,
-        Contact,
+        Employee,
         Paginate,
         NavBar,
-        AlertMessage
+        DialogActions,
+        Company,
+        AlertMessage,
+        Image
     }
 }

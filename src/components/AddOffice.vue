@@ -100,17 +100,12 @@ export default {
         this.submit = true;
         return;
       }
-      try {
-        if (this.office.id) {
-          await this.editOffice();
-        } else {
-          await this.saveOffice();
-        }
+
+      this.tryCatchForAPIAction(async () => {
+        this.office.id ? await this.editOffice() : await this.saveOffice();
         await this.fetchOffices();
         this.dismissDialog();
-      } catch (error) {
-        console.log(error);
-      }
+      });
     },
   },
   destroyed() {

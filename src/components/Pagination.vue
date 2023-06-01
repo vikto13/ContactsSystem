@@ -60,10 +60,10 @@ export default {
     DivideComponents,
   },
   computed: {
-    ...mapGetters(["contacts", "sizeOfPaginate"]),
+    ...mapGetters(["employees", "sizeOfPaginate"]),
     goNext() {
       return (
-        this.contacts.length <=
+        this.employees.length <=
         this.currentPage * this.sizeOfPaginate + this.sizeOfPaginate
       );
     },
@@ -78,4 +78,3 @@ export default {
   },
 };
 </script>
-

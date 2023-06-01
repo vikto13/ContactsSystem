@@ -14,7 +14,7 @@
         :contents="[
           `Telefono nr:  ${contact.phone_number}`,
           `El paštas: ${contact.email} `,
-          `Adresas: ${contact.address}`,
+          `Adresas: ${getAddress(contact)}`,
         ]"
         :id="contact.id"
         @buttonClicked="edit"
@@ -27,7 +27,7 @@
 import Card from "./Card.vue";
 import DivideComponents from "./DivideComponents.vue";
 import { ContactsMixin } from "../views/mixins/ContactsMixin";
-ContactsMixin;
+
 export default {
   components: {
     Card,

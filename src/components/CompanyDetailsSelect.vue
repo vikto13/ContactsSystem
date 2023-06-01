@@ -12,7 +12,7 @@
       class="mt-4"
     >
       <label class="form-label">{{ `${navBar[select.id].title}:` }}</label>
-      <select v-model="contact[inputs[position].input]" class="form-select">
+      <select v-model="employee[inputs[position].input]" class="form-select">
         <option selected disabled :value="null">
           {{ `Pasirinkite ${navBar[select.id].what}...` }}
         </option>
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import AddImage from "./AddImage.vue";
 export default {
   components: {
@@ -46,7 +46,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["companyDetails", "contact","navBar"]),
+    ...mapGetters(["companyDetails", "employee", "navBar", "companyDetails"]),
+  },
+  methods: {
+    ...mapActions(["fetchAllCompanies"]),
+  },
+  async mounted() {
+    await this.fetchAllCompanies();
+    console.log(this.companyDetails);
   },
 };
 </script>

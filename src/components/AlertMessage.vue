@@ -4,11 +4,17 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
     ...mapGetters(["alert"]),
   },
+  methods: {
+    ...mapActions(["disableAlert"]),
+  },
+  // mounted() {
+  //   this.disableAlert();
+  // },
 };
 </script>

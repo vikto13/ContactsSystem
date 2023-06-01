@@ -49,13 +49,16 @@ export default {
 
             let list = await Promise.all(search.map(({ id }) => {
                 return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${id}/records`,
-                    { headers: { Authorization: `Bearer ${getters.user.token}` } }
+                    { headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2NzgxMTIyNzAsImlkIjoidWx6YWlxa2U4eDB4ZGkxIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.kklqpirWGIx5_7bGZi_xf6zBkrdoRHxfn3G2ZwD9yaI` } }
                 )
             }))
+
+
             search.map(({ id }, index) => {
                 let { items } = list[index].data
                 commit('setCompanies', { list: items, entity: id })
             })
+
         },
         async editCompany({ state }, entity) {
             await pocketBase
@@ -93,7 +96,16 @@ export default {
             state.details.divisions,
             ].map(({ all }) => all);
             return [].concat(...all);
+        },
 
+        allCompanies: (state) => {
+            let fetch = [
+                state.details.departments,
+                state.details.groups,
+                state.details.divisions,
+            ].map(({ all }) => all);
+            console.log([].concat(...fetch))
+            return [].concat(...fetch).filter(value => value);
         }
     },
 }

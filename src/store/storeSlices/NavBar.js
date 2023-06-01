@@ -46,7 +46,6 @@ export default {
                 title: 'Ofisai',
                 textAdd: "Pridėti naują ofisą",
                 textEmpty: "Nėra sukurtų ofisų",
-                title: "Būstinės",
                 path: "/offices/records"
             },
             admins: {

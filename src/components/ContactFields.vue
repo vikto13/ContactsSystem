@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout-item m-2">
     <h3 class="mb-5 mt-3">
-      {{ contact.id ? "Pakeisti kontaktą" : "Pridėti naują kontaktą:" }}
+      {{ employee.id ? "Pakeisti kontaktą" : "Pridėti naują kontaktą:" }}
     </h3>
     <div v-for="(table, index) in inputs" :key="index">
       <h5 v-if="table.name" class="mt-5">{{ table.name }}</h5>
@@ -9,18 +9,18 @@
         v-for="(column, index) in table.boxs"
         :key="index"
         :icon-name="column.icon"
-        :bottom-text="messageById({ [column.input]: contact[column.input] })"
+        :bottom-text="messageById({ [column.input]: employee[column.input] })"
         :title="`${column.title}:`"
-        :is-not-valid="isInvalid({ [column.input]: contact[column.input] })"
+        :is-not-valid="isInvalid({ [column.input]: employee[column.input] })"
       >
         <input
-          v-model="contact[column.input]"
+          v-model="employee[column.input]"
           type="text"
           class="form-control"
           :placeholder="column.placeholder"
           :class="{
             'is-invalid': isInvalid({
-              [column.input]: contact[column.input],
+              [column.input]: employee[column.input],
             }),
           }"
           style="background-color: #f1f2f4"
@@ -29,7 +29,7 @@
       </input-box-icon>
     </div>
     <md-button class="btn w-100 m-0 mt-4" @click="save">
-      {{ contact.id ? "Pakeisti" : "Pridėti" }}
+      {{ employee.id ? "Pakeisti" : "Pridėti" }}
     </md-button>
   </div>
 </template>
@@ -45,7 +45,7 @@ export default {
     AddImage,
   },
   computed: {
-    ...mapGetters(["contact"]),
+    ...mapGetters(["employee"]),
   },
   mixins: [LoginMixin],
   data() {
@@ -115,7 +115,7 @@ export default {
       }
 
       this.tryCatchForAPIAction(async () => {
-        this.contact.id ? await this.editContact() : await this.saveContact();
+        this.employee.id ? await this.editContact() : await this.saveContact();
         this.dismissDialog();
         this.fetchContacts();
       });
