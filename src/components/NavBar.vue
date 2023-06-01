@@ -14,7 +14,7 @@
           navBar.contacts,
           navBar.companies,
           navBar.relationship,
-          navBar.office,
+          navBar.offices,
           navBar.admins,
         ]"
         :key="index"

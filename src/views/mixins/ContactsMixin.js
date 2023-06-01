@@ -49,5 +49,23 @@ export const ContactsMixin = {
             //     }
             // })
         },
+        findProperty(obj, propertyName) {
+
+            for (let key in obj) {
+                if (key === propertyName) {
+                    return obj[key];
+                }
+
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    const result = findProperty(obj[key], propertyName);
+
+                    if (result !== undefined) {
+                        return result;
+                    }
+                }
+            }
+
+            return undefined;
+        }
     },
 }

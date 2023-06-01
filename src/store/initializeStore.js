@@ -5,7 +5,7 @@ import DialogActions from "./storeSlices/DialogActions"
 import Company from "./storeSlices/CompanyActions"
 import AlertMessage from "./storeSlices/AlertMessage"
 import Image from "./storeSlices/ImageAction"
-
+import Message from "./storeSlices/MessageAction"
 
 
 export const initializeStore = {
@@ -16,6 +16,7 @@ export const initializeStore = {
         DialogActions,
         Company,
         AlertMessage,
-        Image
+        Image,
+        Message
     }
 }

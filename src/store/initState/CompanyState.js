@@ -8,33 +8,53 @@ export function CompanyState() {
         },
         details: {
             companies: {
+                name: 'companies',
                 id: "companies",
                 all: null,
+                relationship: 'offices',
                 selected: ''
             },
-            divisions: {
-                id: "divisions",
+            departments: {
+                name: 'departments',
+                id: "department_id",
                 all: null,
-                relationship: 'companies',
-                selected: ''
+                relationship: 'groups',
+                selected: '',
+                types: []
             },
-            groups: {
-                id: "groups",
+
+
+            divisions: {
+                name: 'divisions',
+                id: "division_id",
                 all: null,
                 relationship: 'departments',
                 selected: ''
             },
-            departments: {
-                id: "departments",
-                all: null,
-                relationship: 'divisions',
-                selected: ''
-            },
             offices: {
-                id: "offices",
+                name: 'offices',
+                id: "office_id",
                 all: null,
-                selected: ''
+                selected: '',
+                relationship: 'divisions',
             },
+
+
+
+
+            groups: {
+                name: 'groups',
+                id: "group_id",
+                all: null,
+                selected: '',
+                relationship: 'departments',
+                types: []
+            },
+
+
+
+
+
         }
     }
 

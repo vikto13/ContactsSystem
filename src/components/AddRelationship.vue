@@ -21,9 +21,9 @@
             companyDetails.divisions,
           ]"
           :key="index"
-          :value="component.id"
+          :value="component.name"
         >
-          {{ navBar[component.id].title }}
+        {{ navBar[component.name].title }}
         </option>
       </select>
     </input-box-icon>
@@ -42,13 +42,15 @@
         :placeholder="'Įveskite pavadinimą...'"
       />
     </input-box-icon>
-
     <input-box-icon
       v-if="company.collectionName"
       :title="`Tipas:`"
       :bottom-text="`Pasirinkite ${
-        companyDetails[company.collectionName].what
-      }`"
+        navBar[company.collectionName].what
+      }`
+      
+      
+      "
       :is-not-valid="submit && !company.relation"
       class="mb-2"
     >
@@ -57,17 +59,21 @@
         class="form-select"
         style="width: 30rem"
       >
-        <option :value="''" disabled>
+        <option 
+        :value="''" 
+        disabled>
           Pasirinkite
           {{
-            companyDetails[companyDetails[company.collectionName].relationship]
-              .what
+  
+           navBar[
+            companyDetails[company.collectionName].relationship
+          ].what
           }}
         </option>
         <option
           v-for="(component, index) in companyDetails[
             companyDetails[company.collectionName].relationship
-          ].all"
+          ].types"
           :key="index"
           :value="component.id"
         >
@@ -95,6 +101,10 @@ export default {
     InputBoxIcon,
   },
   mixins: [LoginMixin],
+  async mounted() {
+    await this.fetchAllCompanies();
+    console.log(this.companyDetails);
+  },
   computed: {
     ...mapGetters(["companyDetails", "company", "navBar"]),
   },
@@ -105,6 +115,7 @@ export default {
       "fetchCompanies",
       "editCompany",
       "saveCompanyRelation",
+      "fetchAllCompanies"
     ]),
     async add() {
       if (

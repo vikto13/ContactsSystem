@@ -3,7 +3,7 @@ export default {
         navBar: {
             contacts: {
                 title: "Kontaktai",
-                path: "/contacts/records",
+                path: "contacts",
                 detailedText: "Detalesnė kontakto informacija",
                 systemText: 'Kontaktų sistema',
                 textEmpty: "Nėra sukurtų kontaktų",
@@ -19,7 +19,7 @@ export default {
                 textAdd: "Pridėti naują kompaniją",
                 textEmpty: "Nėra pridėta kompanijų",
                 title: 'Įmonė',
-                path: "/companies/records"
+                path: "/create/companies"
             },
             divisions: {
                 what: "diviziją",
@@ -41,19 +41,20 @@ export default {
                 textAdd: "Pridėti naują departamentą",
                 textEmpty: "Nėra pridėta departamentų",
                 title: 'Departamentai',
+                path: 'departments'
             },
-            office: {
+            offices: {
                 title: 'Ofisai',
                 textAdd: "Pridėti naują ofisą",
                 textEmpty: "Nėra sukurtų ofisų",
-                path: "/offices/records"
+                path: "offices"
             },
             admins: {
                 id: 'admins',
                 textCreate: 'Sukurti admin paskyrą',
                 textEmpty: 'Nėra sukurtų admino paskyrų',
                 title: "Paskyros",
-                path: "/admins/records",
+                path: "admins",
                 loginPath: "/users/auth-with-password"
             }
         }

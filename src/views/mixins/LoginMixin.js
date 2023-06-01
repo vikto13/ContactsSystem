@@ -93,8 +93,9 @@ export const LoginMixin = {
         async tryCatchForAPIAction(action) {
             try {
                 await action()
-                this.alert.showAlert && this.disableAlert();
+                // this.alert.showAlert && this.disableAlert();
             } catch (err) {
+                console.log(err)
                 if (err.status == 404 || err.status == 400 || err.response.status == 400) {
                     this.triggerMessage({
                         title: "Jums leidimas tokiam veiksmui nėra duotas",
