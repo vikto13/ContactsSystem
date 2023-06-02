@@ -17,23 +17,18 @@
       >
         <md-table-row slot="md-table-row" slot-scope="{ item }">
           <md-table-cell md-label="Pavadinimas" md-sort-by="name">
-
-          {{  getName(item) }}
+            {{ getName(item) }}
           </md-table-cell>
-          <md-table-cell md-label="Tipas">{{
-          getType(item)
-          }}</md-table-cell>
-        
+          <md-table-cell md-label="Tipas">{{ getType(item) }}</md-table-cell>
 
           <md-table-cell md-label="Veiksmas">
             <md-button
               class="md-dense md-raised md-primary edit-btn table-btn"
-          @click="()=>edit(item)"
+              @click="() => edit(item)"
               >Redaguoti</md-button
             >
             <md-button
               class="md-dense md-raised md-primary delete-btn table-btn"
-            
               >Ištrinti</md-button
             >
           </md-table-cell>
@@ -52,16 +47,16 @@ export default {
     FieldToCreate,
   },
   async mounted() {
-    await this.fetchAllCompaniesRelation(); 
+    await this.fetchAllCompaniesRelation();
   },
-  mixins:[ContactsMixin],
+  mixins: [ContactsMixin],
   computed: {
     ...mapGetters([
       "admins",
       "companyDetails",
       "company",
       "showCompaniesRealations",
-      "navBar"
+      "navBar",
     ]),
     showCompanies: {
       get() {
@@ -77,19 +72,19 @@ export default {
       "fetchAllCompaniesRelation",
       "findCompany",
       "deleteCompany",
+      "findCompanyRelation",
     ]),
     getName(item) {
-      let { id } = this.companyDetails[item.collectionName.split("_")[1]]
-      return  item[id].name
+      let { id } = this.companyDetails[item.collectionName.split("_")[1]];
+      return item[id].name;
     },
     getType(item) {
-    return this.navBar[item.collectionName.split("_")[1]].title
+      return this.navBar[item.collectionName.split("_")[1]].title;
     },
     async edit(find) {
-      console.log(find)
-      // await this.findCompany(find);
+      await this.findCompanyRelation(find);
 
-      // this.triggerDialog("add-relationship");
+      this.triggerDialog("add-relationship");
     },
     async deleting(find) {
       await this.findCompany(find);

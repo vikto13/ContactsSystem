@@ -23,34 +23,36 @@
           :key="index"
           :value="component.name"
         >
-        {{ navBar[component.name].title }}
+          {{ navBar[component.name].title }}
         </option>
       </select>
     </input-box-icon>
 
     <input-box-icon
       v-if="company.collectionName"
-      :title="`${navBar[company.collectionName].whose} pavadinimas:`"
-      :bottom-text="'Įrašykite pavadinimą'"
-      :is-not-valid="submit && !company.name"
+      :title="`Pasirinkite pavadinimą:`"
+      :bottom-text="`Pavadinimas:`"
+      :is-not-valid="submit && !company.collectionName"
       class="mb-2"
     >
-      <input
-        v-model="company.name"
-        type="text"
-        class="form-control table-footer"
-        :placeholder="'Įveskite pavadinimą...'"
-      />
+      <select v-model="company.name" class="form-select" style="width: 30rem">
+        <option :value="''" disabled>
+          Pasirinkite {{ navBar[company.collectionName].what }}
+        </option>
+        <option
+          v-for="component in companyDetails[company.collectionName].types"
+          :key="component.id"
+          :value="component.id"
+        >
+          {{ component.name }}
+        </option>
+      </select>
     </input-box-icon>
+    {{ company.collectionName }}
     <input-box-icon
       v-if="company.collectionName"
       :title="`Tipas:`"
-      :bottom-text="`Pasirinkite ${
-        navBar[company.collectionName].what
-      }`
-      
-      
-      "
+      :bottom-text="`Pasirinkite ${navBar[company.collectionName].what}`"
       :is-not-valid="submit && !company.relation"
       class="mb-2"
     >
@@ -59,16 +61,9 @@
         class="form-select"
         style="width: 30rem"
       >
-        <option 
-        :value="''" 
-        disabled>
+        <option :value="''" disabled>
           Pasirinkite
-          {{
-  
-           navBar[
-            companyDetails[company.collectionName].relationship
-          ].what
-          }}
+          {{ navBar[companyDetails[company.collectionName].relationship].what }}
         </option>
         <option
           v-for="(component, index) in companyDetails[
@@ -115,7 +110,7 @@ export default {
       "fetchCompanies",
       "editCompany",
       "saveCompanyRelation",
-      "fetchAllCompanies"
+      "fetchAllCompanies",
     ]),
     async add() {
       if (

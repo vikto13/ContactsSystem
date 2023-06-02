@@ -36,6 +36,25 @@ export default {
             console.log(data)
             commit("setCompany", data)
         },
+        async findCompanyRelation({ state, commit }, { id, collectionName }) {
+
+            let data = await pocketBase.collection(collectionName).getFirstListItem(`id="${id}"`);
+
+            let find = collectionName.split("_")
+            console.log(data)
+
+            console.log(state.details[find[0]])
+            console.log(data[state.details[find[1]].id])
+            let b = {
+                name: data[state.details[find[1]].id],
+                id: data.id,
+                collectionName: collectionName.split("_")[1],
+                relation: data[state.details[find[0]].id]
+            }
+            console.log(b)
+            commit('setCompany', b)
+
+        },
         async saveCompany({ state }, entity) {
             await pocketBase.collection(entity).create({ name: state.company.name })
         },

@@ -36,7 +36,7 @@
           />
         </input-box-icon>
 
-        <input-box-icon
+        <!-- <input-box-icon
           :icon-name="'phone'"
           :bottom-text="messageById({ phone_number: admin.phone_number })"
           :title="'Telefono numeris:'"
@@ -50,20 +50,20 @@
             class="form-control table-footer"
             :style="{ 'border-left-width': 0 }"
           />
-        </input-box-icon>
+        </input-box-icon> -->
 
         <add-image></add-image>
       </div>
-
       <div v-show="admin.whatDo != 1" class="md-layout-item m-3 pt-5">
         <h4>Administracinės teisės</h4>
+
         <md-checkbox
-          v-for="item in adminRoles"
-          :key="item.id"
+          v-for="item in Object.keys(adminRoles)"
+          :key="item"
           v-model="admin.roles"
-          :value="item.id"
+          :value="item"
           class="md-primary d-flex"
-          >{{ item.title }}</md-checkbox
+          >{{ adminRoles[item] }}</md-checkbox
         >
       </div>
     </div>
@@ -85,6 +85,9 @@ export default {
   mixins: [LoginMixin],
   computed: {
     ...mapGetters(["adminRoles", "admin", "admins"]),
+    getTitle() {
+      console.log(this.admin);
+    },
   },
   async mounted() {
     this.admin.whatDo == null && this.clearAdminData();
@@ -113,37 +116,43 @@ export default {
       "clearAdminData",
       "updateAdmin",
       "triggerMessage",
+      "updateRoles",
     ]),
     async save() {
-      this.submit = true;
-      if (
-        !(
-          this.admin.name &&
-          this.admin.email &&
-          !this.isInvalid({
-            email: this.admin.email,
-          })
-        )
-      ) {
-        return;
-      }
-
-      this.tryCatchForAPIAction(async () => {
-        if (this.admin.whatDo != null) {
-          await this.updateAdmin();
-        } else {
-          await this.saveAdmin();
-
-          this.dismissDialog();
-          this.triggerMessage({
-            title: "Admin paskyra sukurta sėkmingai",
-            content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
-            isAlert: true,
-            action: async () => {},
-          });
+      if (this.admin.whatDo == 0) {
+        await this.updateRoles();
+        this.dismissDialog();
+      } else {
+        this.submit = true;
+        if (
+          !(
+            this.admin.name &&
+            !this.isInvalid({
+              email: this.admin.email,
+            })
+          )
+        ) {
+          return;
         }
-        await this.fetchAdmins();
-      });
+
+        this.tryCatchForAPIAction(async () => {
+          if (this.admin.whatDo != null) {
+            await this.updateAdmin();
+            this.dismissDialog();
+          } else {
+            await this.saveAdmin();
+
+            this.dismissDialog();
+            this.triggerMessage({
+              title: "Admin paskyra sukurta sėkmingai",
+              content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
+              isAlert: true,
+              action: async () => {},
+            });
+          }
+          await this.fetchAdmins();
+        });
+      }
     },
   },
   beforeDestroy() {

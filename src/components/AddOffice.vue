@@ -3,7 +3,7 @@
     <h5 class="mt-5 text-center" style="width: 32rem">
       {{ `${office.id != null ? "Pakeisti ofiso duomenis" : "Pridėti ofisą"}` }}
     </h5>
-    <input-box-icon
+    <!-- <input-box-icon
       :title="`Kompanijos pavadinimas: `"
       :bottom-text="'Pasirinkite kompaniją'"
       :is-not-valid="this.submit && !office.companies.length"
@@ -20,7 +20,7 @@
           </md-option>
         </md-select>
       </md-field>
-    </input-box-icon>
+    </input-box-icon> -->
 
     <input-box-icon
       v-for="(input, index) in inputs"
@@ -95,12 +95,11 @@ export default {
       if (
         this.inputs
           .map(({ id }) => this.office[id])
-          .some((item) => item == null)
+          .some((item) => item == null || item == "")
       ) {
         this.submit = true;
         return;
       }
-
       this.tryCatchForAPIAction(async () => {
         this.office.id ? await this.editOffice() : await this.saveOffice();
         await this.fetchOffices();

@@ -5,24 +5,25 @@ import RemindPassword from "../components/RemindPassword.vue";
 import Companies from "../views/Companies.vue"
 import Relationship from "../views/Relationship.vue"
 import Login from "../views/Login.vue"
+import Admins from "../views/Admins.vue"
 import AdminLogin from "../components/AdminLogin.vue"
 import { store } from "../main";
 import middlewarePipeline from "./middlewares/middlewarePipeline"
 import { authenticate, needsAuth, checkContact, isCategory, verifyToken } from "./middlewares/middlewares"
 import { initializeStore } from "../store/initializeStore";
-
+import Offices from "../views/Offices.vue"
 export const router = new VueRouter({
     routes: [
-        // {
-        //     path: '/admins/records',
-        //     component: Admins,
-        //     meta: {
-        //         middleware: [
-        //             authenticate,
-        //             needsAuth
-        //         ]
-        //     }
-        // },
+        {
+            path: '/admins/records',
+            component: Admins,
+            // meta: {
+            //     middleware: [
+            //         authenticate,
+            //         needsAuth
+            //     ]
+            // }
+        },
         // {
         //     path: '/auth-update-password/:token',
         //     component: UpdatePassword,
@@ -55,16 +56,16 @@ export const router = new VueRouter({
         //         ]
         //     }
         // },
-        // {
-        //     path: '/offices/records',
-        //     component: Offices,
-        //     meta: {
-        //         middleware: [
-        //             authenticate,
-        //             needsAuth
-        //         ]
-        //     }
-        // },
+        {
+            path: '/offices/records',
+            component: Offices,
+            // meta: {
+            //     middleware: [
+            //         authenticate,
+            //         needsAuth
+            //     ]
+            // }
+        },
 
 
 
@@ -76,15 +77,15 @@ export const router = new VueRouter({
             path: initializeStore.modules.NavBar.state.navBar.relationship.path,
             component: Relationship,
         },
-        // {
-        //     path: '/employee/records',
-        //     component: Contacts,
-        //     // meta: {
-        //     //     middleware: [
-        //     //         authenticate,
-        //     //     ]
-        //     // }
-        // },
+        {
+            path: '/employee/records',
+            component: Contacts,
+            // meta: {
+            //     middleware: [
+            //         authenticate,
+            //     ]
+            // }
+        },
         {
             path: '/users/',
             name: 'users',
