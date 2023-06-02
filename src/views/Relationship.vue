@@ -8,7 +8,7 @@
         @pressed="triggerDialog('add-relationship')"
       >
       </field-to-create>
-      <md-table
+      <!-- <md-table
         v-if="showCompanies.length"
         v-model="showCompanies"
         md-card
@@ -34,7 +34,7 @@
           </md-table-cell>
         </md-table-row>
       </md-table>
-      <h5 v-else class="text-center">{{ navBar.relationship.textEmpty }}</h5>
+      <h5 v-else class="text-center">{{ navBar.relationship.textEmpty }}</h5> -->
     </div>
   </div>
 </template>
@@ -75,11 +75,12 @@ export default {
       "findCompanyRelation",
     ]),
     getName(item) {
-      let { id } = this.companyDetails[item.collectionName.split("_")[1]];
-      return item[id].name;
+      let { id } = this.companyDetails[item.collectionName.split("_")[0]];
+      console.log(item[id]);
+      return item[id] ? item[id].name : ".........";
     },
     getType(item) {
-      return this.navBar[item.collectionName.split("_")[1]].title;
+      return this.navBar[item.collectionName.split("_")[0]].title;
     },
     async edit(find) {
       await this.findCompanyRelation(find);

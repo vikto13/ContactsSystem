@@ -29,7 +29,8 @@ export function CompanyState() {
                 id: "division_id",
                 all: null,
                 relationship: 'departments',
-                selected: ''
+                selected: '',
+                types: []
             },
             offices: {
                 name: 'offices',
@@ -37,6 +38,7 @@ export function CompanyState() {
                 all: null,
                 selected: '',
                 relationship: 'divisions',
+                types: []
             },
 
 

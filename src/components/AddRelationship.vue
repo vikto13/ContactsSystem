@@ -19,6 +19,7 @@
             companyDetails.groups,
             companyDetails.departments,
             companyDetails.divisions,
+            companyDetails.offices,
           ]"
           :key="index"
           :value="component.name"
@@ -27,7 +28,7 @@
         </option>
       </select>
     </input-box-icon>
-
+    <!-- {{ companyDetails[company.collectionName].types }} -->
     <input-box-icon
       v-if="company.collectionName"
       :title="`Pasirinkite pavadinimą:`"
@@ -48,7 +49,7 @@
         </option>
       </select>
     </input-box-icon>
-    {{ company.collectionName }}
+
     <input-box-icon
       v-if="company.collectionName"
       :title="`Tipas:`"

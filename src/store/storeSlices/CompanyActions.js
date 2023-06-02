@@ -22,7 +22,6 @@ export default {
             for (let value in state.company) {
                 state.company[value] = company[value]
             }
-            console.log(company)
         },
         setType(state, { list, entity }) {
             state.details[entity].types = list
@@ -36,22 +35,27 @@ export default {
             console.log(data)
             commit("setCompany", data)
         },
-        async findCompanyRelation({ state, commit }, { id, collectionName }) {
+        async findCompanyRelation({ state, commit }, value) {
 
-            let data = await pocketBase.collection(collectionName).getFirstListItem(`id="${id}"`);
+            console.log(value)
+            let data = await pocketBase.collection(value.collectionName).getFirstListItem(`id="${value.id}"`);
 
-            let find = collectionName.split("_")
-            console.log(data)
+            let find = value.collectionName.split("_")
+            // console.log(data)
+            console.log(find, "----")
+            console.log(state.details[find[0]], "*******")
 
-            console.log(state.details[find[0]])
-            console.log(data[state.details[find[1]].id])
+            let departament = data[state.details[find[1]].id]
+            let group = data[state.details[find[0]].id]
+
+            console.log(departament, group)
             let b = {
-                name: data[state.details[find[1]].id],
+                name: departament,
                 id: data.id,
-                collectionName: collectionName.split("_")[1],
-                relation: data[state.details[find[0]].id]
+                collectionName: find[0],
+                relation: data[state.details[find[1]].id]
             }
-            console.log(b)
+            // console.log(b)
             commit('setCompany', b)
 
         },
@@ -69,12 +73,14 @@ export default {
         },
         async fetchAllCompaniesRelation({ commit, state, getters }) {
             let search = [state.details.departments, state.details.divisions, state.details.companies, state.details.offices];
+
             let fetched = await Promise.all(search.map(({ id, name, relationship }) => {
                 return pocketBase.collection(`${name}_${relationship}`).getFullList({
                     expand: `${state.details[name].id},${state.details[relationship].id}`
                 })
             }))
             fetched.map((value, index) => {
+
                 let add = value.map((record) => {
                     let temp = record
                     for (let expanded in record.expand) {
@@ -82,9 +88,11 @@ export default {
                     }
                     return temp
                 })
+
                 let { name } = search[index]
-                commit('setCompanies', { list: add, entity: name })
+                commit('setType', { list: add, entity: name })
             })
+
 
         },
         async fetchAllCompanies({ state, commit }) {
@@ -126,8 +134,9 @@ export default {
         companyDetails: (state) => state.details,
 
         showCompaniesRealations: (state) => {
-            let all = [state.details.departments, state.details.divisions, state.details.companies, state.details.offices
-            ].map(({ all }) => all).filter((item) => item !== null);
+            let all = [state.details.departments, state.details.divisions, state.details.groups, state.details.offices
+            ].map(({ types }) => types)
+            console.log(all)
             return [].concat(...all);
         },
     },
