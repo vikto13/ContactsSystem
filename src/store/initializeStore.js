@@ -9,6 +9,8 @@ import Image from "./storeSlices/ImageAction"
 import Message from "./storeSlices/MessageAction"
 import Office from "./storeSlices/OfficeAction"
 
+
+
 export const initializeStore = {
     modules: {
         Employee,
@@ -20,6 +22,7 @@ export const initializeStore = {
         Image,
         Message,
         Office,
-        Admin
+        Admin,
+
     }
 }

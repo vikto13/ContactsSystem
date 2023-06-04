@@ -10,7 +10,7 @@
         type="text"
         class="form-control table-footer"
         :class="{ 'is-invalid': isInvalid(company.name) }"
-        :placeholder="`Įveskite ${navBar['companies'].whose} pavadinimą...`"
+        :placeholder="`Įveskite ${navBar['companies'].whose.toLowerCase()} pavadinimą...`"
       />
     </input-box-icon>
 
@@ -48,19 +48,19 @@ export default {
       "fetchCompanies",
       "dismissDialog",
       "editCompany",
+      "setToSubmit"
     ]),
     async save() {
       if (!this.company.name) {
-        this.submit = true;
+        await this.setToSubmit()
         return;
       }
-      this.tryCatchForAPIAction(async () => {
+  
         this.company.id
           ? await this.editCompany("companies")
           : await this.saveCompany("companies");
         await this.fetchCompanies("companies");
         this.dismissDialog();
-      });
     },
   },
   destroyed() {

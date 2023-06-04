@@ -14,7 +14,8 @@
         :is-not-valid="isInvalid({ [column.input]: employee[column.input] })"
       >
         <input
-          v-model="employee[column.input]"
+        v-model="employee[column.input]"
+        
           type="text"
           class="form-control"
           :placeholder="column.placeholder"
@@ -25,6 +26,7 @@
           }"
           style="background-color: #f1f2f4"
           :style="{ 'border-left-width': column.icon ? 0 : null }"
+          @input="$store.commit('setEmployee',{[column.input]:$event.target.value})"
         />
       </input-box-icon>
     </div>
@@ -45,7 +47,7 @@ export default {
     AddImage,
   },
   computed: {
-    ...mapGetters(["employee"]),
+    ...mapGetters(['employee','companyDetails'])
   },
   mixins: [LoginMixin],
   data() {
@@ -93,32 +95,34 @@ export default {
   },
   methods: {
     ...mapActions([
-      "saveContact",
-      "editContact",
+      "saveEmployee",
+      "editEmployee",
       "dismissDialog",
-      "fetchContacts",
+      "fetchEmployees",
+      "setToSubmit"
     ]),
     async save() {
-      this.submit = true;
-      if (
-        this.inputs
-          .map(({ boxs }) =>
-            boxs.map(({ input }) =>
-              this.isInvalid({
-                [input]: this.contact[input],
-              })
-            )
-          )
-          .some((subArray) => subArray.includes(true))
-      ) {
-        return;
-      }
+      await this.setToSubmit()
+   if( ![
+        this.companyDetails.companies.id,
+        this.companyDetails.divisions.id,
+        this.companyDetails.offices.id,
+        "name",
+        "surname",
+        "position",
+        "email",
+        "phone_number",
+      ].map((value) =>
+        this.isInvalid({
+          [value]: this.employee[value],
+        })
+   ).every(value => value === false)) {
 
-      this.tryCatchForAPIAction(async () => {
-        this.employee.id ? await this.editContact() : await this.saveContact();
-        this.dismissDialog();
-        this.fetchContacts();
-      });
+      return
+    }
+      this.employee.id ? await this.editEmployee() : await this.saveEmployee();
+      this.dismissDialog();
+      this.fetchEmployees();
     },
   },
 };

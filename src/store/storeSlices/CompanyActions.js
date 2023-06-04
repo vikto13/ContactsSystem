@@ -14,7 +14,6 @@ export default {
             state.details[entity].all = list
         },
         selectCompany(state, { select, id }) {
-            console.log(select, id)
             state.details[id].selected = select
         },
         clearCompanyData(state) {
@@ -25,10 +24,21 @@ export default {
         },
         setType(state, { list, entity }) {
             state.details[entity].types = list
+        },
+        addRelations(state, { who, index, list }) {
+
+            state.details[who].relations[index].relation = list
+        },
+        addComanyState(state, values) {
+            console.log(values, "98989")
+            for (let value in values) {
+                state.company[value] = values[value]
+            }
         }
     },
     actions: {
         async findCompany({ commit }, { id, entity }) {
+
             const data = await pocketBase
                 .collection(entity)
                 .getFirstListItem(`id="${id}"`);
@@ -36,46 +46,36 @@ export default {
             commit("setCompany", data)
         },
         async findCompanyRelation({ state, commit }, value) {
-
-            console.log(value)
             let data = await pocketBase.collection(value.collectionName).getFirstListItem(`id="${value.id}"`);
-
-            let find = value.collectionName.split("_")
-            // console.log(data)
-            console.log(find, "----")
-            console.log(state.details[find[0]], "*******")
-
-            let departament = data[state.details[find[1]].id]
-            let group = data[state.details[find[0]].id]
-
-            console.log(departament, group)
-            let b = {
-                name: departament,
+            let tables = value.collectionName.split("_")
+            let generated = {
+                name: data[state.details[tables[1]].id],
                 id: data.id,
-                collectionName: find[0],
-                relation: data[state.details[find[1]].id]
+                collectionName: tables[1],
+                relation: data[state.details[tables[0]].id]
             }
-            // console.log(b)
-            commit('setCompany', b)
-
+            commit('setCompany', generated)
         },
         async saveCompany({ state }, entity) {
             await pocketBase.collection(entity).create({ name: state.company.name })
         },
         async saveCompanyRelation({ state }) {
             let { collectionName } = state.company
-            let { relationship } = state.details[collectionName]
-            await pocketBase.collection(collectionName).create({ name: state.company.name, [relationship]: state.company.relation })
+            let { relationship, id } = state.details[collectionName]
+            console.log(`${relationship}_${collectionName}`)
+            console.log({ [id]: state.company.name, [state.details[relationship].id]: state.company.relation })
+
+            await pocketBase.collection(`${relationship}_${collectionName}`).create({ [id]: state.company.name, [state.details[relationship].id]: state.company.relation })
         },
         async fetchCompanies({ commit }, entity) {
             let list = await pocketBase.collection(entity).getFullList({ sort: '-created' });
             commit('setCompanies', { list, entity })
         },
         async fetchAllCompaniesRelation({ commit, state, getters }) {
-            let search = [state.details.departments, state.details.divisions, state.details.companies, state.details.offices];
+            let search = [state.details.departments, state.details.divisions, state.details.groups, state.details.offices];
 
             let fetched = await Promise.all(search.map(({ id, name, relationship }) => {
-                return pocketBase.collection(`${name}_${relationship}`).getFullList({
+                return pocketBase.collection(`${relationship}_${name}`).getFullList({
                     expand: `${state.details[name].id},${state.details[relationship].id}`
                 })
             }))
@@ -96,12 +96,12 @@ export default {
 
         },
         async fetchAllCompanies({ state, commit }) {
-            let search = [state.details.groups, state.details.departments];
-            let fetched = await Promise.all(search.map(({ relationship }) => {
-                return pocketBase.collection(relationship).getFullList()
+            let search = [state.details.groups, state.details.departments, state.details.offices, state.details.divisions, state.details.companies];
+            let fetched = await Promise.all(search.map(({ name }) => {
+                return pocketBase.collection(name).getFullList()
             }))
             fetched.map((list, index) => {
-                commit('setType', { list, entity: search[index].relationship })
+                commit('setCompanies', { list, entity: search[index].name })
             })
 
         },
@@ -110,33 +110,58 @@ export default {
                 .collection(entity)
                 .update(state.company.id, { name: state.company.name });
         },
-        async deleteCompany({ commit, state }) {
+        async editCompanyRelation({ state }) {
+            let { relationship, id } = state.details[state.company.collectionName]
+            console.log(state.company.id, { [id]: state.company.name, [state.details[relationship].id]: state.company.relation })
+            console.log(`${state.company.collectionName}_${relationship}`)
             await pocketBase
-                .collection(state.company.collectionName)
-                .delete(state.company.id)
+                .collection(`${relationship}_${state.company.collectionName}`)
+                .update(state.company.id, { [id]: state.company.name, [state.details[relationship].id]: state.company.relation });
         },
-        async getOfficesAddress({ commit, getters, dispatch }) {
-            await dispatch("fetchOffices");
-            let address = getters.offices.lenght ? getters.offices.map(({ street, street_number, city, country, expand }) => {
-                return ({
-                    name: `${country}, ${city}, ${street} ${street_number}`,
-                    id: expand.companies[0].id
-                })
-            }) : []
-            commit('setCompanies', { list: address, entity: "office" })
+        async deleteCompany({ state }, info) {
+            let { id, collectionName } = state.company
+            console.log(state.company, "deleeeeeeeeeeeete")
+            console.log(info)
+            if (info) {
+                collectionName = info.collectionName
+                id = info.id
+            }
+            await pocketBase
+                .collection(collectionName)
+                .delete(id)
+        },
+        async checkIfIsRelation({ state, commit, getters }, { collectionName, id }) {
+            const data = await Promise.all(state.details[collectionName].relations.map((table) => {
+                return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${collectionName}/records/${id}?expand=${table.path}`)
+            }))
+            data.map(({ data }, index) => {
+                if (data.expand) {
+                    let list = data.expand[state.details[collectionName].relations[index].path]
+                    commit("addRelations", { list, index, who: collectionName })
+                    return;
+                }
+                commit("addRelations", { list: [], index, who: collectionName })
+            })
 
-        },
+            let relation = state.details[collectionName].relations.reduce((prev, curr) => {
+                if (curr.relation.length) {
+                    let relation = curr.relation[0].collectionName.split('_').map((relation) => getters.navBar[relation].title).join(" -> ")
+                    return [...prev, relation]
+                }
+                return prev
+            }, [])
+            commit('addComanyState', { relation })
+
+        }
 
     },
     getters: {
         company: (state) => state.company,
         companyList: (state) => state.details.companies.all,
         companyDetails: (state) => state.details,
-
         showCompaniesRealations: (state) => {
             let all = [state.details.departments, state.details.divisions, state.details.groups, state.details.offices
             ].map(({ types }) => types)
-            console.log(all)
             return [].concat(...all);
         },
     },

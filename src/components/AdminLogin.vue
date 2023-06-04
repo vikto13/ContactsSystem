@@ -64,10 +64,11 @@ export default {
       "showAlert",
       "disableAlert",
       "showLoading",
+    "setToSubmit"
     ]),
     async login() {
       if (!(this.password && this.email)) {
-        this.submit = true;
+       await this.setToSubmit()
         return;
       }
       try {

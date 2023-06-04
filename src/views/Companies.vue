@@ -7,8 +7,7 @@
       </field-to-create>
       <h5
         v-if="
-          companyDetails['companies'] != null &&
-          companyDetails['companies'].length
+          !companyDetails['companies'].all.length
         "
         style="text-align: center"
       >
@@ -87,6 +86,7 @@ export default {
       "deleteCompany",
       "triggerMessage",
       "findCompany",
+      "checkIfIsRelation"
     ]),
     async edit(id) {
       this.tryCatchForAPIAction(async () => {
@@ -100,27 +100,33 @@ export default {
       });
     },
     async deleteIt(id) {
-      this.tryCatchForAPIAction(async () => {
-        await this.findCompany({
-          id,
-          entity: "companies",
-        });
+   
+        await this.findCompany({id, entity: "companies", });
+      await this.checkIfIsRelation({ id, collectionName: "companies" })
 
+      if (this.company.relation.length) {
+       await this.triggerMessage({
+          title: `Negalite ištrinti`,
+          content: `${this.navBar["companies"].what} turi ryšius: <br>`+this.company.relation.join("<br>"),
+          isAlert:true
+        });
+        this.$store.commit("clearCompanyData");
+      } else {
         this.triggerMessage({
           title: `Ar tikrai norite ištrinti ${this.navBar["companies"].what}?`,
           content: `${this.navBar["companies"].whose} pavadinimas: ${this.company.name}`,
           action: async () => {
-            this.tryCatchForAPIAction(async () => {
               await this.deleteCompany();
               this.$store.commit("clearCompanyData");
               await this.fetchCompanies("companies");
-            });
           },
           cancelAction: () => {
-            this.$store.commit("clearCompanyData");
           },
         });
-      });
+      }
+    
+     
+
     },
   },
 };

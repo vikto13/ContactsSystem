@@ -6,6 +6,7 @@ import Companies from "../views/Companies.vue"
 import Relationship from "../views/Relationship.vue"
 import Login from "../views/Login.vue"
 import Admins from "../views/Admins.vue"
+import ContactDetails from "../views/ContactDetails.vue"
 import AdminLogin from "../components/AdminLogin.vue"
 import { store } from "../main";
 import middlewarePipeline from "./middlewares/middlewarePipeline"
@@ -34,18 +35,18 @@ export const router = new VueRouter({
         //         ]
         //     }
         // },
-        // {
-        //     path: '/contact/:id',
-        //     component: ContactDetails,
-        //     props: true,
-        //     meta: {
-        //         middleware: [
-        //             checkContact,
-        //             authenticate,
-        //             needsAuth
-        //         ]
-        //     }
-        // },
+        {
+            path: '/contact/:id',
+            component: ContactDetails,
+            props: true,
+            meta: {
+                middleware: [
+                    checkContact,
+                    // authenticate,
+                    // needsAuth
+                ]
+            }
+        },
         // {
         //     path: '/relationship/record',
         //     component: Relationship,

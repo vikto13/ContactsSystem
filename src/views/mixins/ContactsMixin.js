@@ -2,7 +2,7 @@ import { mapGetters, mapActions } from "vuex";
 
 export const ContactsMixin = {
     computed: {
-        ...mapGetters(["currentPage", "sizeOfPaginate", "employees", "findEmployee"]),
+        ...mapGetters(["currentPage", "sizeOfPaginate", "employees", "employee"]),
         showCards: {
             get() {
                 let size = this.currentPage * this.sizeOfPaginate;
@@ -19,35 +19,38 @@ export const ContactsMixin = {
         },
     },
     methods: {
-
+        ...mapActions(["findEmployee", "triggerMessage", "triggerDialog", "deleteEmployee", "fetchEmployees"]),
         getAddress({ office_id }) {
             let { city, country, street, street_number } = office_id;
             return ` ${country}, ${city}, ${street} ${street_number}`;
         },
 
         async see(id) {
+            console.log(id)
             this.$router.push(`/contact/${id}`);
+
         },
         async edit({ button, id }) {
-            await this.findEmployee()
-            // this.tryCatchForAPIAction(async () => {
-            //     await this.findContact(id);
-            //     if (button) {
-            //         this.triggerMessage({
-            //             title: "Ar tikrai norite ištrinti kontaktą?",
-            //             content: `Kontaktas: ${this.contact.name} ${this.contact.surname}`,
-            //             action: async () => {
-            //                 this.tryCatchForAPIAction(async () => {
-            //                     await this.deleteContact();
-            //                     await this.fetchContacts();
-            //                 })
-            //             },
-            //             cancelAction: () => { },
-            //         });
-            //     } else {
-            //         this.triggerDialog("add-contacts");
-            //     }
-            // })
+            await this.findEmployee(id)
+            if (button) {
+                this.triggerMessage({
+                    title: "Ar tikrai norite ištrinti kontaktą?",
+                    content: `Kontaktas: ${this.employee.name} ${this.employee.surname}`,
+                    action: async () => {
+                        this.tryCatchForAPIAction(async () => {
+                            await this.deleteEmployee();
+                            await this.fetchEmployees();
+                            this.$store.commit("clearEmployee");
+                        })
+                    },
+                    cancelAction: () => {
+                        this.$store.commit("clearEmployee");
+                    },
+                });
+            } else {
+                this.triggerDialog("add-contacts");
+            }
+
         },
         findProperty(obj, propertyName) {
 

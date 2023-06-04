@@ -5,48 +5,36 @@ export const LoginMixin = {
         InputBoxIcon
     },
     computed: {
-        ...mapGetters(["alert"])
+        ...mapGetters(["alert", "messageTexts", "messageTexts", "messageIsSubmitted"])
     },
     data() {
         return {
-            submit: false,
             email: '',
             password: '',
             secPassword: '',
-            message: {
-                street: 'Gatvė turi būti įvesta',
-                street_number: 'Gatvės numerys turi būti įvestas',
-                city: 'Miestas turi būti įvestas',
-                country: 'Šalis turi būti įvestas',
-                name: "Pavadinimas turi būti įvestas",
-                surname: "Pavardė turi būti įvesta",
-                position: 'Pozicija turi būti įvesta',
-                phone_number: 'Telefono numerys turi būti įvestas',
-                second_password: `Slaptažodžiai turi būti vienodi`,
-                password: 'Įveskite slaptažodį',
-            }
         }
     },
     methods: {
         ...mapActions(["showAlert", "disableAlert", "triggerMessage"]),
         showCompareMessage(password, secPassword) {
-            return this.submit && (password !== secPassword)
+            return this.messageIsSubmitted && (password !== secPassword)
         },
         showEmailMessage(email) {
             return (
-                this.submit &&
+                this.messageIsSubmitted &&
                 (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             );
         },
+        showPasswordMessage(password) {
+            return this.messageIsSubmitted && (!password || password.length < 8);
+        },
+
+
         emailMessage(email) {
             return !email
                 ? `Elektroninis paštas turi būti įvestas`
-                // : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
                 : `Elektroninis paštas turi būti validus`
 
-        },
-        showPasswordMessage(password) {
-            return this.submit && (!password || password.length < 8);
         },
         passwordMessage(password) {
             return password.length < 8
@@ -60,15 +48,25 @@ export const LoginMixin = {
                 case 'email':
                     return this.showEmailMessage(Object.values(input)[0])
                 default:
-                    return !Object.values(input)[0] && this.submit
+                    return !Object.values(input)[0] && this.messageIsSubmitted
             }
         },
+
+
         messageById(info) {
             if (Object.keys(info)[0] == 'email') {
                 return this.emailMessage(Object.values(info)[0])
             }
-            return this.message[Object.keys(info)[0]]
+            return this.messageTexts[Object.keys(info)[0]]
         },
+
+
+
+
+
+
+
+
         async updatePassword() {
             let message;
             try {
@@ -87,7 +85,6 @@ export const LoginMixin = {
             this.triggerMessage({
                 ...message,
                 isAlert: true,
-                action: async () => { },
             });
         },
         async tryCatchForAPIAction(action) {
@@ -101,7 +98,6 @@ export const LoginMixin = {
                         title: "Jums leidimas tokiam veiksmui nėra duotas",
                         content: `Paprašykite admino, jog suteiktų tokią galimybę`,
                         isAlert: true,
-                        action: async () => { },
                     });
 
                 } else {

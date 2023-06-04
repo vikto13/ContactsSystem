@@ -8,7 +8,7 @@
         @pressed="triggerDialog('add-relationship')"
       >
       </field-to-create>
-      <!-- <md-table
+      <md-table
         v-if="showCompanies.length"
         v-model="showCompanies"
         md-card
@@ -29,12 +29,13 @@
             >
             <md-button
               class="md-dense md-raised md-primary delete-btn table-btn"
+              @click="() => deleting(item)"
               >Ištrinti</md-button
             >
           </md-table-cell>
         </md-table-row>
       </md-table>
-      <h5 v-else class="text-center">{{ navBar.relationship.textEmpty }}</h5> -->
+      <h5 v-else class="text-center">{{ navBar.relationship.textEmpty }}</h5>
     </div>
   </div>
 </template>
@@ -75,37 +76,34 @@ export default {
       "findCompanyRelation",
     ]),
     getName(item) {
-      let { id } = this.companyDetails[item.collectionName.split("_")[0]];
-      console.log(item[id]);
-      return item[id] ? item[id].name : ".........";
+    
+      let name = item.collectionName.split("_")[1]
+      let { id }=this.companyDetails[name]
+     return item[id].name
+     
     },
     getType(item) {
-      return this.navBar[item.collectionName.split("_")[0]].title;
+      return this.navBar[item.collectionName.split("_")[1]].title;
     },
     async edit(find) {
-      await this.findCompanyRelation(find);
-
-      this.triggerDialog("add-relationship");
+       await this.findCompanyRelation(find);
+       this.triggerDialog("add-relationship");
     },
     async deleting(find) {
-      await this.findCompany(find);
 
+      let { collectionName } = find
+      let { id } = this.companyDetails[collectionName.split("_")[1]]
+      
       this.triggerMessage({
-        title: "Ar tikrai norite ištrinti ryšį?",
-        content: `Rišys yra: ${
-          this.navBar[this.company.collectionName].title
-        } su ${this.company.name}`,
-
+        title: "Ar tikrai norite ištrinti struktūrą?",
+        content: `Pavadinimu: ${
+          find[id].name
+        }`,
         action: async () => {
-          await this.deleteCompany();
-          this.$store.commit("clearCompanyData");
+          await this.deleteCompany({collectionName,id:find.id });
           await this.fetchAllCompaniesRelation();
-          this.getData();
         },
-
-        cancelAction: () => {
-          this.$store.commit("clearCompanyData");
-        },
+        cancelAction: () => {},
       });
     },
   },

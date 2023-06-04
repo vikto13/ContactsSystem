@@ -6,13 +6,16 @@ export function EmployeeState() {
             name: "",
             surname: "",
             email: "",
+            position: "",
             phone_number: "",
-            company_id: null,
-            division_id: null,
-            department_id: null,
-            group_id: null,
+            company_id: '',
+            division_id: '',
+            department_id: '',
+            group_id: '',
+            office_id: '',
             photo: null
         },
+        filteredEmployees: [],
         collectionName: "employees",
         contactSearch: ""
     }

@@ -1,19 +1,21 @@
 <template>
   <div class="md-layout-item m-3">
     <h5 class="mt-5 text-center">Pridėti struktūrą</h5>
-
     <input-box-icon
       :title="`Tipas:`"
       :bottom-text="'Pasirinkite tipą'"
-      :is-not-valid="submit && !company.collectionName"
+      :is-not-valid="messageIsSubmitted && !company.collectionName"
       class="mb-2"
     >
       <select
         v-model="company.collectionName"
         class="form-select"
         style="width: 30rem"
+        @input="editType"
       >
-        <option :value="''" disabled>Pasirinkite tipą</option>
+        <option 
+        :value="''" 
+        disabled>Pasirinkite tipą</option>
         <option
           v-for="(component, index) in [
             companyDetails.groups,
@@ -23,6 +25,8 @@
           ]"
           :key="index"
           :value="component.name"
+  
+
         >
           {{ navBar[component.name].title }}
         </option>
@@ -32,8 +36,8 @@
     <input-box-icon
       v-if="company.collectionName"
       :title="`Pasirinkite pavadinimą:`"
-      :bottom-text="`Pavadinimas:`"
-      :is-not-valid="submit && !company.collectionName"
+      :bottom-text="`Pasirinkite ${navBar[company.collectionName].what}`"
+      :is-not-valid="messageIsSubmitted && !company.name"
       class="mb-2"
     >
       <select v-model="company.name" class="form-select" style="width: 30rem">
@@ -41,7 +45,7 @@
           Pasirinkite {{ navBar[company.collectionName].what }}
         </option>
         <option
-          v-for="component in companyDetails[company.collectionName].types"
+          v-for="component in companyDetails[company.collectionName].all"
           :key="component.id"
           :value="component.id"
         >
@@ -52,9 +56,11 @@
 
     <input-box-icon
       v-if="company.collectionName"
-      :title="`Tipas:`"
-      :bottom-text="`Pasirinkite ${navBar[company.collectionName].what}`"
-      :is-not-valid="submit && !company.relation"
+      :title="`Rišys:`"
+      :bottom-text="`Pasirinkite ${ navBar[
+            companyDetails[company.collectionName].relationship
+          ].what}`"
+      :is-not-valid="messageIsSubmitted && !company.relation"
       class="mb-2"
     >
       <select
@@ -62,6 +68,7 @@
         class="form-select"
         style="width: 30rem"
       >
+      
         <option :value="''" disabled>
           Pasirinkite
           {{ navBar[companyDetails[company.collectionName].relationship].what }}
@@ -69,7 +76,7 @@
         <option
           v-for="(component, index) in companyDetails[
             companyDetails[company.collectionName].relationship
-          ].types"
+          ].all"
           :key="index"
           :value="component.id"
         >
@@ -99,10 +106,10 @@ export default {
   mixins: [LoginMixin],
   async mounted() {
     await this.fetchAllCompanies();
-    console.log(this.companyDetails);
+   
   },
   computed: {
-    ...mapGetters(["companyDetails", "company", "navBar"]),
+    ...mapGetters(["companyDetails", "company", "navBar","showCompanies","messageIsSubmitted"]),
   },
   methods: {
     ...mapActions([
@@ -110,8 +117,11 @@ export default {
       "dismissDialog",
       "fetchCompanies",
       "editCompany",
+      "fetchAllCompaniesRelation",
       "saveCompanyRelation",
       "fetchAllCompanies",
+      "setToSubmit",
+      "editCompanyRelation"
     ]),
     async add() {
       if (
@@ -121,20 +131,25 @@ export default {
           this.company.relation
         )
       ) {
-        this.submit = true;
+       await this.setToSubmit()
         return;
       }
-      this.tryCatchForAPIAction(async () => {
+  
         this.company.id
-          ? await this.editCompany(this.company.collectionName)
+          ? await this.editCompanyRelation()
           : await this.saveCompanyRelation();
-        this.dismissDialog();
-        await this.fetchCompanies(this.company.collectionName);
-      });
+      await  this.dismissDialog();
+        await this.fetchAllCompaniesRelation();
     },
+    editType() {
+        this.$store.commit('setCompany', { ...this.company, name: '', relation: '' })
+      
+  
+    }
   },
   destroyed() {
-    this.$store.commit("clearCompanyData");
+     this.$store.commit("clearCompanyData");
+    this.$store.commit("submitMessage")
   },
 };
 </script>

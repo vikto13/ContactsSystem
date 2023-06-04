@@ -17,8 +17,9 @@ export default {
     CompanyDetailsSelect,
     AlertMessage,
   },
-  beforeDestroy() {
-    this.$store.commit("clearContact");
+  destroyed() {
+    this.$store.commit("clearEmployee");
+    this.$store.commit("submitMessage")
   },
 };
 </script>

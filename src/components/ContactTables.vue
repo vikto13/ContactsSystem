@@ -7,7 +7,7 @@
     md-fixed-header
     class="mt-5 table-footer"
   >
-    <md-table-row slot="md-table-row" slot-scope="{ item }" @click="see">
+    <md-table-row slot="md-table-row" slot-scope="{ item }" @click="()=>see(item.id)">
       <md-table-cell md-label="Vardas ir Pavardė" md-sort-by="name">{{
         ` ${item.name} ${item.surname}`
       }}</md-table-cell>

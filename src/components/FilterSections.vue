@@ -1,24 +1,26 @@
 <template>
-  <div class="md-layout md-gutter md-alignment-center mb-4">
+  <div class="md-layout md-gutter md-alignment-center mt-4">
     <divide-components
       v-for="(filter, index) in [
         companyDetails.companies,
         companyDetails.divisions,
         companyDetails.departments,
         companyDetails.groups,
-        companyDetails.office,
+        companyDetails.offices
       ]"
       :key="index"
     >
-      <label class="form-label">{{  navBar[filter.id].title}}: </label>
+      <label class="form-label">{{  navBar[filter.name].title}}: </label>
       <select
         :v-model="filter.selected"
         class="form-select elipses"
         aria-label="Default select example"
-        @click="({ target }) => pressed(target, filter.id)"
+        @click="({ target }) =>companyDetails[filter.name].selected!=target.value && pressed(target, filter.name)"
       >
-        <option :disabled="'' == filter.selected" selected :value="null">
-          {{ navBar[filter.id].title }}
+        <option :disabled="'' == filter.selected" 
+        selected 
+        :value="null">
+          {{ navBar[filter.name].title }}
         </option>
 
         <option
@@ -45,19 +47,21 @@ export default {
   },
   async mounted() {
     try {
+     
       await Promise.all(
         [
           this.companyDetails.companies,
           this.companyDetails.departments,
           this.companyDetails.divisions,
           this.companyDetails.groups,
-        ].map(({ id }) => this.fetchCompanies(id))
+          this.companyDetails.offices,
+        ].map(({ name }) => this.fetchCompanies(name))
       );
-      await this.getOfficesAddress();
     } catch (err) {
       console.log(err);
       this.showAlert(404);
     }
+  
   },
   methods: {
     ...mapActions([
@@ -67,15 +71,17 @@ export default {
       "searchContactBySelections",
       "searchContactByText",
       "disableAlert",
-      "getOfficesAddress",
+   
     ]),
     async pressed(select, id) {
+
       this.$store.commit("selectCompany", { select: select.value, id });
       try {
         await this.searchContactBySelections();
         await this.searchContactByText();
         this.alert.showAlert && this.disableAlert();
-      } catch {
+      } catch (err) {
+        console.log(err)
         this.showAlert(404);
       }
     },

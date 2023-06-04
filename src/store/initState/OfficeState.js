@@ -3,6 +3,7 @@ export function OfficeState() {
     return {
         offices: null,
         office: {
+            name: '',
             id: null,
             street: '',
             country: '',

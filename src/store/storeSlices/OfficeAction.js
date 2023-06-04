@@ -26,7 +26,6 @@ export default {
             const data = await pocketBase
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`);
-            console.log(data)
             commit("setOffice", data)
 
         },

@@ -22,7 +22,7 @@ export function needsAuth({ next, store }) {
 
 export async function checkContact({ next, to, store }) {
     try {
-        await store.dispatch("findContact", to.params.id);
+        await store.dispatch("findAndExpandEmployee", to.params.id);
         return next()
     } catch (error) {
         if (error.status == 404) {

@@ -62,13 +62,13 @@ export default {
   },
   mixins: [LoginMixin],
   async mounted() {
-    this.tryCatchForAPIAction(async () => {
-      this.fetchOffices();
-      this.fetchAllCompanies();
-    });
+
+    await this.fetchOffices();
+    await this.fetchAllCompanies();
+   
   },
   computed: {
-    ...mapGetters(["office", "navBar"]),
+    ...mapGetters(["office", "navBar","companyDetails","company"]),
     offices: {
       get() {
         return this.$store.getters.offices;
@@ -85,6 +85,7 @@ export default {
       "findOffice",
       "deleteOffice",
       "fetchAllCompanies",
+      "checkIfIsRelation"
     ]),
     async edit(id) {
       this.tryCatchForAPIAction(async () => {
@@ -95,8 +96,19 @@ export default {
     async deleting(id) {
       this.tryCatchForAPIAction(async () => {
         await this.findOffice(id);
+        await this.checkIfIsRelation({id,collectionName:'offices'})
 
-        this.triggerMessage({
+
+
+        if (this.company.relation.length) {
+          this.triggerMessage({
+          title: "Negalite ištrinti ofiso duomenis?",
+          content: `Ofisas ${this.office.name} turi rysius :<br>`+this.company.relation.join("<br>"),
+          isAlert: true,
+        });
+        this.$store.commit("clearCompanyData")
+        } else {
+          this.triggerMessage({
           title: "Ar tikrai norite ištrinti ofiso duomenis?",
           content: `Ofisas yra: ${this.office.country}, ${this.office.city}, ${this.office.street} ${this.office.street_number}`,
           action: async () => {
@@ -110,6 +122,10 @@ export default {
             this.$store.commit("clearOfficeState");
           },
         });
+  
+}
+
+
       });
     },
   },

@@ -1,7 +1,8 @@
 <template>
-  <a style="text-decoration: none" @click="$emit('cardClicked', id)">
-    <md-card class="mt-1" md-with-hover>
-      <md-ripple>
+  
+    <md-card class="mt-5 " style="text-decoration: none" md-with-hover>
+      <a @click.stop="$emit('cardClicked', id)">
+      <md-ripple >
         <md-card-header>
           <md-avatar>
             <svg
@@ -40,8 +41,9 @@
           </md-button>
         </div>
       </md-ripple>
+    </a>
     </md-card>
-  </a>
+
 </template>
 <script>
 export default {

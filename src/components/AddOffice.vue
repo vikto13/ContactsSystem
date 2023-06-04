@@ -90,6 +90,7 @@ export default {
       "dismissDialog",
       "fetchOffices",
       "editOffice",
+      "setToSubmit"
     ]),
     async add() {
       if (
@@ -97,7 +98,7 @@ export default {
           .map(({ id }) => this.office[id])
           .some((item) => item == null || item == "")
       ) {
-        this.submit = true;
+        await this.setToSubmit()
         return;
       }
       this.tryCatchForAPIAction(async () => {
@@ -109,6 +110,7 @@ export default {
   },
   destroyed() {
     this.$store.commit("clearOfficeState");
+    this.$store.commit("submitMessage")
   },
 };
 </script>

@@ -16,7 +16,7 @@
             />
           </input-box-icon>
         </div>
-        <div class="col-4 col-md-1 align-self-center margin d-flex">
+        <div  class="col-4 col-md-1 align-self-center margin d-flex">
           <md-menu md-size="medium" md-align-trigger class="d-flex flex-wrap">
             <md-button
               class="md-icon-button md-raised ml-3 edit-btn"
@@ -65,19 +65,12 @@
         <span style="font-weight: bold">{{ employees.length }}</span>
         {{ navBar.title }}
       </p>
-      <!-- <filter-sections></filter-sections> -->
-      <component :is="showComponents[isSelected]"></component>
-      <pagination></pagination>
-      <!-- <h5 v-if="contacts == null" style="text-align: center">
+      <filter-sections></filter-sections>
+      <h5 v-if="!employees.length" class="mt-5 text-center" >
         Kontaktų nerasta
       </h5>
-      <component
-        v-if="contacts != null && contacts.length"
-        :is="contacts != null ? showComponents[isSelected] : null"
-      ></component>
-      <h5 v-else style="text-align: center">
-        {{ navBar.contacts.textEmpty }}
-      </h5> -->
+      <component v-else :is="showComponents[isSelected]"></component>
+      <pagination></pagination>
     </div>
   </div>
 </template>
@@ -86,6 +79,7 @@ import { mapActions, mapGetters } from "vuex";
 import ContactCards from "../components/ContactCards.vue";
 import Pagination from "../components/Pagination.vue";
 import InputBoxIcon from "../components/InputBoxIcon.vue";
+import FilterSections from "../components/FilterSections.vue";
 import ContactTables from "../components/ContactTables.vue";
 
 export default {
@@ -94,6 +88,7 @@ export default {
     Pagination,
     InputBoxIcon,
     ContactTables,
+    FilterSections
   },
   async mounted() {
     await this.fetchEmployees();
@@ -122,16 +117,18 @@ export default {
       get() {
         return this.$store.state.Employee.contactSearch;
       },
-      set(text) {},
+      set(text) {
+        this.$store.state.Employee.contactSearch=text
+      },
     },
   },
   methods: {
-    ...mapActions(["fetchEmployees", "triggerDialog"]),
+    ...mapActions(["fetchEmployees", "triggerDialog","searchContactBySelections","searchContactByText"]),
     async searching() {
-      this.tryCatchForAPIAction(async () => {
+   
         await this.searchContactBySelections();
-        await this.searchContactByText();
-      });
+         await this.searchContactByText();
+   
     },
     setPaginate(size) {
       this.$store.commit("setPagine", size);

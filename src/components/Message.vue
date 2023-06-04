@@ -5,7 +5,6 @@
     :md-title="message.title"
     :md-content="message.content"
     md-confirm-text="Supratau"
-    @md-confirm="onConfirm"
   />
 
   <md-dialog-confirm
@@ -30,7 +29,6 @@ export default {
     second: false,
   }),
   methods: {
-    ...mapActions(["clearContact"]),
     async onConfirm() {
       await this.message.action();
     },
@@ -41,4 +39,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.md-dialog-content .md-theme-default{
+  white-space: pre-line;
+}
+</style>

@@ -18,7 +18,7 @@ export default {
                 whose: "Kompanijos",
                 textAdd: "Pridėti naują kompaniją",
                 textEmpty: "Nėra pridėta kompanijų",
-                title: 'Įmonė',
+                title: 'Kompanija',
                 path: "/users/companies"
             },
             divisions: {
@@ -47,7 +47,8 @@ export default {
                 title: 'Ofisai',
                 textAdd: "Pridėti naują ofisą",
                 textEmpty: "Nėra sukurtų ofisų",
-                path: "/offices/records"
+                path: "/offices/records",
+                what: "ofisą",
             },
             admins: {
                 id: 'admins',
@@ -56,6 +57,9 @@ export default {
                 title: "Paskyros",
                 path: "/admins/records",
                 loginPath: "/users/auth-with-password"
+            },
+            employees: {
+                title: 'Darbuotoju'
             }
         }
     },

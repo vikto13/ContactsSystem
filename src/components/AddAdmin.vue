@@ -117,13 +117,14 @@ export default {
       "updateAdmin",
       "triggerMessage",
       "updateRoles",
+      "setToSubmit"
     ]),
     async save() {
       if (this.admin.whatDo == 0) {
         await this.updateRoles();
         this.dismissDialog();
       } else {
-        this.submit = true;
+       await this.setToSubmit()
         if (
           !(
             this.admin.name &&
@@ -147,7 +148,6 @@ export default {
               title: "Admin paskyra sukurta sėkmingai",
               content: `Elektroninis paštas: ${this.admin.email} ir slaptazodis: ${this.admin.password}`,
               isAlert: true,
-              action: async () => {},
             });
           }
           await this.fetchAdmins();
@@ -155,9 +155,10 @@ export default {
       }
     },
   },
-  beforeDestroy() {
-    this.clearAdminData();
-  },
+  destroyed() {
+      this.clearAdminData();
+    this.$store.commit("submitMessage")
+}
 };
 </script>
 

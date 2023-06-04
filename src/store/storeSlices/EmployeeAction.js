@@ -1,5 +1,7 @@
 import { EmployeeState } from "../initState/EmployeeState"
 import { pocketBase } from "../../../services/pocketBase";
+import axios from "axios";
+import { expanding } from "./expandAction";
 
 export default {
     state: EmployeeState(),
@@ -9,7 +11,7 @@ export default {
                 state.employee[key] = employee[key]
             }
         },
-        clearContact(state) {
+        clearEmployee(state) {
             let { employee } = EmployeeState()
             for (let key in employee) {
                 state.employee[key] = employee[key]
@@ -18,23 +20,24 @@ export default {
         setEmployees(state, list) {
             state.employees = list
         },
+        setFilteredEmployees(state, list) {
+            state.filteredEmployees = list
+        },
     },
     actions: {
         async findEmployee({ commit, state }, id) {
-
             let data = await pocketBase
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`);
-
-
-            // for(expanded in data.expand) {
-            //     data[expanded]=state.employee[expanded]
-            // }
-
             commit("setEmployee", data)
-
         },
-        async savesetEmployee({ state, getters }) {
+        async findAndExpandEmployee({ commit, state }, id) {
+            let data = await pocketBase
+                .collection(state.collectionName)
+                .getFirstListItem(`id="${id}"`, { expand: 'department_id,company_id,division_id,office_id,group_id' });
+            commit("setEmployee", expanding(data))
+        },
+        async saveEmployee({ state, getters }) {
             await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.collectionName}/records`,
                 {
                     ...state.employee,
@@ -43,20 +46,19 @@ export default {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${getters.user.token}`
+                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxMTg3MTIsImlkIjoiaWk2NnBxdDgwM3pha2xrIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.bxYqKoVycGQ2z6upDbO6V9LXjinrYp5s5TzZhUIVKcA`
 
                     }
                 }
             )
         },
-        async fetchEmployees({ commit, getters, state }) {
+        async fetchEmployees({ commit, state }) {
             let list = await pocketBase.collection(state.collectionName).getFullList({
                 sort: '-created',
                 expand: 'department_id,division_id,group_id,office_id,company_id'
             });
             list.map(employee => {
                 let employ = employee
-
                 for (let expanded in employ.expand) {
                     employ[expanded] = employee.expand[expanded]
                 }
@@ -65,16 +67,57 @@ export default {
             })
             commit('setEmployees', list)
         },
-        async editEmployee({ state }) {
-            await pocketBase
-                .collection(state.collectionName)
-                .update(state.contact.id, state.contact);
+        async editEmployee({ state, getters }) {
+            await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.collectionName}/records/${state.employee.id}`,
+                {
+                    ...state.employee,
+                    image: getters.image.file
+                },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxMTg3MTIsImlkIjoiaWk2NnBxdDgwM3pha2xrIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.bxYqKoVycGQ2z6upDbO6V9LXjinrYp5s5TzZhUIVKcA`
+
+                    }
+                }
+            )
+
         },
         async deleteEmployee({ state }) {
             await pocketBase
                 .collection(state.collectionName)
                 .delete(state.employee.id)
         },
+        async searchContactByText({ commit, state }) {
+            let filteredItems = state.filteredEmployees
+            if (state.contactSearch) {
+                let filter = `filter=(email~'${state.contactSearch}'||name~'${state.contactSearch}'||phone_number~'${state.contactSearch}'||position~'${state.contactSearch}'||surname~'${state.contactSearch}')`
+                let { data } =
+                    await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/employees/records/?expand=office_id&${filter}`)
+                filteredItems = data.items.filter(employee =>
+                    filteredItems.some(obj2 => obj2.id === expanding(employee).id)
+                )
+            }
+            commit('setEmployees', filteredItems)
+
+        },
+        async searchContactBySelections({ commit, state, dispatch, getters }) {
+            const find = {};
+            for (let company in getters.companyDetails) {
+                let { selected } = getters.companyDetails[company];
+                if (selected) find[selected] = company
+            }
+            let { data } =
+                await axios.get(
+                    Object.keys(find).length
+                        ? `${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/employees/records/?filter=(
+                    ${Object.keys(find).map((id) => `${getters.companyDetails[find[id]].id}='${id}'`).join("%26%26")})&expand=office_id`
+                        : `${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/employees/records/?expand=office_id`
+                )
+            let filteredItems = data.items.map(employee => expanding(employee))
+            commit('setFilteredEmployees', filteredItems)
+        },
+
     },
     getters: {
         employee: (state) => state.employee,

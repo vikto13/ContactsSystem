@@ -54,7 +54,6 @@ export default {
           title: "Įvyko klaida",
           content: `Pabandykite dar kartą`,
           isAlert: true,
-          action: async () => {},
         });
       }
     },

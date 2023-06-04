@@ -3,12 +3,16 @@ export default {
     state: MessageState,
     mutations: {
         setToShowMessage(state, add) {
-            for (let action in state) {
-                state[action] = add[action]
+            for (let action in state.message) {
+                state.message[action] = add[action]
             }
+            console.log(state)
         },
         setToShowLoading(state, isLoading) {
             state.loading = isLoading
+        },
+        submitMessage(state, show) {
+            state.submit = show
         }
     },
     actions: {
@@ -17,10 +21,15 @@ export default {
         },
         showLoading({ commit }, show) {
             commit("setToShowLoading", show)
+        },
+        setToSubmit({ commit }) {
+            commit("submitMessage", true)
         }
     },
     getters: {
-        message: (state) => state,
-        isLoading: (state) => state.loading
+        message: (state) => state.message,
+        isLoading: (state) => state.loading,
+        messageTexts: (state) => state.messageTexts,
+        messageIsSubmitted: (state) => state.submit
     }
 }
