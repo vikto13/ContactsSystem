@@ -15,7 +15,8 @@ import {
     needsAuth,
     checkContact,
     verifyToken,
-    forAdmins
+    forAdmins,
+    pathForCompany
 } from "./middlewares/middlewares";
 import Offices from "../views/Offices.vue";
 import NotFound from "../views/NotFound.vue";
@@ -53,10 +54,18 @@ export const router = new VueRouter({
             },
         },
         {
-            path: "/users/companies",
-            component: Companies,
+            path: "/employee/records",
+            component: Contacts,
             meta: {
-                middleware: [authenticate, needsAuth],
+                middleware: [authenticate],
+            },
+        },
+        {
+            path: "/:id/records",
+            component: Companies,
+            props: true,
+            meta: {
+                middleware: [authenticate, needsAuth, pathForCompany],
             },
         },
         {
@@ -64,13 +73,6 @@ export const router = new VueRouter({
             component: Relationship,
             meta: {
                 middleware: [authenticate, needsAuth],
-            },
-        },
-        {
-            path: "/employee/records",
-            component: Contacts,
-            meta: {
-                middleware: [authenticate],
             },
         },
         {

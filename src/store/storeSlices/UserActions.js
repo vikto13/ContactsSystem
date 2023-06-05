@@ -52,7 +52,7 @@ export default {
         async resetPassword({ state }) {
             await pocketBase.collection(state.collectionName).requestPasswordReset(state.user.email)
         },
-        async changePassword({ state }, { token, password, passwordConfirm }) {
+        async changePassword({ state }, { token }) {
             await pocketBase.collection(state.collectionName).confirmPasswordReset({ token, password: state.user.password, passwordConfirm: state.user.passwordConfirm });
         }
     },

@@ -8,7 +8,7 @@
                 :size-l="35"
                 :size-xl="20"
             >
-                <form class="card px-4 pt-5">
+                <form class="card px-4 pt-5" v-on:submit.prevent>
                     <h1 class="mb-4">Pakeisti slaptažodį</h1>
                     <div class="forms-inputs">
                         <span> Naujas slaptažodis: </span>
@@ -29,7 +29,7 @@
                                     }),
                                 }"
                                 placeholder="Įveskite naują slaptažodį..."
-                                autocomplete="new-password"
+                                autocomplete="password"
                             />
                         </input-box-icon>
                     </div>
@@ -65,7 +65,7 @@
                         </input-box-icon>
                     </div>
                     <div class="mb-3">
-                        <button class="btn w-100" @click="() => change()">
+                        <button class="btn w-100" @click="change">
                             Keisti
                         </button>
                     </div>
@@ -88,9 +88,6 @@ export default {
             type: String,
         },
     },
-    computed: {
-        ...mapActions(['showAlert']),
-    },
     methods: {
         ...mapActions(['changePassword', 'alert', 'setToSubmit']),
         async change() {
@@ -108,9 +105,6 @@ export default {
                 })
             })
         },
-    },
-    destroyed() {
-        this.alert.showAlert && this.disableAlert()
     },
 }
 </script>

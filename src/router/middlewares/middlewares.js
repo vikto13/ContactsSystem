@@ -54,3 +54,12 @@ export function forAdmins({ next, to, store }) {
     }
     return next({ path: `/users/auth-with-password` });
 }
+
+export function pathForCompany({ next, to, store }) {
+    try {
+        console.log(store)
+        return next()
+    } catch {
+        return next({ name: "notFound" })
+    }
+}

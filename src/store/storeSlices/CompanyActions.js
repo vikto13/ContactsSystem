@@ -26,11 +26,9 @@ export default {
             state.details[entity].types = list
         },
         addRelations(state, { who, index, list }) {
-
             state.details[who].relations[index].relation = list
         },
         addComanyState(state, values) {
-            console.log(values, "98989")
             for (let value in values) {
                 state.company[value] = values[value]
             }

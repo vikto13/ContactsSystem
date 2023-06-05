@@ -19,25 +19,25 @@ export default {
                 textAdd: "Pridėti naują įmonę",
                 textEmpty: "Nėra pridėta įmonių",
                 title: 'Įmonė',
-                path: "/users/companies"
+                path: "/companies/records"
             },
             divisions: {
                 what: "diviziją",
-                whose: "divizijos",
+                whose: "Divizijos",
                 textAdd: "Pridėti naują diviziją",
                 textEmpty: "Nėra pridėta divizijų",
                 title: 'Divizija',
             },
             groups: {
                 what: "grupę",
-                whose: "grupės",
+                whose: "Grupės",
                 textAdd: "Pridėti naują grupę",
                 textEmpty: "Nėra pridėta grupių",
                 title: 'Grupė'
             },
             departments: {
                 what: "departamentą",
-                whose: "departamentai",
+                whose: "Departamentai",
                 textAdd: "Pridėti naują departamentą",
                 textEmpty: "Nėra pridėta departamentų",
                 title: 'Departamentai',

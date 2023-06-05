@@ -17,7 +17,6 @@ export function CompanyState() {
                 relations: [
                     { path: "companies_offices(office_id)", relation: [] },
                     { path: "employees(company_id)", relation: [] },
-
                 ]
             },
             departments: {
@@ -26,7 +25,10 @@ export function CompanyState() {
                 all: [],
                 relationship: 'divisions',
                 selected: '',
-                types: []
+                types: [],
+                relations: [
+                    { path: "employees(department_id)", relation: [] },
+                ]
             },
             divisions: {
                 name: 'divisions',
@@ -34,7 +36,11 @@ export function CompanyState() {
                 all: [],
                 relationship: 'offices',
                 selected: '',
-                types: []
+                types: [],
+                relations: [
+                    { path: "employees(division_id)", relation: [] },
+                    { path: "offices_divisions(division_id)", relation: [] },
+                ]
             },
             offices: {
                 name: 'offices',
@@ -55,7 +61,10 @@ export function CompanyState() {
                 all: [],
                 selected: '',
                 relationship: 'departments',
-                types: []
+                types: [],
+                relations: [
+                    { path: "employees(group_id)", relation: [] },
+                ]
 
             },
         }
