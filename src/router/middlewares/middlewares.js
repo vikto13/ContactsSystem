@@ -22,9 +22,9 @@ export function needsAuth({ next, store }) {
     let haveToken = store.getters.user.token
     if (haveToken) {
         return next()
-    } else {
-        return next({ path: `/users/auth-with-password` });
     }
+    return next({ path: `/users/auth-with-password` });
+
 }
 
 export async function checkContact({ next, to, store }) {
@@ -38,15 +38,6 @@ export async function checkContact({ next, to, store }) {
     }
 }
 
-export function isCategory({ next, to, store }) {
-    const { id } = to.params;
-    if (id == 'companies' || id == 'divisions' || id == "groups" || id == "departaments") {
-        return next()
-    } else {
-        return next({ name: "notFound" })
-    }
-}
-
 export function verifyToken({ next, to, store }) {
     try {
         jwt_decode(to.params.token)
@@ -54,6 +45,12 @@ export function verifyToken({ next, to, store }) {
     } catch {
         return next({ name: "notFound" })
     }
+}
 
-
+export function forAdmins({ next, to, store }) {
+    console.log(store.getters.user.username)
+    if (store.getters.user.username === 'admin') {
+        return next()
+    }
+    return next({ path: `/users/auth-with-password` });
 }

@@ -27,7 +27,6 @@ export default {
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`);
             commit("setOffice", data)
-
         },
         async saveOffice({ state, commit, getters }) {
             let { city, country, street, street_number } = state.office;
@@ -48,7 +47,6 @@ export default {
             await pocketBase
                 .collection(state.collectionName)
                 .delete(state.office.id)
-
         },
 
     },

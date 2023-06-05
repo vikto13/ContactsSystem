@@ -1,46 +1,46 @@
 <template>
-  <md-dialog-alert
-    v-if="message.isAlert"
-    :md-active.sync="message.active"
-    :md-title="message.title"
-    :md-content="message.content"
-    md-confirm-text="Supratau"
-  />
+    <md-dialog-alert
+        v-if="message.isAlert"
+        :md-active.sync="message.active"
+        :md-title="message.title"
+        :md-content="message.content"
+        md-confirm-text="Supratau"
+    />
 
-  <md-dialog-confirm
-    v-else
-    :md-active.sync="message.active"
-    :md-title="message.title"
-    :md-content="message.content"
-    md-confirm-text="Taip"
-    md-cancel-text="Ne"
-    @md-cancel="onCancel"
-    @md-confirm="onConfirm"
-  />
+    <md-dialog-confirm
+        v-else
+        :md-active.sync="message.active"
+        :md-title="message.title"
+        :md-content="message.content"
+        md-confirm-text="Taip"
+        md-cancel-text="Ne"
+        @md-cancel="onCancel"
+        @md-confirm="onConfirm"
+    />
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  computed: {
-    ...mapGetters(["message", "company", "admin"]),
-  },
-  data: () => ({
-    first: true,
-    second: false,
-  }),
-  methods: {
-    async onConfirm() {
-      await this.message.action();
+    computed: {
+        ...mapGetters(['message', 'company', 'admin']),
     },
-    async onCancel() {
-      await this.message.cancelAction();
+    data: () => ({
+        first: true,
+        second: false,
+    }),
+    methods: {
+        async onConfirm() {
+            await this.message.action()
+        },
+        async onCancel() {
+            await this.message.cancelAction()
+        },
     },
-  },
-};
+}
 </script>
 
 <style>
-.md-dialog-content .md-theme-default{
-  white-space: pre-line;
+.md-dialog-content .md-theme-default {
+    white-space: pre-line;
 }
 </style>

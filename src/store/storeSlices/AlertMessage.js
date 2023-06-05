@@ -16,7 +16,6 @@ export default {
         setToShowAlert(state, message) {
             state.showAlert = true
             state.showMessage = message
-
         }
     },
     actions: {

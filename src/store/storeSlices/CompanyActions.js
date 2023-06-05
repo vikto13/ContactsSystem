@@ -93,7 +93,6 @@ export default {
                 commit('setType', { list: add, entity: name })
             })
 
-
         },
         async fetchAllCompanies({ state, commit }) {
             let search = [state.details.groups, state.details.departments, state.details.offices, state.details.divisions, state.details.companies];
@@ -112,16 +111,12 @@ export default {
         },
         async editCompanyRelation({ state }) {
             let { relationship, id } = state.details[state.company.collectionName]
-            console.log(state.company.id, { [id]: state.company.name, [state.details[relationship].id]: state.company.relation })
-            console.log(`${state.company.collectionName}_${relationship}`)
             await pocketBase
                 .collection(`${relationship}_${state.company.collectionName}`)
                 .update(state.company.id, { [id]: state.company.name, [state.details[relationship].id]: state.company.relation });
         },
         async deleteCompany({ state }, info) {
             let { id, collectionName } = state.company
-            console.log(state.company, "deleeeeeeeeeeeete")
-            console.log(info)
             if (info) {
                 collectionName = info.collectionName
                 id = info.id

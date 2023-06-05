@@ -11,7 +11,6 @@ function middlewarePipeline(context, middleware, index) {
         )
 
         nextMiddleware({ ...context, next: nextPipeline })
-
     }
 }
 export default middlewarePipeline

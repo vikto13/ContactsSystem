@@ -4,6 +4,7 @@
     <div class="m-5">
       <h1 style="font-weight: normal">{{ navBar.relationship.title }}</h1>
       <field-to-create
+        v-show="havePermission('edit_structure')"
         :text="'Pridėti naują struktūrą'"
         @pressed="triggerDialog('add-relationship')"
       >
@@ -23,11 +24,13 @@
 
           <md-table-cell md-label="Veiksmas">
             <md-button
+              v-show="havePermission('edit_structure')"
               class="md-dense md-raised md-primary edit-btn table-btn"
               @click="() => edit(item)"
               >Redaguoti</md-button
             >
             <md-button
+              v-show="havePermission('delete_structure')"
               class="md-dense md-raised md-primary delete-btn table-btn"
               @click="() => deleting(item)"
               >Ištrinti</md-button
@@ -43,6 +46,7 @@
 import { mapGetters, mapActions } from "vuex";
 import FieldToCreate from "../components/FieldToCreate.vue";
 import { ContactsMixin } from "./mixins/ContactsMixin";
+import { LoginMixin } from "./mixins/LoginMixin";
 export default {
   components: {
     FieldToCreate,
@@ -50,7 +54,7 @@ export default {
   async mounted() {
     await this.fetchAllCompaniesRelation();
   },
-  mixins: [ContactsMixin],
+  mixins: [ContactsMixin, LoginMixin],
   computed: {
     ...mapGetters([
       "admins",
@@ -76,31 +80,26 @@ export default {
       "findCompanyRelation",
     ]),
     getName(item) {
-    
-      let name = item.collectionName.split("_")[1]
-      let { id }=this.companyDetails[name]
-     return item[id].name
-     
+      let name = item.collectionName.split("_")[1];
+      let { id } = this.companyDetails[name];
+      return item[id].name;
     },
     getType(item) {
       return this.navBar[item.collectionName.split("_")[1]].title;
     },
     async edit(find) {
-       await this.findCompanyRelation(find);
-       this.triggerDialog("add-relationship");
+      await this.findCompanyRelation(find);
+      this.triggerDialog("add-relationship");
     },
     async deleting(find) {
+      let { collectionName } = find;
+      let { id } = this.companyDetails[collectionName.split("_")[1]];
 
-      let { collectionName } = find
-      let { id } = this.companyDetails[collectionName.split("_")[1]]
-      
       this.triggerMessage({
         title: "Ar tikrai norite ištrinti struktūrą?",
-        content: `Pavadinimu: ${
-          find[id].name
-        }`,
+        content: `Pavadinimu: ${find[id].name}`,
         action: async () => {
-          await this.deleteCompany({collectionName,id:find.id });
+          await this.deleteCompany({ collectionName, id: find.id });
           await this.fetchAllCompaniesRelation();
         },
         cancelAction: () => {},

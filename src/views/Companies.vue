@@ -3,12 +3,14 @@
     <slot></slot>
     <div class="m-5">
       <h1 style="font-weight: normal">{{ navBar.companies.whose }}</h1>
-      <field-to-create :text="navBar.companies.textAdd" @pressed="edit(null)">
+      <field-to-create
+        v-show="havePermission('edit_companies')"
+        :text="navBar.companies.textAdd"
+        @pressed="edit(null)"
+      >
       </field-to-create>
       <h5
-        v-if="
-          !companyDetails['companies'].all.length
-        "
+        v-if="!companyDetails['companies'].all.length"
         style="text-align: center"
       >
         {{ navBar.companies.textEmpty }}
@@ -36,6 +38,7 @@
             </div>
             <div>
               <md-button
+                v-show="havePermission('edit_companies')"
                 md-with-hover
                 class="md-icon-button md-raised edit-btn"
                 @click="() => edit(company.id)"
@@ -44,6 +47,7 @@
               </md-button>
 
               <md-button
+                v-show="havePermission('delete_companies')"
                 md-with-hover
                 class="md-icon-button md-raised ml-3 delete-btn"
                 @click="() => deleteIt(company.id)"
@@ -86,7 +90,7 @@ export default {
       "deleteCompany",
       "triggerMessage",
       "findCompany",
-      "checkIfIsRelation"
+      "checkIfIsRelation",
     ]),
     async edit(id) {
       this.tryCatchForAPIAction(async () => {
@@ -100,15 +104,16 @@ export default {
       });
     },
     async deleteIt(id) {
-   
-        await this.findCompany({id, entity: "companies", });
-      await this.checkIfIsRelation({ id, collectionName: "companies" })
+      await this.findCompany({ id, entity: "companies" });
+      await this.checkIfIsRelation({ id, collectionName: "companies" });
 
       if (this.company.relation.length) {
-       await this.triggerMessage({
+        await this.triggerMessage({
           title: `Negalite ištrinti`,
-          content: `${this.navBar["companies"].what} turi ryšius: <br>`+this.company.relation.join("<br>"),
-          isAlert:true
+          content:
+            `${this.navBar["companies"].what} turi ryšius: <br>` +
+            this.company.relation.join("<br>"),
+          isAlert: true,
         });
         this.$store.commit("clearCompanyData");
       } else {
@@ -116,17 +121,13 @@ export default {
           title: `Ar tikrai norite ištrinti ${this.navBar["companies"].what}?`,
           content: `${this.navBar["companies"].whose} pavadinimas: ${this.company.name}`,
           action: async () => {
-              await this.deleteCompany();
-              this.$store.commit("clearCompanyData");
-              await this.fetchCompanies("companies");
+            await this.deleteCompany();
+            this.$store.commit("clearCompanyData");
+            await this.fetchCompanies("companies");
           },
-          cancelAction: () => {
-          },
+          cancelAction: () => {},
         });
       }
-    
-     
-
     },
   },
 };

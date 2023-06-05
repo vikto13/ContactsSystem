@@ -1,5 +1,4 @@
 export function OfficeState() {
-
     return {
         offices: null,
         office: {

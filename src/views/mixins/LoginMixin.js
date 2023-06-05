@@ -5,17 +5,18 @@ export const LoginMixin = {
         InputBoxIcon
     },
     computed: {
-        ...mapGetters(["alert", "messageTexts", "messageTexts", "messageIsSubmitted"])
-    },
-    data() {
-        return {
-            email: '',
-            password: '',
-            secPassword: '',
-        }
+        ...mapGetters(["alert", "messageTexts", "messageTexts", "messageIsSubmitted"]),
+        user: {
+            get() {
+                return this.$store.state.User.user
+            },
+            se(user) {
+                this.$store.state.User.user = user
+            },
+        },
     },
     methods: {
-        ...mapActions(["showAlert", "disableAlert", "triggerMessage"]),
+        ...mapActions(["showAlert", "disableAlert", "triggerMessage", "resetPassword"]),
         showCompareMessage(password, secPassword) {
             return this.messageIsSubmitted && (password !== secPassword)
         },
@@ -28,8 +29,6 @@ export const LoginMixin = {
         showPasswordMessage(password) {
             return this.messageIsSubmitted && (!password || password.length < 8);
         },
-
-
         emailMessage(email) {
             return !email
                 ? `Elektroninis paštas turi būti įvestas`
@@ -42,6 +41,7 @@ export const LoginMixin = {
                 : `Slaptažodis turi būti įvestas`
         },
         isInvalid(input) {
+            console.log(input)
             switch (Object.keys(input)[0]) {
                 case 'password':
                     return this.showPasswordMessage(Object.values(input)[0])
@@ -51,22 +51,16 @@ export const LoginMixin = {
                     return !Object.values(input)[0] && this.messageIsSubmitted
             }
         },
-
-
         messageById(info) {
             if (Object.keys(info)[0] == 'email') {
                 return this.emailMessage(Object.values(info)[0])
             }
             return this.messageTexts[Object.keys(info)[0]]
         },
-
-
-
-
-
-
-
-
+        havePermission(permission) {
+            console.log(this.user.permissions_id)
+            return this.user.token ? this.user.permissions_id[permission] : false;
+        },
         async updatePassword() {
             let message;
             try {
@@ -82,29 +76,18 @@ export const LoginMixin = {
                     content: `Pabandykite dar kartą`,
                 };
             }
-            // this.triggerMessage({
-            //     ...message,
-            //     isAlert: true,
-            // });
+            this.triggerMessage({
+                ...message,
+                isAlert: true,
+            });
         },
-
 
         async tryCatchForAPIAction(action) {
             try {
                 await action()
-                // this.alert.showAlert && this.disableAlert();
+                this.alert.showAlert && this.disableAlert();
             } catch (err) {
-                console.log(err)
-                if (err.status == 404 || err.status == 400 || err.response.status == 400) {
-                    this.triggerMessage({
-                        title: "Jums leidimas tokiam veiksmui nėra duotas",
-                        content: `Paprašykite admino, jog suteiktų tokią galimybę`,
-                        isAlert: true,
-                    });
-
-                } else {
-                    this.showAlert(404);
-                }
+                // this.showAlert(404);
             }
         }
     }

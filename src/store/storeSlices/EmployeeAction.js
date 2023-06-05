@@ -25,11 +25,13 @@ export default {
         },
     },
     actions: {
-        async findEmployee({ commit, state }, id) {
+        async findEmployee({ commit, state, dispatch }, id) {
             let data = await pocketBase
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`);
+            data.photo && dispatch("setImageFromApi", { tableName: data.collectionName, entity: data.id, imageName: data.photo })
             commit("setEmployee", data)
+
         },
         async findAndExpandEmployee({ commit, state }, id) {
             let data = await pocketBase
@@ -41,7 +43,7 @@ export default {
             await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.collectionName}/records`,
                 {
                     ...state.employee,
-                    image: getters.image.file
+                    photo: getters.image.file
                 },
                 {
                     headers: {
@@ -68,10 +70,11 @@ export default {
             commit('setEmployees', list)
         },
         async editEmployee({ state, getters }) {
+            console.log(getters.image)
             await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.collectionName}/records/${state.employee.id}`,
                 {
                     ...state.employee,
-                    image: getters.image.file
+                    photo: getters.image.file
                 },
                 {
                     headers: {
@@ -117,12 +120,9 @@ export default {
             let filteredItems = data.items.map(employee => expanding(employee))
             commit('setFilteredEmployees', filteredItems)
         },
-
     },
     getters: {
         employee: (state) => state.employee,
         employees: (state) => state.employees,
-
-
     },
 }

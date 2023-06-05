@@ -14,7 +14,7 @@
         :size-l="35"
         :size-xl="20"
       >
-        <div class="card px-4 pt-5" :style="{ 'padding-bottom': addingBottom }">
+        <div class="card px-4 pt-5" :style="{ 'padding-bottom': '25%' }">
           <router-view></router-view>
         </div>
       </divide-components>
@@ -34,11 +34,6 @@ export default {
   },
   computed: {
     ...mapGetters(["adminPages", "navBar"]),
-    addingBottom() {
-      return this.$route.path.split("/")[2] == this.navBar.admins.loginPath
-        ? "5%"
-        : "25%";
-    },
     goBackPath() {
       return this.$route.path === this.navBar.admins.loginPath
         ? this.navBar.contacts.path

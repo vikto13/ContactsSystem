@@ -9,16 +9,16 @@ export default {
                 textEmpty: "Nėra sukurtų kontaktų",
             },
             relationship: {
-                title: "Struktūra",
+                title: "Struktūros",
                 path: "/relationship/record",
                 textEmpty: "Nėra sukurtų struktūrų",
             },
             companies: {
-                what: "kompaniją",
-                whose: "Kompanijos",
-                textAdd: "Pridėti naują kompaniją",
-                textEmpty: "Nėra pridėta kompanijų",
-                title: 'Kompanija',
+                what: "įmonę",
+                whose: "Įmonės",
+                textAdd: "Pridėti naują įmonę",
+                textEmpty: "Nėra pridėta įmonių",
+                title: 'Įmonė',
                 path: "/users/companies"
             },
             divisions: {
@@ -44,11 +44,11 @@ export default {
                 path: 'departments'
             },
             offices: {
-                title: 'Ofisai',
-                textAdd: "Pridėti naują ofisą",
-                textEmpty: "Nėra sukurtų ofisų",
+                title: 'Būstinės',
+                textAdd: "Pridėti naują būstinę",
+                textEmpty: "Nėra sukurtų būstinių",
                 path: "/offices/records",
-                what: "ofisą",
+                what: "būstinę",
             },
             admins: {
                 id: 'admins',

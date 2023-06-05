@@ -58,13 +58,6 @@ export function CompanyState() {
                 types: []
 
             },
-
-
-
-
-
         }
     }
-
-
 }

@@ -14,8 +14,8 @@ import {
     authenticate,
     needsAuth,
     checkContact,
-    isCategory,
     verifyToken,
+    forAdmins
 } from "./middlewares/middlewares";
 import Offices from "../views/Offices.vue";
 import NotFound from "../views/NotFound.vue";
@@ -26,7 +26,7 @@ export const router = new VueRouter({
             path: "/admins/records",
             component: Admins,
             meta: {
-                middleware: [authenticate, needsAuth],
+                middleware: [authenticate, needsAuth, forAdmins],
             },
         },
         {

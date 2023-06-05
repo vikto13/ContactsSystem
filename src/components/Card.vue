@@ -27,16 +27,16 @@
         <md-card-content>
           <p v-for="(content, index) in contents" :key="index">{{ content }}</p>
         </md-card-content>
-
-        <div class="mb-4" v-show="user.token">
+        <div class="mb-4">
           <md-button
             v-for="(button, index) in buttons"
+            v-show="button.show"
             :key="index"
             class="md-icon-button md-raised ml-3 mb-3"
-            :class="`${button}-btn`"
+            :class="`${button.name}-btn`"
             @click.stop="$emit('buttonClicked', { button: index, id })"
           >
-            <md-icon class="text-white">{{ button }}</md-icon>
+            <md-icon class="text-white">{{ button.name }}</md-icon>
           </md-button>
         </div>
       </md-ripple>
@@ -44,7 +44,6 @@
   </md-card>
 </template>
 <script>
-import { mapGetters } from "vuex";
 export default {
   props: {
     title: {
@@ -62,9 +61,6 @@ export default {
     id: {
       type: String,
     },
-  },
-  computed: {
-    ...mapGetters(["user"]),
   },
 };
 </script>
