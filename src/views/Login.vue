@@ -43,10 +43,6 @@ export default {
       return this.$route.path === this.navBar.admins.loginPath
         ? this.navBar.contacts.path
         : this.navBar.admins.loginPath;
-      this.$store.commit("submitMessage");
-    },
-    destroyed() {
-      console.log("aaaaa");
     },
   },
 };
