@@ -16,7 +16,7 @@
             />
           </input-box-icon>
         </div>
-        <div  class="col-4 col-md-1 align-self-center margin d-flex">
+        <div class="col-4 col-md-1 align-self-center margin d-flex">
           <md-menu md-size="medium" md-align-trigger class="d-flex flex-wrap">
             <md-button
               class="md-icon-button md-raised ml-3 edit-btn"
@@ -52,6 +52,7 @@
 
           <div class="d-flex flex-wrap">
             <md-button
+              v-show="user.token"
               class="md-icon-button md-raised ml-3 edit-btn"
               @click="() => triggerDialog('add-contacts')"
             >
@@ -66,7 +67,7 @@
         {{ navBar.title }}
       </p>
       <filter-sections></filter-sections>
-      <h5 v-if="!employees.length" class="mt-5 text-center" >
+      <h5 v-if="!employees.length" class="mt-5 text-center">
         Kontaktų nerasta
       </h5>
       <component v-else :is="showComponents[isSelected]"></component>
@@ -88,7 +89,7 @@ export default {
     Pagination,
     InputBoxIcon,
     ContactTables,
-    FilterSections
+    FilterSections,
   },
   async mounted() {
     await this.fetchEmployees();
@@ -112,23 +113,27 @@ export default {
       "navBar",
       "optionsForPaginate",
       "sizeOfPaginate",
+      "user",
     ]),
     contactSearch: {
       get() {
         return this.$store.state.Employee.contactSearch;
       },
       set(text) {
-        this.$store.state.Employee.contactSearch=text
+        this.$store.state.Employee.contactSearch = text;
       },
     },
   },
   methods: {
-    ...mapActions(["fetchEmployees", "triggerDialog","searchContactBySelections","searchContactByText"]),
+    ...mapActions([
+      "fetchEmployees",
+      "triggerDialog",
+      "searchContactBySelections",
+      "searchContactByText",
+    ]),
     async searching() {
-   
-        await this.searchContactBySelections();
-         await this.searchContactByText();
-   
+      await this.searchContactBySelections();
+      await this.searchContactByText();
     },
     setPaginate(size) {
       this.$store.commit("setPagine", size);

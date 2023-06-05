@@ -8,6 +8,7 @@ import AlertMessage from "./storeSlices/AlertMessage"
 import Image from "./storeSlices/ImageAction"
 import Message from "./storeSlices/MessageAction"
 import Office from "./storeSlices/OfficeAction"
+import User from "./storeSlices/UserActions"
 
 
 
@@ -23,6 +24,6 @@ export const initializeStore = {
         Message,
         Office,
         Admin,
-
+        User
     }
 }

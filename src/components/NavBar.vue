@@ -11,16 +11,17 @@
     <template>
       <li
         v-for="(tab, index) in [
-          navBar.contacts,
-          navBar.companies,
-          navBar.relationship,
-          navBar.offices,
-          navBar.admins,
+          { ...navBar.contacts, show: user.token },
+          { ...navBar.companies, show: user.token },
+          { ...navBar.relationship, show: user.token },
+          { ...navBar.offices, show: user.token },
+          { ...navBar.admins, show: user.token },
         ]"
         :key="index"
         class="nav-item d-flex flex-row p-3"
       >
         <router-link
+          v-show="tab.show"
           :to="`${tab.path}`"
           class="nav-link text-white"
           :class="'active'"
@@ -28,15 +29,15 @@
         >
       </li>
 
-      <md-menu md-size="medium" md-align-trigger>
-        <!-- <md-button
+      <md-menu v-show="user.token" md-size="medium" md-align-trigger>
+        <md-button
           md-menu-trigger
           class="md-icon-button md-raised"
           style="background-color: white !important"
         >
           <img v-if="user.avatar" :src="user.avatar.result" />
           <md-icon v-else class="cb">person</md-icon>
-        </md-button> -->
+        </md-button>
 
         <md-menu-content>
           <md-menu-item @click="updatePassword"

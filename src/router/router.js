@@ -13,17 +13,19 @@ import middlewarePipeline from "./middlewares/middlewarePipeline"
 import { authenticate, needsAuth, checkContact, isCategory, verifyToken } from "./middlewares/middlewares"
 import { initializeStore } from "../store/initializeStore";
 import Offices from "../views/Offices.vue"
+import NotFound from "../views/NotFound.vue"
+
 export const router = new VueRouter({
     routes: [
         {
             path: '/admins/records',
             component: Admins,
-            // meta: {
-            //     middleware: [
-            //         authenticate,
-            //         needsAuth
-            //     ]
-            // }
+            meta: {
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
+            }
         },
         // {
         //     path: '/auth-update-password/:token',
@@ -42,8 +44,8 @@ export const router = new VueRouter({
             meta: {
                 middleware: [
                     checkContact,
-                    // authenticate,
-                    // needsAuth
+                    authenticate,
+                    needsAuth
                 ]
             }
         },
@@ -60,32 +62,44 @@ export const router = new VueRouter({
         {
             path: '/offices/records',
             component: Offices,
-            // meta: {
-            //     middleware: [
-            //         authenticate,
-            //         needsAuth
-            //     ]
-            // }
+            meta: {
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
+            }
         },
 
 
 
         {
-            path: initializeStore.modules.NavBar.state.navBar.companies.path,
+            path: "/users/companies",
             component: Companies,
+            meta: {
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
+            }
         },
         {
-            path: initializeStore.modules.NavBar.state.navBar.relationship.path,
+            path: "/relationship/record",
             component: Relationship,
+            meta: {
+                middleware: [
+                    authenticate,
+                    needsAuth
+                ]
+            }
         },
         {
             path: '/employee/records',
             component: Contacts,
-            // meta: {
-            //     middleware: [
-            //         authenticate,
-            //     ]
-            // }
+            meta: {
+                middleware: [
+                    authenticate,
+                ]
+            }
         },
         {
             path: '/users/',
@@ -114,11 +128,11 @@ export const router = new VueRouter({
         //         ]
         //     }
         // },
-        // {
-        //     path: '*',
-        //     name: 'notFound',
-        //     component: NotFound
-        // }
+        {
+            path: '*',
+            name: 'notFound',
+            component: NotFound
+        }
     ]
 })
 

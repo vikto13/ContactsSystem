@@ -10,7 +10,7 @@ export function CompanyState() {
             companies: {
                 name: 'companies',
                 id: "company_id",
-                all: null,
+                all: [],
                 relationship: 'offices',
                 selected: '',
                 types: [],
@@ -23,7 +23,7 @@ export function CompanyState() {
             departments: {
                 name: 'departments',
                 id: "department_id",
-                all: null,
+                all: [],
                 relationship: 'divisions',
                 selected: '',
                 types: []
@@ -31,7 +31,7 @@ export function CompanyState() {
             divisions: {
                 name: 'divisions',
                 id: "division_id",
-                all: null,
+                all: [],
                 relationship: 'offices',
                 selected: '',
                 types: []
@@ -39,7 +39,7 @@ export function CompanyState() {
             offices: {
                 name: 'offices',
                 id: "office_id",
-                all: null,
+                all: [],
                 selected: '',
                 relationship: 'companies',
                 types: [],
@@ -52,7 +52,7 @@ export function CompanyState() {
             groups: {
                 name: 'groups',
                 id: "group_id",
-                all: null,
+                all: [],
                 selected: '',
                 relationship: 'departments',
                 types: []

@@ -64,23 +64,21 @@ export default {
       "showAlert",
       "disableAlert",
       "showLoading",
-    "setToSubmit"
+      "setToSubmit",
     ]),
     async login() {
       if (!(this.password && this.email)) {
-       await this.setToSubmit()
+        await this.setToSubmit();
         return;
       }
       try {
-        this.showLoading(true);
         await this.authWithPassword({
           email: this.email,
           password: this.password,
         });
         setTimeout(() => {
-          this.$router.push("/contacts/records");
+          this.$router.push("/employee/records");
         }, 10);
-        this.showLoading(false);
       } catch (err) {
         console.log(err);
         if (err.status == 400) {
@@ -92,6 +90,7 @@ export default {
     },
   },
   destroyed() {
+    this.$store.commit("submitMessage");
     this.alert.showAlert && this.disableAlert();
   },
 };

@@ -7,7 +7,11 @@
     md-fixed-header
     class="mt-5 table-footer"
   >
-    <md-table-row slot="md-table-row" slot-scope="{ item }" @click="()=>see(item.id)">
+    <md-table-row
+      slot="md-table-row"
+      slot-scope="{ item }"
+      @click="() => see(item.id)"
+    >
       <md-table-cell md-label="Vardas ir Pavardė" md-sort-by="name">{{
         ` ${item.name} ${item.surname}`
       }}</md-table-cell>
@@ -22,7 +26,7 @@
       }}</md-table-cell>
       <md-table-cell md-label="Adresas">{{ getAddress(item) }}</md-table-cell>
 
-      <md-table-cell md-label="Veiksmas">
+      <md-table-cell v-if="user.token" md-label="Veiksmas">
         <md-button
           class="md-dense md-raised md-primary edit-btn"
           @click.stop="edit({ button: 0, id: item.id })"
@@ -43,6 +47,8 @@ import { ContactsMixin } from "../views/mixins/ContactsMixin";
 import { LoginMixin } from "../views/mixins/LoginMixin";
 export default {
   mixins: [ContactsMixin, LoginMixin],
-  computed: {},
+  computed: {
+    ...mapGetters(["user"]),
+  },
 };
 </script>

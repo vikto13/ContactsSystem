@@ -1,8 +1,7 @@
 <template>
-  
-    <md-card class="mt-5 " style="text-decoration: none" md-with-hover>
-      <a @click.stop="$emit('cardClicked', id)">
-      <md-ripple >
+  <md-card class="mt-5" md-with-hover>
+    <a @click.stop="$emit('cardClicked', id)" class="custom-link">
+      <md-ripple>
         <md-card-header>
           <md-avatar>
             <svg
@@ -29,7 +28,7 @@
           <p v-for="(content, index) in contents" :key="index">{{ content }}</p>
         </md-card-content>
 
-        <div class="mb-4">
+        <div class="mb-4" v-show="user.token">
           <md-button
             v-for="(button, index) in buttons"
             :key="index"
@@ -42,10 +41,10 @@
         </div>
       </md-ripple>
     </a>
-    </md-card>
-
+  </md-card>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: {
     title: {
@@ -64,6 +63,14 @@ export default {
       type: String,
     },
   },
+  computed: {
+    ...mapGetters(["user"]),
+  },
 };
 </script>
-<style scoped></style>
+<style scoped>
+a.custom-link {
+  color: inherit;
+  text-decoration: none;
+}
+</style>

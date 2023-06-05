@@ -46,7 +46,7 @@ export default {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxMTg3MTIsImlkIjoiaWk2NnBxdDgwM3pha2xrIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.bxYqKoVycGQ2z6upDbO6V9LXjinrYp5s5TzZhUIVKcA`
+                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxNDgwNjEsImlkIjoidWx6YWlxa2U4eDB4ZGkxIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.Pv-pLmUUg5OED3cEmxiKJRmWf1zd1RE_WOYXjAWLL2k`
 
                     }
                 }
@@ -76,7 +76,7 @@ export default {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxMTg3MTIsImlkIjoiaWk2NnBxdDgwM3pha2xrIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.bxYqKoVycGQ2z6upDbO6V9LXjinrYp5s5TzZhUIVKcA`
+                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxNDgwNjEsImlkIjoidWx6YWlxa2U4eDB4ZGkxIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.Pv-pLmUUg5OED3cEmxiKJRmWf1zd1RE_WOYXjAWLL2k`
 
                     }
                 }

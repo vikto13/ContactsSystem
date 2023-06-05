@@ -1,13 +1,20 @@
 import jwt_decode from "jwt-decode";
 
 export async function authenticate({ next, store }) {
+
     let haveToken = store.getters.user.token
+
     try {
-        let { model, token } = JSON.parse(localStorage.getItem('pocketbase_auth'))
+        let data = localStorage.getItem('pocketbase_auth')
+        if (!data) {
+            throw null;
+        }
+
+        let { model, token } = JSON.parse(data)
         if (!haveToken && token) {
             await store.dispatch("authWithToken", { id: model.id, token })
         }
-    } catch { }
+    } catch (err) { console.log(err) }
     return next()
 }
 

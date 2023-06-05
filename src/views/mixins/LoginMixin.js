@@ -76,17 +76,19 @@ export const LoginMixin = {
                     content: `Patikrinkite savo elektroninį paštą`,
                 };
             } catch (err) {
-
+                console.log(err)
                 message = {
                     title: "Įvyko klaida",
                     content: `Pabandykite dar kartą`,
                 };
             }
-            this.triggerMessage({
-                ...message,
-                isAlert: true,
-            });
+            // this.triggerMessage({
+            //     ...message,
+            //     isAlert: true,
+            // });
         },
+
+
         async tryCatchForAPIAction(action) {
             try {
                 await action()

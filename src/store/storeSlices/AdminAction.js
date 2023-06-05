@@ -62,7 +62,7 @@ export default {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxMTg3MTIsImlkIjoiaWk2NnBxdDgwM3pha2xrIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.bxYqKoVycGQ2z6upDbO6V9LXjinrYp5s5TzZhUIVKcA`
+                        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxNDgwNjEsImlkIjoidWx6YWlxa2U4eDB4ZGkxIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.Pv-pLmUUg5OED3cEmxiKJRmWf1zd1RE_WOYXjAWLL2k`
 
                     }
                 }
@@ -92,7 +92,7 @@ export default {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxMTg3MTIsImlkIjoiaWk2NnBxdDgwM3pha2xrIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.bxYqKoVycGQ2z6upDbO6V9LXjinrYp5s5TzZhUIVKcA`
+                        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE2ODcxNDgwNjEsImlkIjoidWx6YWlxa2U4eDB4ZGkxIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.Pv-pLmUUg5OED3cEmxiKJRmWf1zd1RE_WOYXjAWLL2k`
 
                     }
                 }
@@ -110,13 +110,6 @@ export default {
                 commit("setAdmin", { avatar })
             }
         },
-        async authWithPassword({ commit, dispatch }, user) {
-            const data = await pocketBase.collection('users').authWithPassword(
-                user.email,
-                user.password);
-            await commit("setEmployee", { ...data.record, token: data.token })
-            await dispatch("setUserAvatar")
-        },
         async setAdmin({ commit, getters, state }, id) {
             let data = await pocketBase
                 .collection(state.collectionName)
@@ -129,12 +122,6 @@ export default {
         setWhatDo({ commit }, what) {
             commit("setAdminAction", what)
         },
-        async resetPassword({ state }) {
-            await pocketBase.collection('users').requestPasswordReset(state.admin.email)
-        },
-        async changePassword(_, { token, password, passwordConfirm }) {
-            await pocketBase.collection('users').confirmPasswordReset({ token, password, passwordConfirm });
-        }
     },
     getters: {
         adminRoles: (state) => state.permissions,
