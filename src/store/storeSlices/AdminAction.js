@@ -44,7 +44,6 @@ export default {
         },
         async fetchAdmins({ commit, state }) {
             const data = await pocketBase.collection(state.collectionName).getFullList()
-            console.log(data)
             commit("setAdmins", data)
         },
         async deleteAdmin({ commit, state }) {
@@ -97,25 +96,14 @@ export default {
                 }
             )
         },
-        async setUserAvatar({ commit, state }) {
-            if (state.avatar) {
-                let image = await axios.get(
-                    `${import.meta.env.VITE_POCKET_BASE_URL}/api/files/users/${state.admin.id
-                    }/${state.admin.avatar}?thumb=100x300`,
-                    { responseType: "blob" }
-                );
-                let avatar = new FileReader();
-                avatar.readAsDataURL(image.data);
-                commit("setAdmin", { avatar })
-            }
-        },
-        async setAdmin({ commit, getters, state }, id) {
+        async setAdmin({ commit, state, dispatch }, id) {
             let data = await pocketBase
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`, { expand: 'permissions_id' });
             for (let expanded in data.expand) {
                 data[expanded] = data.expand[expanded]
             }
+            data.avatar && dispatch("setImageFromApi", { tableName: data.collectionName, entity: data.id, imageName: data.avatar })
             commit("setAdmin", data)
         },
         setWhatDo({ commit }, what) {

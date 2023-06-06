@@ -23,7 +23,6 @@ export default {
     },
     actions: {
         async authWithPassword({ commit, dispatch, state }) {
-            console.log(state)
             const data = await pocketBase.collection(state.collectionName).authWithPassword(
                 state.user.email,
                 state.user.password, {}, { expand: "permissions_id" });
@@ -36,7 +35,6 @@ export default {
             await dispatch("setUserAvatar")
         },
         async setUserAvatar({ commit, state }) {
-
             if (state.user.avatar) {
                 let image = await axios.get(
                     `${import.meta.env.VITE_POCKET_BASE_URL}/api/files/users/${state.user.id

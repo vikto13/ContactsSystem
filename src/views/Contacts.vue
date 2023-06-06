@@ -121,7 +121,6 @@ export default {
             'navBar',
             'optionsForPaginate',
             'sizeOfPaginate',
-            'user',
         ]),
         contactSearch: {
             get() {

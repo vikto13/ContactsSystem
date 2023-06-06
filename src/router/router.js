@@ -43,7 +43,7 @@ export const router = new VueRouter({
             component: ContactDetails,
             props: true,
             meta: {
-                middleware: [checkContact, authenticate, needsAuth],
+                middleware: [checkContact, authenticate],
             },
         },
         {

@@ -1,7 +1,7 @@
 <template>
     <div class="m-3 mt-5" style="width: 30rem">
         <input-box-icon
-            :title="`${navBar['companies'].whose} pavadinimas:`"
+            :title="`${navBar[$route.params.id].whose} pavadinimas:`"
             :bottom-text="'Įveskite pavadinimą'"
             :is-not-valid="isInvalid(company.name)"
         >
@@ -11,7 +11,7 @@
                 class="form-control table-footer"
                 :class="{ 'is-invalid': isInvalid(company.name) }"
                 :placeholder="`Įveskite ${navBar[
-                    'companies'
+                    $route.params.id
                 ].whose.toLowerCase()} pavadinimą...`"
             />
         </input-box-icon>
@@ -37,8 +37,12 @@ export default {
         ...mapGetters(['company', 'companyDetails', 'navBar']),
         showTitle() {
             return this.company.id
-                ? `Redaguoti ${this.companyDetails['companies'].what}: `
-                : `Pridėti naują ${this.companyDetails['companies'].what}:`
+                ? `Redaguoti ${
+                      this.companyDetails[this.$route.params.id].what
+                  }: `
+                : `Pridėti naują ${
+                      this.companyDetails[this.$route.params.id].what
+                  }:`
         },
         buttonTitle() {
             return this.company.id ? 'Redaguoti' : 'Pridėti'
@@ -60,15 +64,16 @@ export default {
                 }
 
                 this.company.id
-                    ? await this.editCompany('companies')
-                    : await this.saveCompany('companies')
-                await this.fetchCompanies('companies')
+                    ? await this.editCompany(this.$route.params.id)
+                    : await this.saveCompany(this.$route.params.id)
+                await this.fetchCompanies(this.$route.params.id)
                 this.dismissDialog()
             })
         },
     },
     destroyed() {
         this.$store.commit('clearCompanyData')
+        this.$store.commit('submitMessage', false)
     },
 }
 </script>

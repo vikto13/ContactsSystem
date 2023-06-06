@@ -24,11 +24,8 @@ export const ContactsMixin = {
             let { city, country, street, street_number } = office_id;
             return ` ${country}, ${city}, ${street} ${street_number}`;
         },
-
         async see(id) {
-            console.log(id)
             this.$router.push(`/contact/${id}`);
-
         },
         async edit({ button, id }) {
             await this.findEmployee(id)

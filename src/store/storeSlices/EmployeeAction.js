@@ -70,7 +70,7 @@ export default {
             commit('setEmployees', list)
         },
         async editEmployee({ state, getters }) {
-            console.log(getters.image)
+
             await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.collectionName}/records/${state.employee.id}`,
                 {
                     ...state.employee,

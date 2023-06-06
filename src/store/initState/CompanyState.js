@@ -65,7 +65,6 @@ export function CompanyState() {
                 relations: [
                     { path: "employees(group_id)", relation: [] },
                 ]
-
             },
         }
     }

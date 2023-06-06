@@ -20,7 +20,7 @@ export default {
             const [image] = e.target.files
             commit('setImage', image)
         },
-        async setImageFromApi({ commit }, { tableName, entity, imageName }) {
+        async setImageFromApi({ commit }, { tableName, entity, imageName, commitName }) {
             let image = await axios.get(
                 `${import.meta.env.VITE_POCKET_BASE_URL
                 }/api/files/${tableName}/${entity}/${imageName}?thumb=100x300`,

@@ -14,7 +14,9 @@ export async function authenticate({ next, store }) {
         if (!haveToken && token) {
             await store.dispatch("authWithToken", { id: model.id, token })
         }
-    } catch (err) { console.log(err) }
+    } catch {
+        store.commit("clearUserData")
+    }
     return next()
 }
 
@@ -48,7 +50,6 @@ export function verifyToken({ next, to, store }) {
 }
 
 export function forAdmins({ next, to, store }) {
-    console.log(store.getters.user.username)
     if (store.getters.user.username === 'admin') {
         return next()
     }
@@ -56,10 +57,15 @@ export function forAdmins({ next, to, store }) {
 }
 
 export function pathForCompany({ next, to, store }) {
-    try {
-        console.log(store)
+
+    if ([
+        'companies',
+        'groups',
+        'departments',
+        'divisions'
+    ].includes(to.params.id)) {
         return next()
-    } catch {
-        return next({ name: "notFound" })
     }
+    return next({ name: "notFound" })
+
 }

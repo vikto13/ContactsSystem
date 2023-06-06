@@ -1,5 +1,6 @@
 <template>
     <div class="container pt-5">
+        <navigator-back :go-back-path="'/employee/records'"></navigator-back>
         <h1 style="font-weight: normal">Detalesnė kontakto informacija:</h1>
         <md-card-header>
             <md-avatar>
@@ -58,8 +59,11 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-
+import NavigatorBack from '../components/NavigatorBack.vue'
 export default {
+    components: {
+        NavigatorBack,
+    },
     props: {
         id: {
             type: String,

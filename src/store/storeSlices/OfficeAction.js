@@ -48,7 +48,6 @@ export default {
                 .collection(state.collectionName)
                 .delete(state.office.id)
         },
-
     },
     getters: {
         office: (state) => state.office,

@@ -61,13 +61,7 @@ export default {
         ...mapGetters(['alert']),
     },
     methods: {
-        ...mapActions([
-            'authWithPassword',
-            'showAlert',
-            'disableAlert',
-            'showLoading',
-            'setToSubmit',
-        ]),
+        ...mapActions(['authWithPassword', 'showAlert', 'setToSubmit']),
         async login() {
             if (!(this.user.password && this.user.email)) {
                 await this.setToSubmit()

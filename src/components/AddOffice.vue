@@ -45,7 +45,7 @@ export default {
     },
     mixins: [LoginMixin],
     computed: {
-        ...mapGetters(['office', 'companyDetails']),
+        ...mapGetters(['office']),
     },
     data() {
         return {

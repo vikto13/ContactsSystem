@@ -13,7 +13,6 @@ export function UserState() {
             password: '',
             passwordConfirm: '',
             avatarUrl: ''
-
         },
         collectionName: "users"
     }

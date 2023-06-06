@@ -22,7 +22,7 @@
                             <input
                                 v-model="user.password"
                                 type="password"
-                                class="form-control input-w"
+                                class="form-control table-footer"
                                 :class="{
                                     'is-invalid': isInvalid({
                                         password: user.password,
@@ -52,7 +52,7 @@
                             <input
                                 v-model="user.passwordConfirm"
                                 type="password"
-                                class="form-control input-w"
+                                class="form-control table-footer"
                                 :class="{
                                     'is-invalid': showCompareMessage(
                                         user.password,

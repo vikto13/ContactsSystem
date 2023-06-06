@@ -10,8 +10,5 @@ export default {
     computed: {
         ...mapGetters(['alert']),
     },
-    methods: {
-        ...mapActions(['disableAlert']),
-    },
 }
 </script>

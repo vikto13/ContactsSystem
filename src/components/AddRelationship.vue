@@ -115,15 +115,12 @@ export default {
             'companyDetails',
             'company',
             'navBar',
-            'showCompanies',
             'messageIsSubmitted',
         ]),
     },
     methods: {
         ...mapActions([
-            'saveCompany',
             'dismissDialog',
-            'editCompany',
             'fetchAllCompaniesRelation',
             'saveCompanyRelation',
             'fetchAllCompanies',

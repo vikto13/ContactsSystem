@@ -40,7 +40,6 @@ export default {
             const data = await pocketBase
                 .collection(entity)
                 .getFirstListItem(`id="${id}"`);
-            console.log(data)
             commit("setCompany", data)
         },
         async findCompanyRelation({ state, commit }, value) {
@@ -60,9 +59,6 @@ export default {
         async saveCompanyRelation({ state }) {
             let { collectionName } = state.company
             let { relationship, id } = state.details[collectionName]
-            console.log(`${relationship}_${collectionName}`)
-            console.log({ [id]: state.company.name, [state.details[relationship].id]: state.company.relation })
-
             await pocketBase.collection(`${relationship}_${collectionName}`).create({ [id]: state.company.name, [state.details[relationship].id]: state.company.relation })
         },
         async fetchCompanies({ commit }, entity) {
@@ -90,7 +86,6 @@ export default {
                 let { name } = search[index]
                 commit('setType', { list: add, entity: name })
             })
-
         },
         async fetchAllCompanies({ state, commit }) {
             let search = [state.details.groups, state.details.departments, state.details.offices, state.details.divisions, state.details.companies];
@@ -144,9 +139,7 @@ export default {
                 return prev
             }, [])
             commit('addComanyState', { relation })
-
         }
-
     },
     getters: {
         company: (state) => state.company,

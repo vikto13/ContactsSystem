@@ -22,12 +22,8 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
     computed: {
-        ...mapGetters(['message', 'company', 'admin']),
+        ...mapGetters(['message']),
     },
-    data: () => ({
-        first: true,
-        second: false,
-    }),
     methods: {
         async onConfirm() {
             await this.message.action()

@@ -5,6 +5,7 @@
                 id="logo-icon"
                 src="../assets/teltonika_logo.png"
                 style="height: 3rem"
+                class="m-2"
             />
         </router-link>
 
@@ -39,7 +40,7 @@
                     style="background-color: white !important"
                 >
                     <img v-if="user.avatar" :src="image" />
-                    <md-icon v-else class="cb">person</md-icon>
+                    <md-icon v-else>person</md-icon>
                 </md-button>
 
                 <md-menu-content>

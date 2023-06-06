@@ -6,7 +6,6 @@ export default {
             for (let action in state.message) {
                 state.message[action] = add[action]
             }
-            console.log(state)
         },
         setToShowLoading(state, isLoading) {
             state.loading = isLoading

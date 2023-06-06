@@ -138,8 +138,8 @@ export default {
             this.tryCatchForAPIAction(async () => {
                 event &&
                     (await this.findCompany({
-                        event,
-                        entity: this.companyDetails[this.id].name,
+                        id: event,
+                        entity: this.id,
                     }))
 
                 this.triggerDialog('add-company')

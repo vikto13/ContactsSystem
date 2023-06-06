@@ -41,7 +41,6 @@ export const LoginMixin = {
                 : `Slaptažodis turi būti įvestas`
         },
         isInvalid(input) {
-            console.log(input)
             switch (Object.keys(input)[0]) {
                 case 'password':
                     return this.showPasswordMessage(Object.values(input)[0])
@@ -58,7 +57,6 @@ export const LoginMixin = {
             return this.messageTexts[Object.keys(info)[0]]
         },
         havePermission(permission) {
-            console.log(this.user.permissions_id)
             return this.user.token ? this.user.permissions_id[permission] : false;
         },
         async updatePassword() {
@@ -70,7 +68,6 @@ export const LoginMixin = {
                     content: `Patikrinkite savo elektroninį paštą`,
                 };
             } catch (err) {
-                console.log(err)
                 message = {
                     title: "Įvyko klaida",
                     content: `Pabandykite dar kartą`,

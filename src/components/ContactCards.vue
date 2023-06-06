@@ -41,8 +41,5 @@ export default {
         DivideComponents,
     },
     mixins: [ContactsMixin, LoginMixin],
-    computed: {
-        ...mapGetters(['user']),
-    },
 }
 </script>

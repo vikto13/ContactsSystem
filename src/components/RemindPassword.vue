@@ -12,7 +12,7 @@
                 <input
                     v-model="user.email"
                     type="text"
-                    class="form-control input-w"
+                    class="form-control table-footer"
                     :class="{ 'is-invalid': isInvalid(user.email) }"
                     placeholder="Įveskite el pašto adresą..."
                 />
