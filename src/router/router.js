@@ -54,7 +54,7 @@ export const router = new VueRouter({
             },
         },
         {
-            path: "/employee/records",
+            path: "/",
             component: Contacts,
             meta: {
                 middleware: [authenticate],
@@ -76,8 +76,7 @@ export const router = new VueRouter({
             },
         },
         {
-            path: "/users/",
-            name: "users",
+            path: "/admins/",
             component: Login,
             children: [
                 {
@@ -85,7 +84,7 @@ export const router = new VueRouter({
                     component: RemindPassword,
                 },
                 {
-                    path: "auth-with-password",
+                    path: "login",
                     component: AdminLogin,
                 },
             ],

@@ -1,6 +1,6 @@
 <template>
     <div class="container pt-5">
-        <navigator-back :go-back-path="'/employee/records'"></navigator-back>
+        <navigator-back :go-back-path="'/'"></navigator-back>
         <h1 style="font-weight: normal">Detalesnė kontakto informacija:</h1>
         <md-card-header>
             <md-avatar>

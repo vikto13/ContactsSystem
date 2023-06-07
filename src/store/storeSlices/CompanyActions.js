@@ -1,6 +1,7 @@
 import { CompanyState } from "../initState/CompanyState"
 import { pocketBase } from "../../../services/pocketBase";
 import axios from "axios";
+import { expanding, expandTheLast } from "./expandAction";
 
 export default {
     state: CompanyState(),
@@ -96,6 +97,27 @@ export default {
                 commit('setCompanies', { list, entity: search[index].name })
             })
 
+        },
+        async fetchCompanyRelation({ state, commit, dispatch }, value) {
+
+            let { name, values, selected, index } = value
+            let data = await Promise.all(values.map(({ id }) => axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${selected}/records/${id}?expand=${state.details[name].fetching[index]}`)))
+            const combinedArray = data.map(({ data }) => data.expand ? expandTheLast(data) : [])
+                .flatMap((arr) => arr)
+
+            if (state.details[name].fetching.length == index + 1) {
+
+                let notTheSame = combinedArray.reduce((result, element) => {
+                    if (!result.find((e) => e.id === element.id)) {
+                        result.push(element);
+                    }
+                    return result;
+                }, [])
+
+                commit('setCompanies', { list: notTheSame, entity: name })
+            } else {
+                dispatch("fetchCompanyRelation", { name, values: combinedArray, selected: state.details[name].relationship, index: index + 1 })
+            }
         },
         async editCompany({ state }, entity) {
             await pocketBase

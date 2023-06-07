@@ -70,7 +70,7 @@ export default {
             try {
                 await this.authWithPassword()
                 setTimeout(() => {
-                    this.$router.push('/employee/records')
+                    this.$router.push('/')
                 }, 10)
             } catch (err) {
                 if (err.status) {

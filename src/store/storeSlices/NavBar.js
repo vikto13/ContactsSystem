@@ -3,7 +3,7 @@ export default {
         navBar: {
             contacts: {
                 title: "Kontaktai",
-                path: "/employee/records",
+                path: "/",
                 detailedText: "Detalesnė kontakto informacija",
                 systemText: 'Kontaktų sistema',
                 textEmpty: "Nėra sukurtų kontaktų",

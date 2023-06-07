@@ -3,17 +3,13 @@
         <h5 class="text-center mb-4" style="margin-top: 13%">
             Kompanijos detalės:
         </h5>
-        <div
-            v-for="(select, position) in [
-                { ...companyDetails.companies, required: true },
-                { ...companyDetails.departments, required: false },
-                { ...companyDetails.divisions, required: true },
-                { ...companyDetails.groups, required: false },
-                { ...companyDetails.offices, required: true },
-            ]"
-            :key="position"
-        >
+        <div v-for="(select, position) in showCompanies" :key="position">
             <input-box-icon
+                v-show="
+                    companyDetails[select.relation]
+                        ? employee[companyDetails[select.relation].id]
+                        : true
+                "
                 :bottom-text="`Pasirinkite ${navBar[select.name].what}:`"
                 :title="`${navBar[select.name].title}:`"
                 :is-not-valid="
@@ -26,9 +22,12 @@
                     v-model="employee[select.id]"
                     class="form-select"
                     @input="
-                        $store.commit('setEmployee', {
-                            [select.id]: $event.target.value,
-                        })
+                        (e) =>
+                            selected({
+                                value: e.target.value,
+                                selected: select,
+                                name: showCompanies[position + 1].name,
+                            })
                     "
                 >
                     <option
@@ -53,7 +52,7 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import AddImage from './AddImage.vue'
 import InputBoxIcon from './InputBoxIcon.vue'
 import { LoginMixin } from '../views/mixins/LoginMixin'
@@ -65,6 +64,36 @@ export default {
     mixins: [LoginMixin],
     computed: {
         ...mapGetters(['companyDetails', 'employee', 'navBar']),
+        companyDetails: {
+            get() {
+                return this.$store.state.Company.details
+            },
+        },
+        showCompanies: {
+            get() {
+                return [
+                    { ...this.companyDetails.companies, required: true },
+                    { ...this.companyDetails.divisions, required: true },
+                    { ...this.companyDetails.departments, required: false },
+                    { ...this.companyDetails.groups, required: false },
+                ]
+            },
+        },
+    },
+    methods: {
+        ...mapActions(['fetchCompanyRelation']),
+        selected({ selected, value, name }) {
+            value &&
+                this.fetchCompanyRelation({
+                    name,
+                    values: [{ id: value }],
+                    selected: selected.name,
+                    index: 0,
+                })
+            this.$store.commit('setEmployee', {
+                [selected.id]: value,
+            })
+        },
     },
 }
 </script>

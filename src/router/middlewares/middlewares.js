@@ -12,7 +12,7 @@ export async function authenticate({ next, store }) {
 
         let { model, token } = JSON.parse(data)
         if (!haveToken && token) {
-            await store.dispatch("authWithToken", { id: model.id, token })
+            await store.dispatch("authWithToken", { id: model.id, token, password: '', passwordConfirm: '' })
         }
     } catch {
         store.commit("clearUserData")
