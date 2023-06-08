@@ -10,11 +10,17 @@
                 :key="index"
                 :icon-name="column.icon"
                 :bottom-text="
-                    messageById({ [column.input]: employee[column.input] })
+                    !column.notRequired
+                        ? messageById({
+                              [column.input]: employee[column.input],
+                          })
+                        : ''
                 "
                 :title="`${column.title}:`"
                 :is-not-valid="
-                    isInvalid({ [column.input]: employee[column.input] })
+                    !column.notRequired
+                        ? isInvalid({ [column.input]: employee[column.input] })
+                        : null
                 "
             >
                 <input
@@ -23,9 +29,11 @@
                     class="form-control"
                     :placeholder="column.placeholder"
                     :class="{
-                        'is-invalid': isInvalid({
-                            [column.input]: employee[column.input],
-                        }),
+                        'is-invalid':
+                            !column.notRequired &&
+                            isInvalid({
+                                [column.input]: employee[column.input],
+                            }),
                     }"
                     style="background-color: #f1f2f4"
                     :style="{ 'border-left-width': column.icon ? 0 : null }"
@@ -94,6 +102,7 @@ export default {
                             placeholder: 'Įveskite telefono numerį...',
                             icon: 'phone',
                             input: 'phone_number',
+                            notRequired: true,
                         },
                     ],
                 },
@@ -107,9 +116,11 @@ export default {
             'dismissDialog',
             'fetchEmployees',
             'setToSubmit',
+            'setOfficeByDivisionAndCompany',
         ]),
         async save() {
             await this.setToSubmit()
+            await this.setOfficeByDivisionAndCompany()
             if (
                 ![
                     this.companyDetails.companies.id,
@@ -119,7 +130,6 @@ export default {
                     'surname',
                     'position',
                     'email',
-                    'phone_number',
                 ]
                     .map((value) =>
                         this.isInvalid({

@@ -19,6 +19,25 @@ export function CompanyState() {
                     { path: "companies_offices(office_id)", relation: [] },
                     { path: "employees(company_id)", relation: [] },
                 ],
+
+
+                fetchFrom: [
+                    { path: "companies_offices(company_id).office_id", table: 'offices' }
+                ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             },
             departments: {
                 name: 'departments',
@@ -32,6 +51,10 @@ export function CompanyState() {
                 relations: [
                     { path: "employees(department_id)", relation: [] },
                 ],
+                fetching: [
+                    "divisions_departments(division_id).department_id",
+                ]
+
             },
             divisions: {
                 name: 'divisions',
@@ -52,8 +75,6 @@ export function CompanyState() {
                 fetching: [
                     "companies_offices(company_id).office_id",
                     "offices_divisions(office_id).division_id",
-
-
                 ]
             },
             offices: {
@@ -67,7 +88,23 @@ export function CompanyState() {
                     { path: "companies_offices(office_id)", relation: [] },
                     { path: "offices_divisions(office_id)", relation: [] },
                     { path: "employees(office_id)", relation: [] }
+                ],
+                fetching: [
+                    { path: "companies_offices(company_id).office_id", relate: 'offices', table: 'companies' },
+                    { path: "offices_divisions(office_id).division_id", relate: 'divisions', table: 'offices' }
+                ],
+
+
+
+                fetchFrom: [
+                    { path: "companies_offices(company_id).office_id", table: 'companies' },
+                    { path: 'offices_divisions(division_id).office_id', table: 'divisions' }
                 ]
+
+
+
+
+
             },
             groups: {
                 name: 'groups',
@@ -82,6 +119,10 @@ export function CompanyState() {
                 types: [],
                 relations: [
                     { path: "employees(group_id)", relation: [] },
+                ],
+                fetching: [
+                    "departments_groups(department_id).group_id",
+
                 ]
             },
         }

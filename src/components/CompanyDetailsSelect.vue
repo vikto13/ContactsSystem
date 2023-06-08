@@ -23,6 +23,7 @@
                     class="form-select"
                     @input="
                         (e) =>
+                            position != showCompanies.length - 1 &&
                             selected({
                                 value: e.target.value,
                                 selected: select,
@@ -38,7 +39,7 @@
                         Pasirinkite {{ navBar[select.name].what }}
                     </option>
                     <option
-                        v-for="option in select.all"
+                        v-for="option in select.types"
                         :key="option.id"
                         :value="option.id"
                         :disabled="employee[select.id] == option.id"
@@ -62,6 +63,9 @@ export default {
         InputBoxIcon,
     },
     mixins: [LoginMixin],
+    async mounted() {
+        await this.setCompaniesInType('companies')
+    },
     computed: {
         ...mapGetters(['companyDetails', 'employee', 'navBar']),
         companyDetails: {
@@ -81,7 +85,12 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['fetchCompanyRelation']),
+        ...mapActions([
+            'fetchCompanyRelation',
+            'fetchAllCompaniesRelation',
+            'setOfficeByDivisionAndCompany',
+            'setCompaniesInType',
+        ]),
         selected({ selected, value, name }) {
             value &&
                 this.fetchCompanyRelation({
@@ -90,7 +99,18 @@ export default {
                     selected: selected.name,
                     index: 0,
                 })
+
+            let index = this.showCompanies.findIndex(
+                (obj) => obj.name === selected.name
+            )
+            let filteredArr = this.showCompanies.slice(
+                index + 1,
+                this.showCompanies.length
+            )
             this.$store.commit('setEmployee', {
+                ...filteredArr.reduce((prev, curr) => {
+                    return { ...prev, [curr.id]: '' }
+                }, {}),
                 [selected.id]: value,
             })
         },

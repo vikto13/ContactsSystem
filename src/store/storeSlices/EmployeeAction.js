@@ -1,7 +1,8 @@
 import { EmployeeState } from "../initState/EmployeeState"
 import { pocketBase } from "../../../services/pocketBase";
 import axios from "axios";
-import { expanding } from "./expandAction";
+import { expanding, expandTheLast } from "./expandAction";
+import { findObjectWithSameId } from "./filterAction"
 
 export default {
     state: EmployeeState(),
@@ -118,6 +119,20 @@ export default {
                 )
             let filteredItems = data.items.map(employee => expanding(employee))
             commit('setFilteredEmployees', filteredItems)
+        },
+        async setOfficeByDivisionAndCompany({ commit, state }) {
+            let { division_id, company_id } = state.employee
+            if (!division_id && !company_id) {
+                return
+            }
+            let data =
+                await Promise.all([
+                    axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/companies/records/${company_id}?expand=companies_offices(company_id).office_id`),
+                    axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/divisions/records/${division_id}?expand=offices_divisions(division_id).office_id`)
+                ])
+            let offices = data.map(({ data }) => expandTheLast(data))
+            let { id } = findObjectWithSameId(offices[0], offices[1])
+            commit('setEmployee', { office_id: id })
         },
     },
     getters: {

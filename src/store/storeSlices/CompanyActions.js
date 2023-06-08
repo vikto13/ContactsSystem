@@ -2,6 +2,7 @@ import { CompanyState } from "../initState/CompanyState"
 import { pocketBase } from "../../../services/pocketBase";
 import axios from "axios";
 import { expanding, expandTheLast } from "./expandAction";
+import { filterSameId, findObjectWithSameId } from "./filterAction"
 
 export default {
     state: CompanyState(),
@@ -37,7 +38,6 @@ export default {
     },
     actions: {
         async findCompany({ commit }, { id, entity }) {
-
             const data = await pocketBase
                 .collection(entity)
                 .getFirstListItem(`id="${id}"`);
@@ -66,6 +66,10 @@ export default {
             let list = await pocketBase.collection(entity).getFullList({ sort: '-created' });
             commit('setCompanies', { list, entity })
         },
+        async setCompaniesInType({ commit }, entity) {
+            let list = await pocketBase.collection(entity).getFullList({ sort: '-created' });
+            commit('setType', { list, entity })
+        },
         async fetchAllCompaniesRelation({ commit, state, getters }) {
             let search = [state.details.departments, state.details.divisions, state.details.groups, state.details.offices];
 
@@ -74,6 +78,7 @@ export default {
                     expand: `${state.details[name].id},${state.details[relationship].id}`
                 })
             }))
+
             fetched.map((value, index) => {
 
                 let add = value.map((record) => {
@@ -83,7 +88,6 @@ export default {
                     }
                     return temp
                 })
-
                 let { name } = search[index]
                 commit('setType', { list: add, entity: name })
             })
@@ -98,26 +102,69 @@ export default {
             })
 
         },
+        // async fetchCompanyRelation({ state, commit, dispatch }, value) {
+
+        //     let { name, values, selected, index } = value
+        //     let data = await Promise.all(values.map(({ id }) => axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${selected}/records/${id}?expand=${state.details[name].fetching[index]}`)))
+        //     const combinedArray = data.map(({ data }) => data.expand ? expandTheLast(data) : [])
+        //         .flatMap((arr) => arr)
+
+        //     if (state.details[name].fetching.length == index + 1) {
+        //         console.log("aaaa")
+        //         commit('setType', { list: filterSameId(combinedArray), entity: name })
+        //     } else {
+        //         dispatch("fetchCompanyRelation", { name, values: combinedArray, selected: state.details[name].relationship, index: index + 1 })
+        //     }
+        // },
         async fetchCompanyRelation({ state, commit, dispatch }, value) {
+            if (value.length) {
+                let search = state.details[value[0]]
+                let { selected, all, fetchFrom } = search
 
-            let { name, values, selected, index } = value
-            let data = await Promise.all(values.map(({ id }) => axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${selected}/records/${id}?expand=${state.details[name].fetching[index]}`)))
-            const combinedArray = data.map(({ data }) => data.expand ? expandTheLast(data) : [])
-                .flatMap((arr) => arr)
 
-            if (state.details[name].fetching.length == index + 1) {
+                let values = []
 
-                let notTheSame = combinedArray.reduce((result, element) => {
-                    if (!result.find((e) => e.id === element.id)) {
-                        result.push(element);
+                fetchFrom.map(async ({ table, path }) => {
+                    // console.log("is selected", state.details[table].selected)
+
+                    if (state.details[table].selected) {
+                        //get all offices which have relationships with this selected value
+                        // console.log("get from path")
+                        let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${state.details[table].selected}?expand=${path}`)
+                        values.push(expandTheLast(data))
+                    } else {
+                        console.log("not selected then would be all")
+                        values.push(state.details[value[0]].all)
+
                     }
-                    return result;
-                }, [])
+                })
 
-                commit('setCompanies', { list: notTheSame, entity: name })
-            } else {
-                dispatch("fetchCompanyRelation", { name, values: combinedArray, selected: state.details[name].relationship, index: index + 1 })
+                console.log(values)
+                //console.log(values.length == 1 ? values : findObjectWithSameId(values[0], values[1]))
+                //get all offices which have relationship
+                if (selected) {
+                    //if selected them check from selected value
+                } else {
+                    //if not then check from all values that are types
+
+                }
+                //commit all
+                dispatch("fetchCompanyRelation", value.slice(1, value.length))
             }
+            // let { name, values, index } = value
+
+            // let { table, path, relate } = state.details[name].fetching[index]
+
+            // let data = await Promise.all(values.map(({ id }) => axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${id}?expand=${path}`)))
+            // const combinedArray = data.map(({ data }) => data.expand ? expandTheLast(data) : [])
+            //     .flatMap((arr) => arr)
+
+            // if (state.details[name].fetching.length != index + 1) {
+            //     dispatch("fetchCompanyRelation", { name, values: combinedArray, index: index + 1 })
+
+            // }
+
+            // commit('setCompanies', { list: filterSameId(combinedArray), entity: relate })
         },
         async editCompany({ state }, entity) {
             await pocketBase

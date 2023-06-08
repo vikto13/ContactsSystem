@@ -74,13 +74,21 @@ export default {
             'searchContactBySelections',
             'searchContactByText',
             'disableAlert',
+            'fetchCompanyRelation',
         ]),
         async pressed(select, id) {
             this.$store.commit('selectCompany', { select: select.value, id })
+            let value = [
+                'companies',
+                // 'departments',
+                // 'divisions',
+                // 'groups',
+                'offices',
+            ]
+            this.fetchCompanyRelation(value)
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()
                 await this.searchContactByText()
-                this.alert.showAlert && this.disableAlert()
             })
         },
     },
