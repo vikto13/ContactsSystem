@@ -17,6 +17,7 @@
                 aria-label="Default select example"
                 @click="
                     ({ target }) =>
+                        target.value == companyDetails[filter.name].selected ||
                         selectOption({ value: target.value, id: filter.name })
                 "
             >
@@ -94,6 +95,7 @@ export default {
             ]
         },
         async selectOption({ value, id }) {
+            console.log('aaaaaaaaa')
             await this.$store.commit('selectCompany', {
                 select: value,
                 id,
@@ -107,7 +109,6 @@ export default {
             ]
             if (!value) {
                 let index = companiesInfo.indexOf(id)
-
                 await this.selectEmptyRelation(
                     companiesInfo.slice(
                         index - 1 < 0 ? 0 : index - 1,
@@ -116,10 +117,7 @@ export default {
                 )
             }
 
-            value &&
-                this.fetchCompanyRelation(
-                    this.rearrangeArray(companiesInfo, id)
-                )
+            this.fetchCompanyRelation(this.rearrangeArray(companiesInfo, id))
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()
                 await this.searchContactByText()

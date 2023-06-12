@@ -82,9 +82,8 @@ export default {
             'findCompanyRelation',
         ]),
         getName(item) {
-            let name = item.collectionName.split('_')[1]
-            let { id } = this.companyDetails[name]
-            return item[id].name
+            let name = this.companyDetails[item.collectionName.split('_')[1]].id
+            return item[name].name
         },
         getType(item) {
             return this.navBar[item.collectionName.split('_')[1]].title

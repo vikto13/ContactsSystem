@@ -57,6 +57,7 @@ import { mapGetters, mapActions } from 'vuex'
 import AddImage from './AddImage.vue'
 import InputBoxIcon from './InputBoxIcon.vue'
 import { LoginMixin } from '../views/mixins/LoginMixin'
+import { expandTheLast } from '../store/storeSlices/expandAction'
 export default {
     components: {
         AddImage,
@@ -64,7 +65,10 @@ export default {
     },
     mixins: [LoginMixin],
     async mounted() {
-        await this.setCompaniesInType('companies')
+        await Promise.all([
+            this.setCompaniesInType('companies'),
+            this.setCompaniesInType('offices'),
+        ])
     },
     computed: {
         ...mapGetters(['companyDetails', 'employee', 'navBar']),
@@ -91,8 +95,23 @@ export default {
             'setOfficeByDivisionAndCompany',
             'setCompaniesInType',
             'fetchCompanyDetailsRelation',
+            'setCompanyRealation',
         ]),
-        selected({ selected, value, name }) {
+        // async getRelationships({ relationship, fetch }) {
+        //     await this.setCompanyRealation({
+        //         fetch,
+        //         entitySave: relationship,
+        //         whereSave: 'setType',
+        //         show: (fetched) => {
+        //             return fetched.reduce((prev, curr) => {
+        //                 console.log(fetched)
+        //                 prev.push(...expandTheLast(curr.data))
+        //                 return prev
+        //             }, [])
+        //         },
+        //     })
+        // },
+        async selected({ selected, value, name }) {
             let index = this.showCompanies.findIndex(
                 (obj) => obj.name === selected.name
             )
@@ -101,22 +120,50 @@ export default {
                 this.showCompanies.length
             )
 
-            console.log(filteredArr)
+            // let { relationship } = this.companyDetails[name]
+            // let { fetchFrom } = this.companyDetails[relationship]
+            // let fetch = [
+            //     {
+            //         table: selected.name,
+            //         record: value,
+            //         path: fetchFrom[fetchFrom.length - 1].path,
+            //     },
+            // ]
 
-            console.log(selected, name)
-            console.log(value)
-            // value &&
-            //     this.fetchCompanyRelation({
-            //         name,
+            // if (relationship == 'offices') {
+            //     await this.getRelationships({
+            //         relationship,
+            //         fetch,
             //     })
-            // THIS.fetchCompanyDetailsRelation()
 
+            //     fetch = this.companyDetails[relationship].types.map((id) => ({
+            //         table: 'offices',
+            //         path: this.companyDetails['offices'].fetchFrom[0].path,
+            //     }))
+            // }
+            // await this.getRelationships({
+            //     relationship,
+            //     fetch,
+            // })
+            //    await dispatch("setCompanyRealation", { table, record: state.details[table].selected, path, entitySave: name, whereSave: 'setCompanies' })
+
+            // console.log(filteredArr)
+
+            // value &&
             this.$store.commit('setEmployee', {
                 ...filteredArr.reduce((prev, curr) => {
                     return { ...prev, [curr.id]: '' }
                 }, {}),
                 [selected.id]: value,
             })
+            let show = []
+            index == 0 && show.push({ name: 'offices' })
+
+            this.setCompanyRealation([
+                ...show,
+                ...this.showCompanies.slice(index + 1, index + 2),
+            ])
+            // THIS.fetchCompanyDetailsRelation()
         },
     },
 }
