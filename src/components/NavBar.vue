@@ -1,6 +1,6 @@
 <template>
     <ul class="nav nav-fill dialog-box navigation-bar">
-        <router-link :to="'/contacts/records'">
+        <router-link :to="'/'">
             <img
                 id="logo-icon"
                 src="../assets/teltonika_logo.png"
@@ -72,7 +72,7 @@ export default {
         ...mapActions(['triggerMessage', 'resetPassword', 'showLoading']),
         signOut() {
             setTimeout(() => {
-                this.$router.push('/users/auth-with-password')
+                this.$router.push('/admins/login')
                 this.$store.commit('clearUserData')
                 localStorage.removeItem('pocketbase_auth')
             }, 500)

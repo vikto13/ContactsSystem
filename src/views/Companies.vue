@@ -11,35 +11,7 @@
             class="ml-5"
         >
         </field-to-create>
-        <div class="m-5 card text-bg-light pb-5">
-            <div class="card-header">
-                <ul class="nav nav-pills card-header-pills">
-                    <li
-                        v-for="(component, index) in [
-                            companyDetails.companies,
-                            companyDetails.groups,
-                            companyDetails.departments,
-                            companyDetails.divisions,
-                        ]"
-                        :key="index"
-                        class="nav-item"
-                    >
-                        <a
-                            class="nav-link navbar-light"
-                            :href="`#/${component.name}/records`"
-                            :class="
-                                component.name == id ? 'active disabled' : ''
-                            "
-                            :style="{
-                                color: component.name != id ? '#414042' : null,
-                                textDecoration: 'none',
-                            }"
-                            >{{ navBar[component.name].title }}</a
-                        >
-                    </li>
-                </ul>
-            </div>
-
+        <div class="m-5 pb-5">
             <h5 v-if="!companyDetails[id].all.length" class="mt-5 text-center">
                 {{ navBar[id].textEmpty }}
             </h5>

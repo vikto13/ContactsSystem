@@ -53,7 +53,7 @@ export function forAdmins({ next, to, store }) {
     if (store.getters.user.username === 'admin') {
         return next()
     }
-    return next({ path: `/users/auth-with-password` });
+    return next({ path: `/admins/login` });
 }
 
 export function pathForCompany({ next, to, store }) {

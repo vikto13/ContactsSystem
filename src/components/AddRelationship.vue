@@ -12,6 +12,7 @@
                 class="form-select"
                 style="width: 30rem"
                 @input="editType"
+                :disabled="Boolean(company.id)"
             >
                 <option :value="''" disabled>Pasirinkite tipą</option>
                 <option
@@ -30,28 +31,20 @@
         </input-box-icon>
         <input-box-icon
             v-if="company.collectionName"
-            :title="`Pasirinkite pavadinimą:`"
-            :bottom-text="`Pasirinkite ${navBar[company.collectionName].what}`"
+            :title="`Įveskite pavadinimą: `"
+            class="mb-3"
+            :bottom-text="`Įveskite pavadinimą`"
             :is-not-valid="messageIsSubmitted && !company.name"
-            class="mb-2"
         >
-            <select
+            <input
                 v-model="company.name"
-                class="form-select"
-                style="width: 30rem"
-            >
-                <option :value="''" disabled>
-                    Pasirinkite {{ navBar[company.collectionName].what }}
-                </option>
-                <option
-                    v-for="component in companyDetails[company.collectionName]
-                        .all"
-                    :key="component.id"
-                    :value="component.id"
-                >
-                    {{ component.name }}
-                </option>
-            </select>
+                type="text"
+                class="form-control table-footer"
+                :placeholder="`Įveskite ${navBar[company.collectionName].what}`"
+                :class="{
+                    'is-invalid': messageIsSubmitted && !company.name,
+                }"
+            />
         </input-box-icon>
 
         <input-box-icon
@@ -63,29 +56,38 @@
             :is-not-valid="messageIsSubmitted && !company.relation"
             class="mb-2"
         >
-            <select
-                v-model="company.relation"
-                class="form-select"
-                style="width: 30rem"
-            >
-                <option :value="''" disabled>
+            <md-field>
+                <label v-if="company.id">
+                    {{
+                        navBar[
+                            companyDetails[company.collectionName].relationship
+                        ].title
+                    }}</label
+                >
+                <label v-else>
                     Pasirinkite
                     {{
                         navBar[
                             companyDetails[company.collectionName].relationship
                         ].what
-                    }}
-                </option>
-                <option
-                    v-for="(component, index) in companyDetails[
-                        companyDetails[company.collectionName].relationship
-                    ].all"
-                    :key="index"
-                    :value="component.id"
+                    }}</label
                 >
-                    {{ component.name }}
-                </option>
-            </select>
+                <md-select
+                    v-model="company.relation"
+                    :disabled="Boolean(company.id)"
+                    multiple
+                >
+                    <md-option
+                        v-for="(component, index) in companyDetails[
+                            companyDetails[company.collectionName].relationship
+                        ].all"
+                        :key="index"
+                        :value="component.id"
+                    >
+                        {{ component.name }}</md-option
+                    >
+                </md-select>
+            </md-field>
         </input-box-icon>
 
         <md-button
@@ -147,11 +149,10 @@ export default {
             })
         },
         editType() {
-            this.$store.commit('setCompany', {
-                ...this.company,
-                name: '',
-                relation: '',
-            })
+            this.company ||
+                this.$store.commit('setCompany', {
+                    relation: [],
+                })
         },
     },
     destroyed() {

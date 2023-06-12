@@ -44,11 +44,11 @@ export default {
                 path: 'departments'
             },
             offices: {
-                title: 'Būstinės',
-                textAdd: "Pridėti naują būstinę",
-                textEmpty: "Nėra sukurtų būstinių",
+                title: 'Ofisai',
+                textAdd: "Pridėti naują ofisą",
+                textEmpty: "Nėra sukurtų ofisų",
                 path: "/offices/records",
-                what: "būstinę",
+                what: "ofisą",
             },
             admins: {
                 id: 'admins',
@@ -56,7 +56,7 @@ export default {
                 textEmpty: 'Nėra sukurtų admino paskyrų',
                 title: "Paskyros",
                 path: "/admins/records",
-                loginPath: "/users/auth-with-password"
+                loginPath: "/admins/login"
             },
             employees: {
                 title: 'Darbuotoju'

@@ -12,7 +12,7 @@
                             class="form-control"
                             placeholder="Ieškoti kontakto"
                             style="background-color: #f1f2f4"
-                            v-debounce:1500="searching"
+                            v-debounce:1000="searching"
                         />
                     </input-box-icon>
                 </div>

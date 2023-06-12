@@ -4,7 +4,7 @@ export function CompanyState() {
             name: '',
             id: null,
             collectionName: '',
-            relation: ''
+            relation: []
         },
         details: {
             companies: {

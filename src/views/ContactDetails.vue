@@ -102,7 +102,7 @@ export default {
                         },
                         {
                             getText: (text) => text.division_id.name,
-                            field: 'Būstinė:',
+                            field: 'Ofisas:',
                         },
                         {
                             getText: (text) => text.department_id.name,

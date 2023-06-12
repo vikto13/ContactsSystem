@@ -102,9 +102,7 @@ export default {
             )
 
             console.log(filteredArr)
-            let all = ['offices', 'divisions', 'departments', 'groups']
 
-            console.log()
             console.log(selected, name)
             console.log(value)
             // value &&

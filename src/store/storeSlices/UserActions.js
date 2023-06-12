@@ -48,7 +48,7 @@ export default {
 
         },
         async resetPassword({ state }) {
-            await pocketBase.collection(state.collectionName).requestPasswordReset(state.user.email)
+            await pocketBase.collection(state.collectionName).requestPasswordReset(state.user.username == 'admin' ? "admin@teltonika.lt" : state.user.email)
         },
         async changePassword({ state }, { token }) {
             await pocketBase.collection(state.collectionName).confirmPasswordReset({ token, password: state.user.password, passwordConfirm: state.user.passwordConfirm });

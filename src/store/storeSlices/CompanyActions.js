@@ -44,23 +44,30 @@ export default {
             commit("setCompany", data)
         },
         async findCompanyRelation({ state, commit }, value) {
-            let data = await pocketBase.collection(value.collectionName).getFirstListItem(`id="${value.id}"`);
             let tables = value.collectionName.split("_")
+            let data = await pocketBase.collection(value.collectionName).getFirstListItem(`id="${value.id}"`);
+
+
             let generated = {
                 name: data[state.details[tables[1]].id],
                 id: data.id,
                 collectionName: tables[1],
-                relation: data[state.details[tables[0]].id]
+                relation: [data[state.details[tables[0]].id]]
             }
             commit('setCompany', generated)
         },
         async saveCompany({ state }, entity) {
             await pocketBase.collection(entity).create({ name: state.company.name })
         },
-        async saveCompanyRelation({ state }) {
-            let { collectionName } = state.company
-            let { relationship, id } = state.details[collectionName]
-            await pocketBase.collection(`${relationship}_${collectionName}`).create({ [id]: state.company.name, [state.details[relationship].id]: state.company.relation })
+        async saveCompanyRelation({ state, getters }) {
+            let { collectionName, relation, name } = state.company
+            let { relationship } = state.details[collectionName]
+            let saved = await pocketBase.collection(`${collectionName}`).create({ name })
+            await Promise.all(relation.map((relate) => {
+                return axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${relationship}_${collectionName}/records`,
+                    { [state.details[collectionName].id]: saved.id, [state.details[relationship].id]: relate },
+                )
+            }))
         },
         async fetchCompanies({ commit }, entity) {
             let list = await pocketBase.collection(entity).getFullList({ sort: '-created' });
@@ -171,10 +178,13 @@ export default {
                 .update(state.company.id, { name: state.company.name });
         },
         async editCompanyRelation({ state }) {
-            let { relationship, id } = state.details[state.company.collectionName]
-            await pocketBase
-                .collection(`${relationship}_${state.company.collectionName}`)
-                .update(state.company.id, { [id]: state.company.name, [state.details[relationship].id]: state.company.relation });
+            console.log(state.company)
+            let { collectionName, name, relation } = state.company
+            let { id, relationship } = state.details[collectionName]
+
+            // await pocketBase
+            //     .collection(`${collectionName}`)
+            //     .update(state.company.id, { name: state.company.name });
         },
         async deleteCompany({ state }, info) {
             let { id, collectionName } = state.company

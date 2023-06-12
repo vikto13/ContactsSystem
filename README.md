@@ -15,7 +15,7 @@ Run the following command to start the Pocketbase server:
 ` ./pocketbase serve`
 
 Open your web browser and navigate to the following URLs:
-`Main page: http://localhost:5173/#/employee/records`
+`Main page: http://localhost:5173/#/`
 `Admin login: http://localhost:5173/#/users/auth-with-password`
 
 To login as an admin, use the following credentials:
