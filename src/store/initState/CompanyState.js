@@ -22,7 +22,7 @@ export function CompanyState() {
 
 
                 fetchFrom: [
-                    { path: "companies_offices(company_id).office_id", table: 'offices' }
+                    { path: "companies_offices(office_id).company_id", table: 'offices' }
                 ]
 
 
@@ -53,6 +53,11 @@ export function CompanyState() {
                 ],
                 fetching: [
                     "divisions_departments(division_id).department_id",
+                ],
+
+                fetchFrom: [
+                    { path: "departments_groups(group_id).department_id", table: 'groups' },
+                    { path: "divisions_departments(division_id).department_id", table: 'divisions' },
                 ]
 
             },
@@ -75,7 +80,18 @@ export function CompanyState() {
                 fetching: [
                     "companies_offices(company_id).office_id",
                     "offices_divisions(office_id).division_id",
+                ],
+
+                fetchFrom: [
+                    { path: 'divisions_departments(department_id).division_id', table: 'departments' },
+                    { path: "offices_divisions(office_id).division_id", table: 'offices' },
+
                 ]
+
+
+
+
+
             },
             offices: {
                 name: 'offices',
@@ -97,8 +113,9 @@ export function CompanyState() {
 
 
                 fetchFrom: [
+
+                    { path: 'offices_divisions(division_id).office_id', table: 'divisions' },
                     { path: "companies_offices(company_id).office_id", table: 'companies' },
-                    { path: 'offices_divisions(division_id).office_id', table: 'divisions' }
                 ]
 
 
@@ -123,6 +140,11 @@ export function CompanyState() {
                 fetching: [
                     "departments_groups(department_id).group_id",
 
+                ],
+
+                fetchFrom: [
+                    { path: 'departments_groups(department_id).group_id', table: 'departments' },
+                    { path: 'departments_groups(department_id).group_id', table: 'departments' }
                 ]
             },
         }

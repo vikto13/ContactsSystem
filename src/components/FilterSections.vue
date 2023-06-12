@@ -17,8 +17,7 @@
                 aria-label="Default select example"
                 @click="
                     ({ target }) =>
-                        companyDetails[filter.name].selected != target.value &&
-                        pressed(target, filter.name)
+                        selectOption({ value: target.value, id: filter.name })
                 "
             >
                 <option
@@ -34,6 +33,7 @@
                     :disabled="select.id == filter.selected"
                     :key="position"
                     :value="select.id"
+                    :selected="select.id == filter.selected"
                 >
                     {{ select.name }}
                 </option>
@@ -75,21 +75,50 @@ export default {
             'searchContactByText',
             'disableAlert',
             'fetchCompanyRelation',
+            'selectEmptyRelation',
         ]),
+        rearrangeArray(arr, selectedValue) {
+            const index = arr.indexOf(selectedValue)
+            const beforeSelected = arr.slice(0, index)
+            const afterSelected = arr.slice(index + 1)
+            beforeSelected.reverse()
+            return [
+                ...beforeSelected.map((value) => ({
+                    value,
+                    toTop: false,
+                })),
+                ...afterSelected.map((value) => ({
+                    value,
+                    toTop: true,
+                })),
+            ]
+        },
         async pressed(select, id) {
-            this.$store.commit('selectCompany', { select: select.value, id })
             let value = [
                 'companies',
-                // 'departments',
-                // 'divisions',
-                // 'groups',
                 'offices',
+                'divisions',
+                'departments',
+                'groups',
             ]
-            this.fetchCompanyRelation(value)
+
+            this.fetchCompanyRelation(this.rearrangeArray(value, id))
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()
                 await this.searchContactByText()
             })
+        },
+        async selectOption({ value, id }) {
+            await this.$store.commit('selectCompany', {
+                select: value,
+                id,
+            })
+            if (value) {
+                this.selectEmptyRelation(id)
+            }
+
+            // this.companyDetails[this.filter.name].selected != target.value &&
+            // this.pressed(value, id)
         },
     },
 }
