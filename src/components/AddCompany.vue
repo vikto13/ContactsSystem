@@ -62,7 +62,6 @@ export default {
                     await this.setToSubmit()
                     return
                 }
-
                 this.company.id
                     ? await this.editCompany(this.$route.params.id)
                     : await this.saveCompany(this.$route.params.id)

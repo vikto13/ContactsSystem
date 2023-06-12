@@ -90,16 +90,9 @@ export default {
             'fetchAllCompaniesRelation',
             'setOfficeByDivisionAndCompany',
             'setCompaniesInType',
+            'fetchCompanyDetailsRelation',
         ]),
         selected({ selected, value, name }) {
-            value &&
-                this.fetchCompanyRelation({
-                    name,
-                    values: [{ id: value }],
-                    selected: selected.name,
-                    index: 0,
-                })
-
             let index = this.showCompanies.findIndex(
                 (obj) => obj.name === selected.name
             )
@@ -107,6 +100,19 @@ export default {
                 index + 1,
                 this.showCompanies.length
             )
+
+            console.log(filteredArr)
+            let all = ['offices', 'divisions', 'departments', 'groups']
+
+            console.log()
+            console.log(selected, name)
+            console.log(value)
+            // value &&
+            //     this.fetchCompanyRelation({
+            //         name,
+            //     })
+            // THIS.fetchCompanyDetailsRelation()
+
             this.$store.commit('setEmployee', {
                 ...filteredArr.reduce((prev, curr) => {
                     return { ...prev, [curr.id]: '' }

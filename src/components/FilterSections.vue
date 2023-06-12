@@ -93,32 +93,37 @@ export default {
                 })),
             ]
         },
-        async pressed(select, id) {
-            let value = [
+        async selectOption({ value, id }) {
+            await this.$store.commit('selectCompany', {
+                select: value,
+                id,
+            })
+            let companiesInfo = [
                 'companies',
                 'offices',
                 'divisions',
                 'departments',
                 'groups',
             ]
+            if (!value) {
+                let index = companiesInfo.indexOf(id)
 
-            this.fetchCompanyRelation(this.rearrangeArray(value, id))
+                await this.selectEmptyRelation(
+                    companiesInfo.slice(
+                        index - 1 < 0 ? 0 : index - 1,
+                        index + 2
+                    )
+                )
+            }
+
+            value &&
+                this.fetchCompanyRelation(
+                    this.rearrangeArray(companiesInfo, id)
+                )
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()
                 await this.searchContactByText()
             })
-        },
-        async selectOption({ value, id }) {
-            await this.$store.commit('selectCompany', {
-                select: value,
-                id,
-            })
-            if (value) {
-                this.selectEmptyRelation(id)
-            }
-
-            // this.companyDetails[this.filter.name].selected != target.value &&
-            // this.pressed(value, id)
         },
     },
 }

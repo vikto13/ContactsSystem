@@ -3,6 +3,7 @@ export default {
     state: {
         file: null,
         name: null,
+        result: ''
     },
     mutations: {
         setImage(state, image) {
@@ -14,10 +15,19 @@ export default {
                 state[value] = null
             }
         },
+        setResult(state, result) {
+            state.result = result
+        }
     },
     actions: {
         uploadImage({ commit }, e) {
             const [image] = e.target.files
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                commit("setResult", event.target.result)
+            };
+            reader.readAsDataURL(image);
+
             commit('setImage', image)
         },
         async setImageFromApi({ commit }, { tableName, entity, imageName, commitName }) {

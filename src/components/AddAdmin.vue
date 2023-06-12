@@ -35,6 +35,7 @@
                         :style="{ 'border-left-width': 0 }"
                     />
                 </input-box-icon>
+
                 <add-image></add-image>
             </div>
             <div v-show="admin.whatDo != 1" class="md-layout-item m-3 pt-5">
@@ -66,7 +67,7 @@ export default {
     },
     mixins: [LoginMixin],
     computed: {
-        ...mapGetters(['adminRoles', 'admin', 'admins']),
+        ...mapGetters(['adminRoles', 'admin', 'admins', 'image']),
     },
     async mounted() {
         this.admin.whatDo == null && this.clearAdminData()

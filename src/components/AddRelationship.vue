@@ -56,7 +56,7 @@
 
         <input-box-icon
             v-if="company.collectionName"
-            :title="`Rišys:`"
+            :title="`Ryšys:`"
             :bottom-text="`Pasirinkite ${
                 navBar[companyDetails[company.collectionName].relationship].what
             }`"
