@@ -26,23 +26,17 @@
                     :size-m="60"
                 >
                     <md-card
-                        class="pl-5 m-2 mt-3"
+                        class="pl-5 mt-3"
                         style="height: 5rem; display: flex; align-items: center"
                     >
-                        <div
-                            style="
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                flex: 1;
-                            "
-                        >
+                        <div style="flex: 1">
                             {{ company.name }}
                         </div>
-                        <div>
+                        <div style="flex: 0.3">
                             <md-button
                                 v-show="havePermission('edit_companies')"
                                 md-with-hover
-                                class="md-icon-button md-raised edit-btn"
+                                class="md-icon-button md-raised edit-btn ml-3"
                                 @click="() => edit(company.id)"
                             >
                                 <md-icon style="color: white">edit</md-icon>
@@ -51,7 +45,7 @@
                             <md-button
                                 v-show="havePermission('delete_companies')"
                                 md-with-hover
-                                class="md-icon-button md-raised ml-3 delete-btn"
+                                class="md-icon-button md-raised delete-btn ml-3"
                                 @click="() => deleteIt(company.id)"
                             >
                                 <md-icon style="color: white">delete</md-icon>
@@ -65,9 +59,9 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Card from '../components/Card.vue'
-import DivideComponents from '../components/DivideComponents.vue'
-import FieldToCreate from '../components/FieldToCreate.vue'
+import Card from '../components/utils/Card.vue'
+import DivideComponents from '../components/utils/DivideComponents.vue'
+import FieldToCreate from '../components/fields/FieldToCreate.vue'
 import { LoginMixin } from './mixins/LoginMixin'
 
 export default {

@@ -54,10 +54,9 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import AddImage from './AddImage.vue'
-import InputBoxIcon from './InputBoxIcon.vue'
+import AddImage from './fields/AddImage.vue'
+import InputBoxIcon from './utils/InputBoxIcon.vue'
 import { LoginMixin } from '../views/mixins/LoginMixin'
-import { expandTheLast } from '../store/storeSlices/expandAction'
 export default {
     components: {
         AddImage,

@@ -84,9 +84,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import ContactCards from '../components/ContactCards.vue'
-import Pagination from '../components/Pagination.vue'
-import InputBoxIcon from '../components/InputBoxIcon.vue'
-import FilterSections from '../components/FilterSections.vue'
+import Pagination from '../components/fields/Pagination.vue'
+import InputBoxIcon from '../components/utils/InputBoxIcon.vue'
+import FilterSections from '../components/fields/FilterSections.vue'
 import ContactTables from '../components/ContactTables.vue'
 import { LoginMixin } from './mixins/LoginMixin'
 

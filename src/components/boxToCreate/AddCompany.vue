@@ -23,9 +23,9 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import DivideComponents from './DivideComponents.vue'
-import { LoginMixin } from '../views/mixins/LoginMixin'
-import InputBoxIcon from './InputBoxIcon.vue'
+import DivideComponents from '../utils/DivideComponents.vue'
+import { LoginMixin } from '../../views/mixins/LoginMixin'
+import InputBoxIcon from '../InputBoxIcon.vue'
 
 export default {
     components: {

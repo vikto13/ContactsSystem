@@ -21,6 +21,7 @@ export default {
     },
     actions: {
         uploadImage({ commit }, e) {
+            console.log("pressed")
             const [image] = e.target.files
             const reader = new FileReader();
             reader.onload = (event) => {

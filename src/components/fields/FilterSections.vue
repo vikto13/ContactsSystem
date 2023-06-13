@@ -44,8 +44,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import DivideComponents from './DivideComponents.vue'
-import { LoginMixin } from '../views/mixins/LoginMixin'
+import DivideComponents from '../utils/DivideComponents.vue'
+import { LoginMixin } from '../../views/mixins/LoginMixin'
 export default {
     components: {
         DivideComponents,

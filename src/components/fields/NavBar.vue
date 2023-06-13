@@ -3,7 +3,7 @@
         <router-link :to="'/'">
             <img
                 id="logo-icon"
-                src="../assets/teltonika_logo.png"
+                src="../../assets/teltonika_logo.png"
                 style="height: 3rem"
                 class="m-2"
             />
@@ -60,7 +60,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { LoginMixin } from '../views/mixins/LoginMixin'
+import { LoginMixin } from '../../views/mixins/LoginMixin'
 export default {
     computed: {
         ...mapGetters(['user', 'navBar']),

@@ -77,7 +77,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { LoginMixin } from '../views/mixins/LoginMixin'
-import DivideComponents from './DivideComponents.vue'
+import DivideComponents from './utils/DivideComponents.vue'
 export default {
     mixins: [LoginMixin],
     components: {

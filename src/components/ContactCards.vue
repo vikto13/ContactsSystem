@@ -30,10 +30,9 @@
     </div>
 </template>
 <script>
-import Card from './Card.vue'
-import DivideComponents from './DivideComponents.vue'
+import Card from './utils/Card.vue'
+import DivideComponents from './utils/DivideComponents.vue'
 import { ContactsMixin } from '../views/mixins/ContactsMixin'
-import { mapGetters } from 'vuex'
 import { LoginMixin } from '../views/mixins/LoginMixin'
 export default {
     components: {

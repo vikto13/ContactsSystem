@@ -37,8 +37,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import InputBoxIcon from './InputBoxIcon.vue'
-import { LoginMixin } from '../views/mixins/LoginMixin'
+import InputBoxIcon from '../utils/InputBoxIcon.vue'
+import { LoginMixin } from '../../views/mixins/LoginMixin'
 export default {
     components: {
         InputBoxIcon,

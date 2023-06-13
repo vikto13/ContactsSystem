@@ -275,10 +275,19 @@ export default {
             //         }))
 
             // })
-            // await pocketBase
-            //     .collection(collectionName).update(id, { name })
 
-
+            let data = await pocketBase
+                .collection(collectionName).update(id, { name })
+            state.company.relation.map((value) => {
+                if (state.company.id.some(obj => obj.relation === value)) {
+                    return;
+                }
+                else {
+                    console.log("create it")
+                }
+            })
+            Promise.all(state.company.id.filter(({ relation }) => !state.company.relation.some(id => id === relation)))
+            throw null
             // let data = await pocketBase
             //     .collection(collectionName).create({ name })
             // await commit("setCompany", { ...state.company, name: data })

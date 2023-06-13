@@ -7,8 +7,10 @@ export default {
     state: UserState(),
     mutations: {
         setUser(state, record) {
-            for (let user in state.user) {
-                state.user[user] = record[user]
+            let { user } = state
+            for (let userInfo in user) {
+                let info = record[userInfo]
+                state.user[userInfo] = info ? info : user[userInfo]
             }
         },
         clearUserData(state) {

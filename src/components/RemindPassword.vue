@@ -30,7 +30,7 @@
 <script>
 import { LoginMixin } from '../views/mixins/LoginMixin'
 import { mapActions } from 'vuex'
-import AlertMessage from './AlertMessage.vue'
+import AlertMessage from './fields/AlertMessage.vue'
 
 export default {
     mixins: [LoginMixin],

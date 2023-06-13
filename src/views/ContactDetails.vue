@@ -59,7 +59,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import NavigatorBack from '../components/NavigatorBack.vue'
+import NavigatorBack from '../components/utils/NavigatorBack.vue'
 export default {
     components: {
         NavigatorBack,

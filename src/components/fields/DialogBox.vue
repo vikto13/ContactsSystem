@@ -20,11 +20,11 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import AddContacts from './AddContacts.vue'
-import AddCompany from './AddCompany.vue'
-import AddAdmin from './AddAdmin.vue'
-import AddRelationship from './AddRelationship.vue'
-import AddOffice from './AddOffice.vue'
+import AddContacts from '../boxForCreate/AddContacts.vue'
+import AddCompany from '../boxForCreate/AddCompany.vue'
+import AddAdmin from '../boxForCreate/AddAdmin.vue'
+import AddRelationship from '../boxForCreate/AddRelationship.vue'
+import AddOffice from '../boxForCreate/AddOffice.vue'
 
 export default {
     components: {

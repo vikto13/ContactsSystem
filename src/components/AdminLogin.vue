@@ -48,9 +48,9 @@
     </form>
 </template>
 <script>
-import { LoginMixin } from '../views/mixins/LoginMixin'
 import { mapActions, mapGetters } from 'vuex'
-import AlertMessage from './AlertMessage.vue'
+import { LoginMixin } from '../views/mixins/LoginMixin'
+import AlertMessage from './fields/AlertMessage.vue'
 
 export default {
     components: {

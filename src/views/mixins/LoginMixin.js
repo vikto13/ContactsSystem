@@ -1,5 +1,5 @@
 import { mapActions, mapGetters } from "vuex";
-import InputBoxIcon from "../../components/InputBoxIcon.vue"
+import InputBoxIcon from "../../components/utils/InputBoxIcon.vue"
 export const LoginMixin = {
     components: {
         InputBoxIcon

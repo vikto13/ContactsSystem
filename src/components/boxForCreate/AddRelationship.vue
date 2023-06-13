@@ -48,7 +48,7 @@
             :bottom-text="`Pasirinkite ${
                 navBar[companyDetails[company.collectionName].relationship].what
             }`"
-            :is-not-valid="messageIsSubmitted && !company.relation"
+            :is-not-valid="messageIsSubmitted && !company.relation.length"
             class="mb-2"
         >
             <md-field>
@@ -76,14 +76,14 @@
             :style="{ opacity: company.collectionName ? 1 : 0.4 }"
             @click="add"
         >
-            {{ company.id != null ? 'Pakeisti' : 'Pridėti' }}
+            {{ company.id.length ? 'Pakeisti' : 'Pridėti' }}
         </md-button>
     </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { LoginMixin } from '../views/mixins/LoginMixin'
-import InputBoxIcon from './InputBoxIcon.vue'
+import { LoginMixin } from '../../views/mixins/LoginMixin'
+import InputBoxIcon from '../utils/InputBoxIcon.vue'
 export default {
     components: {
         InputBoxIcon,
@@ -140,17 +140,19 @@ export default {
         ]),
         async add() {
             this.tryCatchForAPIAction(async () => {
+                console.log(this.company.id.length)
                 if (
                     !(
                         this.company.collectionName &&
-                        this.company.name.length &&
+                        this.company.name &&
                         this.company.relation.length
                     )
                 ) {
                     await this.setToSubmit()
                     return
                 }
-                his.company.id.length
+
+                this.company.id.length
                     ? await this.editCompanyRelation()
                     : await this.saveCompanyRelation()
 

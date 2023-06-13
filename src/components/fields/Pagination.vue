@@ -53,7 +53,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import DivideComponents from './DivideComponents.vue'
+import DivideComponents from '../utils/DivideComponents.vue'
 
 export default {
     components: {

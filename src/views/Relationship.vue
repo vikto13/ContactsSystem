@@ -28,13 +28,14 @@
                     <md-table-cell md-label="Veiksmas">
                         <md-button
                             v-show="havePermission('edit_structure')"
-                            class="md-dense md-raised md-primary edit-btn table-btn"
+                            class="md-dense md-raised md-primary edit-btn"
                             @click="() => edit(item)"
+                            style="margin 0"
                             >Redaguoti</md-button
                         >
                         <md-button
                             v-show="havePermission('delete_structure')"
-                            class="md-dense md-raised md-primary delete-btn table-btn"
+                            class="md-dense md-raised md-primary delete-btn"
                             @click="() => deleting(item)"
                             >Ištrinti</md-button
                         >
@@ -49,7 +50,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import FieldToCreate from '../components/FieldToCreate.vue'
+import FieldToCreate from '../components/fields/FieldToCreate.vue'
 import { ContactsMixin } from './mixins/ContactsMixin'
 import { LoginMixin } from './mixins/LoginMixin'
 export default {

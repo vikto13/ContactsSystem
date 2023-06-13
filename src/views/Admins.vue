@@ -63,7 +63,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import FieldToCreate from '../components/FieldToCreate.vue'
+import FieldToCreate from '../components/fields/FieldToCreate.vue'
 export default {
     components: {
         FieldToCreate,
