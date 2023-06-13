@@ -101,7 +101,7 @@ export default {
                             field: 'Kompanija:',
                         },
                         {
-                            getText: (text) => text.division_id.name,
+                            getText: (text) => text.office_id.name,
                             field: 'Ofisas:',
                         },
                         {

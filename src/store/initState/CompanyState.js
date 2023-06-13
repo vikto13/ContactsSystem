@@ -2,9 +2,10 @@ export function CompanyState() {
     return {
         company: {
             name: '',
-            id: null,
+            id: [],
             collectionName: '',
-            relation: []
+            relation: [],
+            table: ''
         },
         details: {
             companies: {

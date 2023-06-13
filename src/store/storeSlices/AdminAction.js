@@ -2,6 +2,7 @@ import { pocketBase } from "../../../services/pocketBase";
 import { AdminState } from "../initState/AdminState";
 import axios from 'axios';
 import generator from "generate-password-browser";
+import { expanding } from "./expandAction";
 
 export default {
     state: AdminState(),
@@ -43,7 +44,9 @@ export default {
             commit("setRoles", data)
         },
         async fetchAdmins({ commit, state }) {
-            const data = await pocketBase.collection(state.collectionName).getFullList()
+            const data = await pocketBase.collection(state.collectionName).getFullList({
+                sort: '-created',
+            })
             commit("setAdmins", data)
         },
         async deleteAdmin({ commit, state }) {
@@ -96,15 +99,13 @@ export default {
                 }
             )
         },
-        async setAdmin({ commit, state, dispatch }, id) {
+        async fetchAdmin({ commit, state, dispatch }, id) {
             let data = await pocketBase
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`, { expand: 'permissions_id' });
-            for (let expanded in data.expand) {
-                data[expanded] = data.expand[expanded]
-            }
+
             data.avatar && dispatch("setImageFromApi", { tableName: data.collectionName, entity: data.id, imageName: data.avatar })
-            commit("setAdmin", data)
+            commit("setAdmin", expanding(data))
         },
         setWhatDo({ commit }, what) {
             commit("setAdminAction", what)

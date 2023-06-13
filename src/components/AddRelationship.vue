@@ -12,16 +12,11 @@
                 class="form-select"
                 style="width: 30rem"
                 @input="editType"
-                :disabled="Boolean(company.id)"
+                :disabled="Boolean(company.id.length)"
             >
                 <option :value="''" disabled>Pasirinkite tipą</option>
                 <option
-                    v-for="(component, index) in [
-                        companyDetails.groups,
-                        companyDetails.departments,
-                        companyDetails.divisions,
-                        companyDetails.offices,
-                    ]"
+                    v-for="(component, index) in relationList"
                     :key="index"
                     :value="component.name"
                 >
@@ -37,7 +32,7 @@
             :is-not-valid="messageIsSubmitted && !company.name"
         >
             <input
-                v-model="company.name"
+                v-model="getInputName"
                 type="text"
                 class="form-control table-footer"
                 :placeholder="`Įveskite ${navBar[company.collectionName].what}`"
@@ -57,26 +52,11 @@
             class="mb-2"
         >
             <md-field>
-                <label v-if="company.id">
-                    {{
-                        navBar[
-                            companyDetails[company.collectionName].relationship
-                        ].title
-                    }}</label
-                >
-                <label v-else>
+                <label>
                     Pasirinkite
-                    {{
-                        navBar[
-                            companyDetails[company.collectionName].relationship
-                        ].what
-                    }}</label
+                    {{ getInputNameText }}</label
                 >
-                <md-select
-                    v-model="company.relation"
-                    :disabled="Boolean(company.id)"
-                    multiple
-                >
+                <md-select v-model="company.relation" multiple>
                     <md-option
                         v-for="(component, index) in companyDetails[
                             companyDetails[company.collectionName].relationship
@@ -119,6 +99,35 @@ export default {
             'navBar',
             'messageIsSubmitted',
         ]),
+        relationList() {
+            return [
+                this.companyDetails.groups,
+                this.companyDetails.departments,
+                this.companyDetails.divisions,
+                this.companyDetails.offices,
+            ]
+        },
+        getInputNameText() {
+            let text = this.company.id.length ? 'title' : 'what'
+            return this.navBar[
+                this.companyDetails[this.company.collectionName].relationship
+            ][text]
+        },
+        getInputName: {
+            get() {
+                return this.company.id.length
+                    ? this.company.name.name
+                    : this.company.name
+            },
+            set(name) {
+                this.$store.state.Company.company.name = this.company.id.length
+                    ? {
+                          ...this.company.name,
+                          name,
+                      }
+                    : name
+            },
+        },
     },
     methods: {
         ...mapActions([
@@ -134,25 +143,26 @@ export default {
                 if (
                     !(
                         this.company.collectionName &&
-                        this.company.name &&
-                        this.company.relation
+                        this.company.name.length &&
+                        this.company.relation.length
                     )
                 ) {
                     await this.setToSubmit()
                     return
                 }
-                this.company.id
+                his.company.id.length
                     ? await this.editCompanyRelation()
                     : await this.saveCompanyRelation()
+
+                this.fetchAllCompaniesRelation()
                 await this.dismissDialog()
-                await this.fetchAllCompaniesRelation()
             })
         },
         editType() {
-            this.company ||
-                this.$store.commit('setCompany', {
-                    relation: [],
-                })
+            this.$store.commit('setCompany', {
+                ...this.company,
+                relation: [],
+            })
         },
     },
     destroyed() {

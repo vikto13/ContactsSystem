@@ -76,12 +76,14 @@ export default {
             'searchContactByText',
             'disableAlert',
             'fetchCompanyRelation',
+            'setCompanyRealation',
             'selectEmptyRelation',
         ]),
         rearrangeArray(arr, selectedValue) {
             const index = arr.indexOf(selectedValue)
             const beforeSelected = arr.slice(0, index)
-            const afterSelected = arr.slice(index + 1)
+            const afterSelected = arr.slice(index + 1, selectedValue.length - 1)
+
             beforeSelected.reverse()
             return [
                 ...beforeSelected.map((value) => ({
@@ -95,8 +97,7 @@ export default {
             ]
         },
         async selectOption({ value, id }) {
-            console.log('aaaaaaaaa')
-            await this.$store.commit('selectCompany', {
+            this.$store.commit('selectCompany', {
                 select: value,
                 id,
             })
@@ -107,16 +108,21 @@ export default {
                 'departments',
                 'groups',
             ]
+            let change = []
             if (!value) {
                 let index = companiesInfo.indexOf(id)
-                await this.selectEmptyRelation(
-                    companiesInfo.slice(
-                        index - 1 < 0 ? 0 : index - 1,
-                        index + 2
-                    )
+                change = companiesInfo.slice(
+                    index - 1 < 0 ? 0 : index - 1,
+                    index + 2
                 )
+                await this.selectEmptyRelation(change)
             }
-
+            let reranged = this.rearrangeArray(companiesInfo, id)
+            if (!value) {
+                reranged = reranged.filter(({ value }) => {
+                    return !change.includes(value)
+                })
+            }
             this.fetchCompanyRelation(this.rearrangeArray(companiesInfo, id))
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()

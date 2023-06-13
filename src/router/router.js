@@ -15,7 +15,7 @@ import {
     needsAuth,
     checkContact,
     verifyToken,
-    forAdmins,
+    readAdmins,
     pathForCompany
 } from "./middlewares/middlewares";
 import Offices from "../views/Offices.vue";
@@ -27,7 +27,7 @@ export const router = new VueRouter({
             path: "/admins/records",
             component: Admins,
             meta: {
-                middleware: [authenticate, needsAuth, forAdmins],
+                middleware: [authenticate, needsAuth, readAdmins],
             },
         },
         {

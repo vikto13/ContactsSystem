@@ -41,11 +41,14 @@ export const LoginMixin = {
                 : `Slaptažodis turi būti įvestas`
         },
         isInvalid(input) {
+            console.log(Object.values(input)[0])
             switch (Object.keys(input)[0]) {
                 case 'password':
                     return this.showPasswordMessage(Object.values(input)[0])
                 case 'email':
                     return this.showEmailMessage(Object.values(input)[0])
+                case 'street_number':
+                    return !Boolean(/\d/.test(Object.values(input)[0])) && this.messageIsSubmitted
                 default:
                     return !Object.values(input)[0] && this.messageIsSubmitted
             }

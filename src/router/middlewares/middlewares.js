@@ -49,8 +49,8 @@ export function verifyToken({ next, to, store }) {
     }
 }
 
-export function forAdmins({ next, to, store }) {
-    if (store.getters.user.username === 'admin') {
+export function readAdmins({ next, to, store }) {
+    if (store.getters.user.permissions_id.read_permissions) {
         return next()
     }
     return next({ path: `/admins/login` });

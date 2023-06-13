@@ -2,8 +2,9 @@
     <div>
         <slot></slot>
         <div class="m-5">
-            <h1 style="font-weight: normal">{{ navBar.admins.textCreate }}</h1>
+            <h1 style="font-weight: normal">{{ getTitle }}</h1>
             <field-to-create
+                v-show="user.permissions_id.edit_permissions"
                 :text="'Sukurti naują admin paskyrą'"
                 @pressed="triggerDialog('add-admin')"
                 :title="'Sukurti admin paskyrą'"
@@ -26,8 +27,15 @@
                         item.email
                     }}</md-table-cell>
 
-                    <md-table-cell md-label="Veiksmas">
+                    <md-table-cell
+                        md-label="Veiksmas"
+                        v-if="
+                            user.permissions_id.edit_permissions ||
+                            user.permissions_id.delete_permissions
+                        "
+                    >
                         <md-button
+                            v-show="user.permissions_id.edit_permissions"
                             class="md-dense md-raised md-primary table-btn edit-btn"
                             @click="() => change(item.id, 0)"
                             >Keisti leidimus</md-button
@@ -35,11 +43,13 @@
                         <md-button
                             class="md-dense md-raised md-primary table-btn edit-btn"
                             @click="() => change(item.id, 1)"
+                            v-show="user.permissions_id.edit_permissions"
                             >Redaguoti</md-button
                         >
                         <md-button
                             class="md-dense md-raised md-primary table-btn delete-btn"
                             @click="() => deleting(item.id)"
+                            v-show="user.permissions_id.delete_permissions"
                             >Ištrinti</md-button
                         >
                     </md-table-cell>
@@ -66,19 +76,31 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['admin', 'isLoading', 'companyDetails', 'navBar']),
+        ...mapGetters([
+            'admin',
+            'isLoading',
+            'companyDetails',
+            'navBar',
+            'user',
+        ]),
         admins: {
             get() {
                 return this.$store.getters.admins
             },
             set() {},
         },
+        getTitle() {
+            console
+            return this.user.permissions_id.edit_permissions
+                ? 'Sukurti admin paskyra'
+                : 'Admin paskyra'
+        },
     },
     methods: {
         ...mapActions([
             'triggerDialog',
             'fetchAdmins',
-            'setAdmin',
+            'fetchAdmin',
             'setWhatDo',
             'triggerMessage',
             'deleteAdmin',
@@ -87,7 +109,7 @@ export default {
             'setAdminRole',
         ]),
         async deleting(id) {
-            await this.setAdmin(id)
+            await this.fetchdmin(id)
             this.triggerMessage({
                 title: 'Ar tikrai norite ištrinti adminą?',
                 content: `Admino vardas: ${this.admin.name}`,
@@ -101,7 +123,7 @@ export default {
             })
         },
         async change(id, action) {
-            await this.setAdmin(id)
+            await this.fetchAdmin(id)
             action || (await this.$store.commit('setAdminRole'))
             this.setWhatDo(action)
             this.triggerDialog('add-admin')

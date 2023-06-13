@@ -13,17 +13,18 @@
                 v-if="showCompanies.length"
                 v-model="showCompanies"
                 md-card
+                md-sort="created"
+                md-sort-order="asc"
                 md-fixed-header
                 class="mt-5 table-footer"
             >
                 <md-table-row slot="md-table-row" slot-scope="{ item }">
                     <md-table-cell md-label="Pavadinimas" md-sort-by="name">
-                        {{ getName(item) }}
+                        {{ item.name }}
                     </md-table-cell>
-                    <md-table-cell md-label="Tipas">{{
-                        getType(item)
+                    <md-table-cell md-label="Tipas" md-sort-by="type">{{
+                        item.type
                     }}</md-table-cell>
-
                     <md-table-cell md-label="Veiksmas">
                         <md-button
                             v-show="havePermission('edit_structure')"
@@ -81,13 +82,6 @@ export default {
             'deleteCompany',
             'findCompanyRelation',
         ]),
-        getName(item) {
-            let name = this.companyDetails[item.collectionName.split('_')[1]].id
-            return item[name].name
-        },
-        getType(item) {
-            return this.navBar[item.collectionName.split('_')[1]].title
-        },
         async edit(find) {
             await this.findCompanyRelation(find)
             this.triggerDialog('add-relationship')

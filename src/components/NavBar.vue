@@ -18,7 +18,9 @@
                     { ...navBar.offices, show: Boolean(user.token) },
                     {
                         ...navBar.admins,
-                        show: Boolean(user.token && user.username === 'admin'),
+                        show: Boolean(
+                            user.token && user.permissions_id.edit_permissions
+                        ),
                     },
                 ]"
                 :key="index"

@@ -98,6 +98,7 @@ export default {
             'triggerMessage',
             'updateRoles',
             'setToSubmit',
+            'authWithToken',
         ]),
         async save() {
             if (this.admin.whatDo === 0) {
@@ -131,6 +132,7 @@ export default {
                     await this.fetchAdmins()
                 })
             }
+            await this.authWithToken()
         },
     },
     destroyed() {

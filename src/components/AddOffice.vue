@@ -85,7 +85,10 @@ export default {
             if (
                 this.inputs
                     .map(({ id }) => this.office[id])
-                    .some((item) => item == null || item == '')
+                    .some((item) => item == null || item == '') ||
+                this.isInvalid({
+                    street_number: this.office.street_number,
+                })
             ) {
                 await this.setToSubmit()
                 return
