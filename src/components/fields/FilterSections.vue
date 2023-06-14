@@ -121,7 +121,6 @@ export default {
                     return !change.includes(value)
                 })
             }
-            console.log(reranged)
             this.fetchCompanyRelation(this.rearrangeArray(companiesInfo, id))
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()

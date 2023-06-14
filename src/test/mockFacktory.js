@@ -24,7 +24,6 @@ export function mergeDeep(target, ...sources) {
     return mergeDeep(target, ...sources)
 }
 
-
 function createWrapper(page, overrides) {
     const defaultMountingOptions = {
         mocks: {
