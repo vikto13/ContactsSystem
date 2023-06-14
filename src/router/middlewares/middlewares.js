@@ -50,7 +50,7 @@ export function verifyToken({ next, to, store }) {
 }
 
 export function readAdmins({ next, to, store }) {
-    if (store.getters.user.permissions_id.read_permissions) {
+    if (store.getters.user.token && store.getters.user.permissions_id.read_permissions) {
         return next()
     }
     return next({ path: `/admins/login` });
