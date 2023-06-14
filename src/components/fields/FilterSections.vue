@@ -94,6 +94,7 @@ export default {
             ]
         },
         async selectOption({ value, id }) {
+            console.log(value, id)
             this.$store.commit('selectCompany', {
                 select: value,
                 id,
@@ -120,6 +121,7 @@ export default {
                     return !change.includes(value)
                 })
             }
+            console.log(reranged)
             this.fetchCompanyRelation(this.rearrangeArray(companiesInfo, id))
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()
