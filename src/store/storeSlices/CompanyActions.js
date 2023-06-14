@@ -47,9 +47,11 @@ export default {
             let tables = value.collectionName.split("_")
             let { id } = state.details[tables[1]]
             let data = await pocketBase.collection(value.collectionName).getFullList(
-                { filter: `${id}='${value[id].id}'` }
+                {
+                    filter: `${id}='${value[id].id}'`,
+                    '$autoCancel': false
+                }
             );
-
             let generated = {
                 name: value[state.details[tables[1]].id],
                 id: data.map((data) => ({
@@ -107,16 +109,22 @@ export default {
             fetched.map((value, index) => {
                 let add = value.map((record) => {
                     let temp = record
-
                     for (let expanded in record.expand) {
                         temp[expanded] = record.expand[expanded]
                     }
-                    let search = temp.collectionName.split('_')[1]
-                    let { name } = record[getters.companyDetails[search].id]
-                    return { ...temp, name, type: getters.navBar[search].title }
+                    return temp
                 })
+                let results = add.reduce((prev, curr) => {
+                    let { name } = curr[search[index].id]
+                    let type = getters.navBar[search[index].name].title
+                    prev[curr[search[index].id].id] = {
+                        ...curr,
+                        name, type
+                    }
+                    return prev
+                }, {})
                 let { name } = search[index]
-                commit('setType', { list: add, entity: name })
+                commit('setType', { list: Object.values(results), entity: name })
             })
         },
         async fetchAllCompanies({ state, commit }) {
@@ -140,7 +148,6 @@ export default {
                 let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${fetchFrom[1].table}/records/${selected}?expand=${fetchFrom[1].path}`)
                 commit("setType", { list: data.expand ? expandTheLast(data) : [], entity: name })
             } else {
-                console.log("not selected", name)
                 let { table, path } = fetchFrom[1]
                 let fetched = await Promise.all(state.details[table].types.map(({ id }) => {
                     return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${id}?expand=${path}`)
@@ -155,8 +162,6 @@ export default {
             if (value.length) {
                 let search = state.details[value[0].value]
                 let { fetchFrom, name } = search;
-                console.log(value[0].toTop)
-                console.log(name, fetchFrom)
                 let { path, table } = fetchFrom[value[0].toTop ? 1 : 0]
                 if (state.details[table].selected) {
                     let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${state.details[table].selected}?expand=${path}`)
@@ -172,50 +177,7 @@ export default {
 
                 }
                 await dispatch("fetchCompanyRelation", value.slice(1, value.length))
-
             }
-
-
-            // let data = await Promise.all(fetchFrom.map(({ table, path }) => {
-            //     // console.log(table)
-            //     // console.log('//////////', state.details[table].selected)
-            //     //if is selected then getting values that are connected
-            //     if (state.details[table].selected) {
-            //         return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${state.details[table].selected}?expand=${path}`)
-            //     } else {
-            //         //getting if is come values with it, the match eatch other
-            //         // console.log(state.details[table].all, value[0]) 
-
-            //         return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${value[0]}/records`)
-            //     }
-            // }))
-            // let searching = data.map(({ data }) => {
-            //     return data.items ? data.items : expandTheLast(data)
-            // })
-            // // console.log(searching, "/*/*/")
-            // //check iff match all
-
-            // const list = searching.length == 1 ? searching[0] : getAllMatches(searching[0], searching[1])
-            // console.log(state.details[fetchFrom[0].table].all, list)
-
-            // // console.log(list, value[0])
-            // if (value.length) {
-
-            //     commit("setCompanies", { list, entity: value[0] })
-            //     dispatch("fetchCompanyRelation", value.slice(1, value.length))
-            // }
-            // }
-            // let { name, values, index } = value
-
-            // let { table, path, relate } = state.details[name].fetching[index]
-
-            // let data = await Promise.all(values.map(({ id }) => axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${id}?expand=${path}`)))
-            // const combinedArray = data.map(({ data }) => data.expand ? expandTheLast(data) : [])
-            //     .flatMap((arr) => arr)
-
-            // if (state.details[name].fetching.length != index + 1) {
-
-            // }
 
         },
         async selectEmptyRelation({ state, commit, dispatch }, selected) {
@@ -227,72 +189,50 @@ export default {
             const { fetchFrom, relationship } = state.details[name]
 
             if (state.details[relationship].selected) {
-                console.log("is selected", name)
+
                 let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${fetchFrom[fetchFrom.length - 1].table}/records/${state.details[relationship].selected}?expand=${fetchFrom[fetchFrom.length - 1].path}`)
-                console.log(expandTheLast(data))
+
                 await commit("setCompanies", { list: data.expand ? expandTheLast(data) : [], entity: name })
             } else {
-                console.log("not selected", name)
-                // console.log("not selected", name)
-                // let { table, path } = fetchFrom[fetchFrom.length - 1]
+
                 let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${name}/records?expand=${fetchFrom[fetchFrom.length - 1].path.split(".")[0]}`)
-                console.log(data)
+
                 await commit("setCompanies", { list: data.items, entity: name })
             }
 
             await dispatch("selectEmptyRelation", selected.slice(1, selected.length))
-            // dispatch("setCompanyRealation", values.slice(1, values.length))
-            //  // console.log(state.details[table].selected == null)
-            //  if (state.details[table].selected == 1) {
-            //     console.log(name)
-            //     //console.log(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${relationship}/records/?expand=${relationship}_${name}`)
-            //     console.log(await Promise.all(fetchFrom.map(({ path, table }) => {
-            //         console.log(state.details[table], table)
-            //         console.log(path)
-            //         // return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${name}/records/?expand=${relationship}_${name}`)
-            //     })))
 
-            // }
         },
         async editCompany({ state, commit }, entity) {
             await pocketBase
                 .collection(entity)
                 .update(state.company.id, { name: state.company.name });
         },
-        async editCompanyRelation({ state, commit, dispatch }) {
+        async editCompanyRelation({ state, commit, dispatch, getters }) {
 
             let { collectionName, id, name } = state.company.name
-            console.log("aaaaaaaaaaaaaaaaaaaaaa")
-            // await Promise.all(state.company.id.map((id) => {
-            //     return pocketBase
-            //         .collection(state.company.table).delete(id)
-            // }))
-            // state.company.relation.map(id => {
-            //     // console.log(state.company.id.includes(id))
-            //     console.log(
-            //         state.company.id.some(obj => {
-            //             obj.relation === d
-            //         }))
-
-            // })
-
             let data = await pocketBase
                 .collection(collectionName).update(id, { name })
-            state.company.relation.map((value) => {
-                if (state.company.id.some(obj => obj.relation === value)) {
-                    return;
-                }
-                else {
-                    console.log("create it")
-                }
-            })
-            Promise.all(state.company.id.filter(({ relation }) => !state.company.relation.some(id => id === relation)))
-            throw null
-            // let data = await pocketBase
-            //     .collection(collectionName).create({ name })
-            // await commit("setCompany", { ...state.company, name: data })
-            // await dispatch("saveCompanyRelation")
+            await Promise.all(state.company.relation.filter((value) => {
+                return state.company.id.some(obj => obj.relation != value)
+            }).map(id => {
+                return axios.post(
+                    `${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.details[state.company.collectionName].relationship}_${state.company.collectionName}/records`,
+                    {
+                        [state.details[state.details[state.company.collectionName].relationship].id]: id,
+                        [state.details[state.company.collectionName].id]: data.id
 
+                    }, {
+                    headers: {
+                        Authorization: `Bearer ${getters.user.token}`
+                    }
+                }
+
+                )
+            }))
+            await Promise.all(state.company.id.filter(({ relation }) => state.company.relation.some(id => id != relation)).map((relation) => {
+                return pocketBase.collection(state.company.table).delete(relation.id)
+            }))
         },
         async deleteCompany({ state }, info) {
             let { id, collectionName } = state.company
@@ -303,6 +243,13 @@ export default {
             await pocketBase
                 .collection(collectionName)
                 .delete(id)
+        },
+        async deleteCompanyRelation({ state }) {
+            await Promise.all(state.company.id.map(({ id }) => {
+                return pocketBase.collection(`${state.details[state.company.collectionName].relationship}_${state.company.collectionName}`).delete(id, {
+                    '$autoCancel': false
+                })
+            }))
         },
         async checkIfIsRelation({ state, commit, getters }, { collectionName, id }) {
             const data = await Promise.all(state.details[collectionName].relations.map((table) => {

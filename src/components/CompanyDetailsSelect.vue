@@ -96,20 +96,6 @@ export default {
             'fetchCompanyDetailsRelation',
             'setCompanyRealation',
         ]),
-        // async getRelationships({ relationship, fetch }) {
-        //     await this.setCompanyRealation({
-        //         fetch,
-        //         entitySave: relationship,
-        //         whereSave: 'setType',
-        //         show: (fetched) => {
-        //             return fetched.reduce((prev, curr) => {
-        //                 console.log(fetched)
-        //                 prev.push(...expandTheLast(curr.data))
-        //                 return prev
-        //             }, [])
-        //         },
-        //     })
-        // },
         async selected({ selected, value, name }) {
             let index = this.showCompanies.findIndex(
                 (obj) => obj.name === selected.name
@@ -118,37 +104,6 @@ export default {
                 index + 1,
                 this.showCompanies.length
             )
-
-            // let { relationship } = this.companyDetails[name]
-            // let { fetchFrom } = this.companyDetails[relationship]
-            // let fetch = [
-            //     {
-            //         table: selected.name,
-            //         record: value,
-            //         path: fetchFrom[fetchFrom.length - 1].path,
-            //     },
-            // ]
-
-            // if (relationship == 'offices') {
-            //     await this.getRelationships({
-            //         relationship,
-            //         fetch,
-            //     })
-
-            //     fetch = this.companyDetails[relationship].types.map((id) => ({
-            //         table: 'offices',
-            //         path: this.companyDetails['offices'].fetchFrom[0].path,
-            //     }))
-            // }
-            // await this.getRelationships({
-            //     relationship,
-            //     fetch,
-            // })
-            //    await dispatch("setCompanyRealation", { table, record: state.details[table].selected, path, entitySave: name, whereSave: 'setCompanies' })
-
-            // console.log(filteredArr)
-
-            // value &&
             this.$store.commit('setEmployee', {
                 ...filteredArr.reduce((prev, curr) => {
                     return { ...prev, [curr.id]: '' }
@@ -162,7 +117,6 @@ export default {
                 ...show,
                 ...this.showCompanies.slice(index + 1, index + 2),
             ])
-            // THIS.fetchCompanyDetailsRelation()
         },
     },
 }

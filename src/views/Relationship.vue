@@ -30,7 +30,6 @@
                             v-show="havePermission('edit_structure')"
                             class="md-dense md-raised md-primary edit-btn"
                             @click="() => edit(item)"
-                            style="margin 0"
                             >Redaguoti</md-button
                         >
                         <md-button
@@ -82,21 +81,28 @@ export default {
             'fetchAllCompaniesRelation',
             'deleteCompany',
             'findCompanyRelation',
+            'deleteCompanyRelation',
         ]),
         async edit(find) {
             await this.findCompanyRelation(find)
             this.triggerDialog('add-relationship')
         },
         async deleting(find) {
-            let { collectionName } = find
-            let { id } = this.companyDetails[collectionName.split('_')[1]]
-
             this.triggerMessage({
                 title: 'Ar tikrai norite ištrinti struktūrą?',
-                content: `Pavadinimu: ${find[id].name}`,
+                content: `Pavadinimu: ${find.name}`,
                 action: async () => {
-                    await this.deleteCompany({ collectionName, id: find.id })
-                    await this.fetchAllCompaniesRelation()
+                    this.tryCatchForAPIAction(async () => {
+                        await this.findCompanyRelation(find)
+                        await this.deleteCompanyRelation()
+
+                        try {
+                            let { collectionName, id } = this.company.name
+                            await this.deleteCompany({ collectionName, id })
+                        } catch {}
+                        this.$store.commit('clearCompanyData')
+                        await this.fetchAllCompaniesRelation()
+                    })
                 },
                 cancelAction: () => {},
             })

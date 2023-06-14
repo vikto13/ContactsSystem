@@ -41,7 +41,6 @@ export const LoginMixin = {
                 : `Slaptažodis turi būti įvestas`
         },
         isInvalid(input) {
-            console.log(Object.values(input)[0])
             switch (Object.keys(input)[0]) {
                 case 'password':
                     return this.showPasswordMessage(Object.values(input)[0])

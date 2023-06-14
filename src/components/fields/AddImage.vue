@@ -1,15 +1,16 @@
 <template>
     <div>
-        <label for="image-upload" class="btn w-100 mt-4 text-start">
-            ĮKELTI NUOTRAUKĄ
-            <input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                @change="uploadImage"
-                style="display: none"
-            />
-        </label>
+        <button class="btn text-uppercase w-100 text-start" @click="addImage">
+            Įkelti nuotrauką
+        </button>
+        <input
+            ref="fileInput"
+            type="file"
+            accept="image/*"
+            @change="uploadImage"
+            style="display: none"
+        />
+
         <img :src="getImage" alt="Nuotrauka" />
     </div>
 </template>
@@ -25,6 +26,13 @@ export default {
     },
     methods: {
         ...mapActions(['uploadImage']),
+        addImage() {
+            if (!this.image.buttonIsPressed) {
+                this.$store.commit('imageButtonPressed', true)
+                this.$refs.fileInput.click()
+                this.$store.commit('imageButtonPressed', false)
+            }
+        },
     },
     destroyed() {
         this.$store.commit('clearImageState')

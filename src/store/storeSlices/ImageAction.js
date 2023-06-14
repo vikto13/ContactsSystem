@@ -3,7 +3,8 @@ export default {
     state: {
         file: null,
         name: null,
-        result: ''
+        result: '',
+        buttonIsPressed: false,
     },
     mutations: {
         setImage(state, image) {
@@ -17,11 +18,13 @@ export default {
         },
         setResult(state, result) {
             state.result = result
+        },
+        imageButtonPressed(state, isPressed) {
+            state.buttonIsPressed = isPressed
         }
     },
     actions: {
         uploadImage({ commit }, e) {
-            console.log("pressed")
             const [image] = e.target.files
             const reader = new FileReader();
             reader.onload = (event) => {

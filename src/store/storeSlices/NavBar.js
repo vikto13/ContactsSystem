@@ -49,6 +49,7 @@ export default {
                 textEmpty: "Nėra sukurtų ofisų",
                 path: "/offices/records",
                 what: "ofisą",
+                whose: "Ofiso",
             },
             admins: {
                 id: 'admins',

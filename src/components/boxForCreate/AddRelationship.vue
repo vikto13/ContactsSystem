@@ -35,7 +35,9 @@
                 v-model="getInputName"
                 type="text"
                 class="form-control table-footer"
-                :placeholder="`Įveskite ${navBar[company.collectionName].what}`"
+                :placeholder="`Įveskite ${
+                    navBar[company.collectionName].whose
+                } pavadinimą`"
                 :class="{
                     'is-invalid': messageIsSubmitted && !company.name,
                 }"
@@ -140,7 +142,6 @@ export default {
         ]),
         async add() {
             this.tryCatchForAPIAction(async () => {
-                console.log(this.company.id.length)
                 if (
                     !(
                         this.company.collectionName &&
@@ -160,9 +161,10 @@ export default {
                 await this.dismissDialog()
             })
         },
-        editType() {
+        editType(e) {
             this.$store.commit('setCompany', {
                 ...this.company,
+                collectionName: e.target.value,
                 relation: [],
             })
         },
