@@ -105,7 +105,6 @@ export default {
             'triggerMessage',
             'deleteAdmin',
             'clearAdminData',
-            'showLoading',
             'setAdminRole',
         ]),
         async deleting(id) {
@@ -131,4 +130,3 @@ export default {
     },
 }
 </script>
-<style scoped></style>

@@ -189,14 +189,10 @@ export default {
             const { fetchFrom, relationship } = state.details[name]
 
             if (state.details[relationship].selected) {
-
                 let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${fetchFrom[fetchFrom.length - 1].table}/records/${state.details[relationship].selected}?expand=${fetchFrom[fetchFrom.length - 1].path}`)
-
                 await commit("setCompanies", { list: data.expand ? expandTheLast(data) : [], entity: name })
             } else {
-
                 let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${name}/records?expand=${fetchFrom[fetchFrom.length - 1].path.split(".")[0]}`)
-
                 await commit("setCompanies", { list: data.items, entity: name })
             }
 
@@ -286,9 +282,6 @@ export default {
     },
 }
 
-function getAllMatches(arr, secArr) {
-    return arr.filter(obj1 => secArr.some(obj2 => obj2.id === obj1.id))
-}
 function reduceArray(fetched) {
     let show = fetched.reduce((prev, curr) => {
         if (curr.data.expand) {

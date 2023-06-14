@@ -61,12 +61,7 @@ export default {
     },
     mixins: [ContactsMixin, LoginMixin],
     computed: {
-        ...mapGetters([
-            'companyDetails',
-            'company',
-            'showCompaniesRealations',
-            'navBar',
-        ]),
+        ...mapGetters(['company', 'showCompaniesRealations', 'navBar']),
         showCompanies: {
             get() {
                 return this.showCompaniesRealations

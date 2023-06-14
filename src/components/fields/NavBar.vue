@@ -71,7 +71,6 @@ export default {
     },
     mixins: [LoginMixin],
     methods: {
-        ...mapActions(['triggerMessage', 'resetPassword', 'showLoading']),
         signOut() {
             setTimeout(() => {
                 this.$router.push('/admins/login')

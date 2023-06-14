@@ -89,7 +89,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['changePassword', 'alert', 'setToSubmit']),
+        ...mapActions(['changePassword', 'setToSubmit']),
         async change() {
             await this.setToSubmit()
 

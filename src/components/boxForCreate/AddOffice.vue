@@ -82,6 +82,7 @@ export default {
             'setToSubmit',
         ]),
         async add() {
+            await this.setToSubmit()
             if (
                 this.inputs
                     .map(({ id }) => this.office[id])
@@ -90,7 +91,6 @@ export default {
                     street_number: this.office.street_number,
                 })
             ) {
-                await this.setToSubmit()
                 return
             }
             this.tryCatchForAPIAction(async () => {

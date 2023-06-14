@@ -36,7 +36,7 @@ export default {
     computed: {
         ...mapGetters(['company', 'companyDetails', 'navBar']),
         showTitle() {
-            return this.company.id
+            return this.company.id.length
                 ? `Redaguoti ${
                       this.companyDetails[this.$route.params.id].what
                   }: `
@@ -45,7 +45,7 @@ export default {
                   }:`
         },
         buttonTitle() {
-            return this.company.id ? 'Redaguoti' : 'Pridėti'
+            return this.company.id.length ? 'Redaguoti' : 'Pridėti'
         },
     },
     methods: {
@@ -62,7 +62,7 @@ export default {
                     await this.setToSubmit()
                     return
                 }
-                this.company.id
+                this.company.id.length
                     ? await this.editCompany(this.$route.params.id)
                     : await this.saveCompany(this.$route.params.id)
                 await this.fetchCompanies(this.$route.params.id)

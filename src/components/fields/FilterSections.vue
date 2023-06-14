@@ -52,7 +52,7 @@ export default {
     },
     mixins: [LoginMixin],
     computed: {
-        ...mapGetters(['companyDetails', 'alert', 'navBar']),
+        ...mapGetters(['companyDetails', 'navBar']),
     },
     async mounted() {
         this.tryCatchForAPIAction(async () => {
@@ -71,12 +71,9 @@ export default {
         ...mapActions([
             'fetchCompanies',
             'selectCompany',
-            'showAlert',
             'searchContactBySelections',
             'searchContactByText',
-            'disableAlert',
             'fetchCompanyRelation',
-            'setCompanyRealation',
             'selectEmptyRelation',
         ]),
         rearrangeArray(arr, selectedValue) {

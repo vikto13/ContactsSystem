@@ -88,14 +88,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions([
-            'fetchCompanyRelation',
-            'fetchAllCompaniesRelation',
-            'setOfficeByDivisionAndCompany',
-            'setCompaniesInType',
-            'fetchCompanyDetailsRelation',
-            'setCompanyRealation',
-        ]),
+        ...mapActions(['setCompaniesInType', 'setCompanyRealation']),
         async selected({ selected, value, name }) {
             let index = this.showCompanies.findIndex(
                 (obj) => obj.name === selected.name
