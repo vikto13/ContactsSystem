@@ -33,6 +33,7 @@
                         :placeholder="'Įveskite el.paštą...'"
                         class="form-control table-footer"
                         :style="{ 'border-left-width': 0 }"
+                        :disabled="admin.id"
                     />
                 </input-box-icon>
 

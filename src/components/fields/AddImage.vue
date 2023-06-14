@@ -10,8 +10,7 @@
             @change="uploadImage"
             style="display: none"
         />
-
-        <img :src="getImage" alt="Nuotrauka" />
+        <img :src="getImage" alt="Nuotrauka" class="mt-2" />
     </div>
 </template>
 <script>
