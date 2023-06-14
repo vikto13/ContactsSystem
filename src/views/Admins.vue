@@ -108,7 +108,7 @@ export default {
             'setAdminRole',
         ]),
         async deleting(id) {
-            await this.fetchdmin(id)
+            await this.fetchAdmin(id)
             this.triggerMessage({
                 title: 'Ar tikrai norite ištrinti adminą?',
                 content: `Admino vardas: ${this.admin.name}`,
