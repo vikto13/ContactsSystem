@@ -92,20 +92,15 @@ export default {
             let list = await pocketBase.collection(entity).getFullList({ sort: '-created' });
             commit('setType', { list, entity })
         },
-        async fetchAllCompaniesRelation({ commit, state, getters }) {
-            let search = [
-                state.details.departments,
-                state.details.divisions,
-                state.details.groups,
-                state.details.offices,
-            ]
-            let fetched = await Promise.all(search.map(({ id, name, relationship }) => {
-                return pocketBase.collection(`${relationship}_${name}`).getFullList({
+        async fetchAllCompaniesRelation({ commit, state, getters }, search) {
+
+            let fetched = await Promise.all(search.map(async ({ id, name, relationship }) => {
+                let data = await pocketBase.collection(`${relationship}_${name}`).getFullList({
                     expand: `${state.details[name].id},${state.details[relationship].id}`,
                     sort: '-created',
                 })
+                return data
             }))
-
             fetched.map((value, index) => {
                 let add = value.map((record) => {
                     let temp = record
@@ -116,10 +111,9 @@ export default {
                 })
                 let results = add.reduce((prev, curr) => {
                     let { name } = curr[search[index].id]
-                    let type = getters.navBar[search[index].name].title
                     prev[curr[search[index].id].id] = {
                         ...curr,
-                        name, type
+                        name
                     }
                     return prev
                 }, {})

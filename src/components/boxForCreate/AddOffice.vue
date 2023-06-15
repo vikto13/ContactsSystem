@@ -29,8 +29,26 @@
                 }"
             />
         </input-box-icon>
+        <input-box-icon
+            :title="`Kompanija:`"
+            :bottom-text="'Pasirinkite kompaniją'"
+            class="mb-2"
+            ><md-field>
+                <label> Pasirinkite kompaniją</label>
+                <md-select v-model="office.company" multiple>
+                    <md-option
+                        v-for="(component, index) in selectCompanies"
+                        :key="index"
+                        :value="component.id"
+                        selected
+                    >
+                        {{ component.name }}</md-option
+                    >
+                </md-select>
+            </md-field>
+        </input-box-icon>
 
-        <md-button class="btn w-100 m-0" @click="add">
+        <md-button class="btn w-100 mt-3" @click="add">
             {{ office.id != null ? 'Pakeisti' : 'Pridėti' }}
         </md-button>
     </div>
@@ -45,7 +63,10 @@ export default {
     },
     mixins: [LoginMixin],
     computed: {
-        ...mapGetters(['office']),
+        ...mapGetters(['office', 'companyDetails']),
+        selectCompanies() {
+            return this.companyDetails.companies.all
+        },
     },
     data() {
         return {

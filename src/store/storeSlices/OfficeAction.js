@@ -26,22 +26,46 @@ export default {
             const data = await pocketBase
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`);
-            commit("setOffice", data)
+
+            let savedCompanies = await pocketBase.collection('companies_offices').getFullList({ filter: `office_id="${data.id}"` });
+            commit("setOffice", { ...data, savedCompanies, company: savedCompanies.map(({ company_id }) => company_id) })
         },
-        async saveOffice({ state, commit, getters }) {
-            let { city, country, street, street_number } = state.office;
-            await pocketBase
+        async saveOffice({ state }) {
+
+            let { city, country, street, street_number, company } = state.office;
+            let { id } = await pocketBase
                 .collection(state.collectionName)
                 .create({ ...state.office, name: `${street} ${street_number}, ${city}, ${country}` });
+            await Promise.all(
+                company.map(((company_id) => {
+                    return pocketBase
+                        .collection('companies_offices')
+                        .create({ office_id: id, company_id }, { '$autoCancel': false });
+                }))
+            )
+
         },
         async fetchOffices({ commit, state }) {
             let allOffice = await pocketBase.collection(state.collectionName).getFullList({ sort: '-created' });
             commit('setOffices', allOffice)
         },
         async editOffice({ state }) {
-            await pocketBase
+            let { id } = await pocketBase
                 .collection(state.collectionName)
                 .update(state.office.id, state.office);
+            await Promise.all(state.office.company.filter((value) => {
+                return !state.office.savedCompanies.some(obj => obj.company_id == value)
+            })
+                .map(company_id => {
+                    return pocketBase
+                        .collection('companies_offices')
+                        .create({ office_id: id, company_id }, { '$autoCancel': false });
+                }))
+            await Promise.all(state.office.savedCompanies.filter(({ company_id }) => !state.office.company.some((id) => id == company_id)).map(({ id }) => {
+                return pocketBase.collection('companies_offices').delete(id)
+            }))
+
+
         },
         async deleteOffice({ commit, state }) {
             await pocketBase

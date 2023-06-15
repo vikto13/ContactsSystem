@@ -61,6 +61,7 @@ import { mapActions, mapGetters } from 'vuex'
 import AddImage from '../fields/AddImage.vue'
 import InputBoxIcon from '../utils/InputBoxIcon.vue'
 import { LoginMixin } from '../../views/mixins/LoginMixin'
+import { getFromObjectText } from '../../store/storeSlices/filterAction'
 export default {
     components: {
         InputBoxIcon,
@@ -104,7 +105,7 @@ export default {
         async save() {
             if (this.admin.whatDo === 0) {
                 await this.updateRoles()
-                this.dismissDialog()
+                return this.dismissDialog()
             } else {
                 await this.setToSubmit()
                 if (
@@ -116,7 +117,7 @@ export default {
                     return
                 }
 
-                this.tryCatchForAPIAction(async () => {
+                try {
                     if (this.admin.whatDo != null) {
                         await this.updateAdmin()
                         this.dismissDialog()
@@ -131,9 +132,18 @@ export default {
                         })
                     }
                     await this.fetchAdmins()
-                })
+                    await this.authWithToken()
+                } catch (err) {
+                    this.triggerMessage({
+                        title: 'Negalima sukurti',
+                        content: `${getFromObjectText(
+                            err.response.data.data,
+                            'message'
+                        )}`,
+                        isAlert: true,
+                    })
+                }
             }
-            await this.authWithToken()
         },
     },
     destroyed() {

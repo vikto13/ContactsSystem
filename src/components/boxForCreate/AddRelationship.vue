@@ -156,7 +156,7 @@ export default {
                     ? await this.editCompanyRelation()
                     : await this.saveCompanyRelation()
 
-                this.fetchAllCompaniesRelation()
+                this.fetchAllCompaniesRelation(this.relationList)
                 await this.dismissDialog()
             })
         },

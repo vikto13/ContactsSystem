@@ -36,18 +36,18 @@
                     >
                         <md-button
                             v-show="user.permissions_id.edit_permissions"
-                            class="md-dense md-raised md-primary table-btn edit-btn"
+                            class="md-dense md-raised md-primary table-btn edit-btn m-1"
                             @click="() => change(item.id, 0)"
                             >Keisti leidimus</md-button
                         >
                         <md-button
-                            class="md-dense md-raised md-primary table-btn edit-btn"
+                            class="md-dense md-raised md-primary table-btn edit-btn m-1"
                             @click="() => change(item.id, 1)"
                             v-show="user.permissions_id.edit_permissions"
                             >Redaguoti</md-button
                         >
                         <md-button
-                            class="md-dense md-raised md-primary table-btn delete-btn"
+                            class="md-dense md-raised md-primary table-btn delete-btn m-1"
                             @click="() => deleting(item.id)"
                             v-show="user.permissions_id.delete_permissions"
                             >Ištrinti</md-button

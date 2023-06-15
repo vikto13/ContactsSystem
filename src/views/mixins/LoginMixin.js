@@ -94,6 +94,7 @@ export const LoginMixin = {
                 await action()
                 this.alert.showAlert && this.disableAlert();
             } catch (err) {
+                console.log(err)
                 // this.showAlert(404);
             }
         }

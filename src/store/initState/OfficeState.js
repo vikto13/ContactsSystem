@@ -9,7 +9,8 @@ export function OfficeState() {
             city: '',
             street_number: null,
             expand: null,
-            companies: null
+            company: [],
+            savedCompanies: []
         },
         collectionName: 'offices'
     }

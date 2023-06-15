@@ -23,9 +23,11 @@ export default {
             state.admin.password = password
             state.admin.passwordConfirm = password
         },
-        setAdmin(state, admin) {
+        setAdmin(state, info) {
+            let { admin } = AdminState();
             for (let adminState in admin) {
-                state.admin[adminState] = admin[adminState]
+                let setInfo = info[adminState]
+                state.admin[adminState] = setInfo ? setInfo : admin[adminState]
             }
         },
         setAdminRole(state) {
@@ -50,7 +52,11 @@ export default {
             commit("setAdmins", data)
         },
         async deleteAdmin({ commit, state }) {
-            await pocketBase.collection(state.collectionName).delete(state.admin.id)
+            let { id, permissions_id } = state.admin
+            await pocketBase.collection(state.collectionName).delete(id)
+            await pocketBase.collection('user_permissions').delete(permissions_id.id)
+
+
         },
         async updateAdmin({ getters, state }) {
             await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${state.admin.id}`,

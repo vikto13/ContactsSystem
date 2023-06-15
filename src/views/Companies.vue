@@ -11,6 +11,7 @@
             class="ml-5"
         >
         </field-to-create>
+
         <div class="m-5 pb-5">
             <h5 v-if="!companyDetails[id].all.length" class="mt-5 text-center">
                 {{ navBar[id].textEmpty }}

@@ -45,11 +45,14 @@
                             v-for="(column, position) in box.details"
                             :key="position"
                         >
-                            {{
-                                `${column.field} ${isNoText(
-                                    column.getText(employee)
-                                )}`
-                            }}
+                            {{ column.field }}
+                            <span
+                                :style="{
+                                    color: column.color ? 'black' : '#0054A6',
+                                }"
+                            >
+                                {{ isNoText(column.getText(employee)) }}
+                            </span>
                         </p>
                     </md-card-content>
                 </div>
@@ -99,14 +102,20 @@ export default {
                         {
                             getText: (text) => text.company_id.name,
                             field: 'Kompanija:',
+                            color: true,
                         },
                         {
                             getText: (text) => text.office_id.name,
                             field: 'Ofisas:',
+                            color: true,
                         },
                         {
                             getText: (text) => text.department_id.name,
                             field: 'Departamentas:',
+                        },
+                        {
+                            getText: (text) => text.division_id.name,
+                            field: 'Divizija:',
                         },
                         {
                             getText: (text) => text.group_id.name,

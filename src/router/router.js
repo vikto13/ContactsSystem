@@ -69,8 +69,9 @@ export const router = new VueRouter({
             },
         },
         {
-            path: "/relationship/record",
+            path: "/relationship/record/:id",
             component: Relationship,
+            props: true,
             meta: {
                 middleware: [authenticate, needsAuth],
             },

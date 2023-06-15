@@ -10,7 +10,7 @@ export default {
             },
             relationship: {
                 title: "Struktūros",
-                path: "/relationship/record",
+                path: "/relationship/record/divisions",
                 textEmpty: "Nėra sukurtų struktūrų",
             },
             companies: {

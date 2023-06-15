@@ -21,3 +21,22 @@ export function filterSameId(array) {
 export function getWithSameId(array1, array2) {
     return array1.filter(item1 => array2.some(item2 => item2.id === item1.id));
 }
+
+export function getFromObjectText(obj, find) {
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            const value = obj[key];
+
+            if (typeof value === 'object') {
+                const message = getFromObjectText(value, find);
+                if (message) {
+                    return message;
+                }
+            } else if (key === find) {
+                return value;
+            }
+        }
+    }
+
+    return null;
+}

@@ -36,13 +36,13 @@
                     <md-table-cell md-label="Veiksmas">
                         <md-button
                             v-show="havePermission('edit_offices')"
-                            class="md-dense md-raised md-primary edit-btn table-btn"
+                            class="md-dense md-raised md-primary edit-btn table-btn m-1 w-50"
                             @click="() => edit(item.id)"
                             >Redaguoti</md-button
                         >
                         <md-button
                             v-show="havePermission('delete_offices')"
-                            class="md-dense md-raised md-primary delete-btn table-btn"
+                            class="md-dense md-raised md-primary delete-btn table-btn m-1 w-25"
                             @click="() => deleting(item.id)"
                             >Ištrinti</md-button
                         >
@@ -101,7 +101,7 @@ export default {
 
                 if (this.company.relation.length) {
                     this.triggerMessage({
-                        title: 'Negalite ištrinti ofiso duomenis?',
+                        title: 'Negalite ištrinti ofiso duomenis',
                         content:
                             `Ofisas ${this.office.name} turi rysius :<br>` +
                             this.company.relation.join('<br>'),
