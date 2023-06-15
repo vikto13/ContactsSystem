@@ -9,9 +9,8 @@
                         <input
                             v-model="contactSearch"
                             type="text"
-                            class="form-control"
+                            class="form-control table-footer"
                             placeholder="Ieškoti kontakto"
-                            style="background-color: #f1f2f4"
                             v-debounce:1000="searching"
                         />
                     </input-box-icon>
@@ -26,7 +25,7 @@
                             class="md-icon-button md-raised ml-3 edit-btn"
                             md-menu-trigger
                         >
-                            <md-icon style="color: white">filter_alt</md-icon>
+                            <md-icon class="icon-colors">filter_alt</md-icon>
                         </md-button>
                         <md-menu-content>
                             <md-menu-item
@@ -48,9 +47,9 @@
                     <div class="d-flex flex-wrap">
                         <md-button
                             class="md-icon-button md-raised ml-3 edit-btn"
-                            @click="() => (isSelected = buttons[isSelected])"
+                            @click="selectCardStyle"
                         >
-                            <md-icon style="color: #ffffff">{{
+                            <md-icon class="icon-colors">{{
                                 isSelected
                             }}</md-icon>
                         </md-button>
@@ -62,7 +61,7 @@
                             class="md-icon-button md-raised ml-3 edit-btn"
                             @click="() => triggerDialog('add-contacts')"
                         >
-                            <md-icon style="color: #ffffff">add</md-icon>
+                            <md-icon class="icon-colors">add</md-icon>
                         </md-button>
                     </div>
                 </div>
@@ -108,7 +107,7 @@ export default {
                 table_rows: 'contact-cards',
                 grid_view: 'contact-tables',
             },
-            isSelected: 'table_rows',
+            isSelected: localStorage.getItem('cardStyle') || 'table_rows',
             buttons: {
                 table_rows: 'grid_view',
                 grid_view: 'table_rows',
@@ -144,6 +143,10 @@ export default {
         },
         setPaginate(size) {
             this.$store.commit('setPagine', size)
+        },
+        selectCardStyle() {
+            localStorage.setItem('cardStyle', this.buttons[this.isSelected])
+            this.isSelected = this.buttons[this.isSelected]
         },
     },
 }

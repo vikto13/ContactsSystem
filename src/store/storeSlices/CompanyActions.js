@@ -191,7 +191,7 @@ export default {
             let data = await pocketBase
                 .collection(collectionName).update(id, { name })
             await Promise.all(state.company.relation.filter((value) => {
-                return state.company.id.some(obj => obj.relation != value)
+                return !state.company.id.some(obj => obj.relation == value)
             }).map(id => {
                 return axios.post(
                     `${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.details[state.company.collectionName].relationship}_${state.company.collectionName}/records`,
@@ -207,7 +207,7 @@ export default {
 
                 )
             }))
-            await Promise.all(state.company.id.filter(({ relation }) => state.company.relation.some(id => id != relation)).map((relation) => {
+            await Promise.all(state.company.id.filter(({ relation }) => !state.company.relation.some(id => id == relation)).map((relation) => {
                 return pocketBase.collection(state.company.table).delete(relation.id)
             }))
         },

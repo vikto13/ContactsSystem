@@ -41,18 +41,23 @@ export default {
             commit("setEmployee", expanding(data))
         },
         async saveEmployee({ state, getters }) {
-            await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.collectionName}/records`,
-                {
-                    ...state.employee,
-                    photo: getters.image.file
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${getters.user.token}`
+            try {
+                await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${state.collectionName}/records`,
+                    {
+                        ...state.employee,
+                        photo: getters.image.file
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${getters.user.token}`
+                        }
                     }
-                }
-            )
+                )
+            } catch (err) {
+                console.log(err)
+            }
+
         },
         async fetchEmployees({ commit, state }) {
             let list = await pocketBase.collection(state.collectionName).getFullList({

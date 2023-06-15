@@ -123,37 +123,45 @@ export default {
             this.triggerDialog('add-relationship')
         },
         async deleting(find) {
-            console.log(find)
-            //     await this.checkIfIsRelation({ id, collectionName: 'offices' })
-            // console.log(this.compa)
+            console.log(this.id, find.id)
+            await this.checkIfIsRelation({
+                id: find[this.companyDetails[this.id].id].id,
+                collectionName: this.id,
+            })
+            if (this.company.relation.length) {
+                this.triggerMessage({
+                    title: `Negalite ištrinti ${
+                        this.navBar[this.id].whose
+                    } duomenis`,
+                    content:
+                        `${this.navBar[this.id].title} "${
+                            find.name
+                        }" turi rysius :<br>` +
+                        this.company.relation.join('<br>'),
+                    isAlert: true,
+                })
+            } else {
+                this.triggerMessage({
+                    title: 'Ar tikrai norite ištrinti struktūrą?',
+                    content: `Pavadinimu: ${find.name}`,
+                    action: async () => {
+                        this.tryCatchForAPIAction(async () => {
+                            await this.findCompanyRelation(find)
+                            await this.deleteCompanyRelation()
 
-            // if (this.company.relation.length) {
-            //     this.triggerMessage({
-            //         title: 'Negalite ištrinti ofiso duomenis',
-            //         content:
-            //             `Ofisas ${this.office.name} turi rysius :<br>` +
-            //             this.company.relation.join('<br>'),
-            //         isAlert: true,
-            //     })
-
-            // this.triggerMessage({
-            //     title: 'Ar tikrai norite ištrinti struktūrą?',
-            //     content: `Pavadinimu: ${find.name}`,
-            //     action: async () => {
-            //         this.tryCatchForAPIAction(async () => {
-            //             await this.findCompanyRelation(find)
-            //             await this.deleteCompanyRelation()
-
-            //             try {
-            //                 let { collectionName, id } = this.company.name
-            //                 await this.deleteCompany({ collectionName, id })
-            //             } catch {}
-            //             this.$store.commit('clearCompanyData')
-            //             await this.fetchAllCompaniesRelation()
-            //         })
-            //     },
-            //     cancelAction: () => {},
-            // })
+                            try {
+                                let { collectionName, id } = this.company.name
+                                await this.deleteCompany({ collectionName, id })
+                            } catch {}
+                            this.$store.commit('clearCompanyData')
+                            await this.fetchAllCompaniesRelation([
+                                this.companyDetails[this.id],
+                            ])
+                        })
+                    },
+                    cancelAction: () => {},
+                })
+            }
         },
     },
 }

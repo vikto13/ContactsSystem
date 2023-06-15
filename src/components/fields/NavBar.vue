@@ -1,5 +1,5 @@
 <template>
-    <ul class="nav nav-fill dialog-box navigation-bar">
+    <ul class="nav nav-fill dialog-box navigation-bar" style="flex-shrink: 0">
         <router-link :to="'/'">
             <img
                 id="logo-icon"

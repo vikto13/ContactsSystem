@@ -50,9 +50,10 @@ export default {
             commit('setOffices', allOffice)
         },
         async editOffice({ state }) {
+            let { city, country, street, street_number } = state.office;
             let { id } = await pocketBase
                 .collection(state.collectionName)
-                .update(state.office.id, state.office);
+                .update(state.office.id, { ...state.office, name: `${street} ${street_number}, ${city}, ${country}` });
             await Promise.all(state.office.company.filter((value) => {
                 return !state.office.savedCompanies.some(obj => obj.company_id == value)
             })

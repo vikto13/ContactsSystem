@@ -33,13 +33,13 @@
             <md-table-cell v-if="user.token" md-label="Veiksmas">
                 <md-button
                     v-show="havePermission('delete_companies')"
-                    class="md-dense md-raised md-primary edit-btn"
+                    class="md-dense md-raised md-primary edit-btn m-1"
                     @click.stop="edit({ button: 0, id: item.id })"
                     >Redaguoti</md-button
                 >
                 <md-button
                     v-show="havePermission('edit_companies')"
-                    class="md-dense md-raised md-primary delete-btn"
+                    class="md-dense md-raised md-primary delete-btn m-1"
                     @click.stop="() => edit({ button: 1, id: item.id })"
                     >Ištrinti</md-button
                 >

@@ -34,7 +34,7 @@
 }
 
 .icon-colors{
-  color: white
+  color: white !important
 }
 
 .table-footer{

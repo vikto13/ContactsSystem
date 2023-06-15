@@ -2,7 +2,6 @@ import axios from 'axios'
 export default {
     state: {
         file: null,
-        name: null,
         result: '',
         buttonIsPressed: false,
     },
@@ -29,11 +28,13 @@ export default {
     actions: {
         uploadImage({ commit }, image) {
             const reader = new FileReader();
+
             reader.onload = (event) => {
                 commit("setResult", event.target.result)
             };
+            commit('setImage', { file: image })
             reader.readAsDataURL(image);
-            commit('setImage', image)
+
         },
         async setImageFromApi({ commit, dispatch }, { tableName, entity, imageName, commitName }) {
             let image = await axios.get(

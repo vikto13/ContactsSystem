@@ -13,11 +13,9 @@
                 v-if="offices != null && offices.length"
                 v-model="offices"
                 md-sort="name"
-                md-sort-order="asc"
                 md-card
                 md-fixed-header
-                class="mt-5"
-                style="background-color: #f1f2f4"
+                class="mt-5 table-footer"
             >
                 <md-table-row slot="md-table-row" slot-scope="{ item }">
                     <md-table-cell md-label="Pavadinimas" md-sort-by="name">

@@ -34,6 +34,7 @@ export function CompanyState() {
                 types: [],
                 relations: [
                     { path: "employees(department_id)", relation: [] },
+                    { path: "departments_groups(department_id)", relation: [] },
                 ],
                 fetching: [
                     "divisions_departments(division_id).department_id",
@@ -54,7 +55,7 @@ export function CompanyState() {
                 relation: 'companies',
                 relations: [
                     { path: "employees(division_id)", relation: [] },
-                    { path: "offices_divisions(division_id)", relation: [] },
+                    { path: "divisions_departments(division_id)", relation: [] },
                 ],
                 fetchFrom: [
                     { path: 'divisions_departments(department_id).division_id', table: 'departments' },
@@ -89,6 +90,7 @@ export function CompanyState() {
                 types: [],
                 relations: [
                     { path: "employees(group_id)", relation: [] },
+
                 ],
                 fetchFrom: [
                     { path: 'departments_groups(department_id).group_id', table: 'departments' },
