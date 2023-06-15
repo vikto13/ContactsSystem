@@ -2,7 +2,7 @@ import { CompanyState } from "../initState/CompanyState"
 import { pocketBase } from "../../../services/pocketBase";
 import axios from "axios";
 import { expanding, expandTheLast } from "./expandAction";
-import { filterSameId, findObjectWithSameId } from "./filterAction"
+import { filterSameId, findObjectWithSameId, getWithSameId } from "./filterAction"
 
 export default {
     state: CompanyState(),
@@ -160,43 +160,30 @@ export default {
         async fetchCompanyRelation({ state, commit, dispatch }, value) {
 
             if (value.length) {
-                let search = state.details[value[0].value]
+                let search = state.details[value[0]]
                 let { fetchFrom, name } = search;
-                let { path, table } = fetchFrom[value[0].toTop ? 1 : 0]
-                if (state.details[table].selected) {
-                    let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${state.details[table].selected}?expand=${path}`)
-                    let list = data.expand ? expandTheLast(data) : []
-                    await commit('setCompanies', { list, entity: name })
-                }
-                else {
+                const results = []
+                for (const { table, path } of fetchFrom) {
 
-                    let fetched = await Promise.all(state.details[table].all.map(({ id }) => {
-                        return axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${id}?expand=${path}`)
-                    }))
-                    commit("setCompanies", { list: reduceArray(fetched), entity: name })
+                    if (state.details[table].selected) {
+                        let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records/${state.details[table].selected}?expand=${path}`)
+                        let list = data.expand ? expandTheLast(data) : []
+                        if (fetchFrom.filter(({ table }) => state.details[table].selected).length != fetchFrom.length) {
+                            await commit('setCompanies', { list, entity: name })
+                            return dispatch("fetchCompanyRelation", value.slice(1, value.length))
+                        } else {
 
+                            results.push(list)
+                        }
+                    }
+                    else {
+                        let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${table}/records?expand=${path}`)
+                        results.push(reduceArr(data.items))
+                    }
                 }
+                await commit('setCompanies', { list: results.length == 2 ? getWithSameId(results[0], results[1]) : results[0], entity: name })
                 await dispatch("fetchCompanyRelation", value.slice(1, value.length))
             }
-
-        },
-        async selectEmptyRelation({ state, commit, dispatch }, selected) {
-
-            if (!selected.length) {
-                return;
-            }
-            let name = selected[0]
-            const { fetchFrom, relationship } = state.details[name]
-
-            if (state.details[relationship].selected) {
-                let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${fetchFrom[fetchFrom.length - 1].table}/records/${state.details[relationship].selected}?expand=${fetchFrom[fetchFrom.length - 1].path}`)
-                await commit("setCompanies", { list: data.expand ? expandTheLast(data) : [], entity: name })
-            } else {
-                let { data } = await axios.get(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${name}/records?expand=${fetchFrom[fetchFrom.length - 1].path.split(".")[0]}`)
-                await commit("setCompanies", { list: data.items, entity: name })
-            }
-
-            await dispatch("selectEmptyRelation", selected.slice(1, selected.length))
 
         },
         async editCompany({ state, commit }, entity) {
@@ -286,6 +273,18 @@ function reduceArray(fetched) {
     let show = fetched.reduce((prev, curr) => {
         if (curr.data.expand) {
             expandTheLast(curr.data).map(val => {
+                prev[val.id] = val
+            })
+        }
+        return prev
+    }, {})
+    return show ? Object.values(show) : []
+}
+
+function reduceArr(fetched) {
+    let show = fetched.reduce((prev, curr) => {
+        if (curr.expand) {
+            expandTheLast(curr).map(val => {
                 prev[val.id] = val
             })
         }

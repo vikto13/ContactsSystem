@@ -3,10 +3,10 @@
         <divide-components
             v-for="(filter, index) in [
                 companyDetails.companies,
+                companyDetails.offices,
                 companyDetails.divisions,
                 companyDetails.departments,
                 companyDetails.groups,
-                companyDetails.offices,
             ]"
             :key="index"
         >
@@ -21,11 +21,7 @@
                         selectOption({ value: target.value, id: filter.name })
                 "
             >
-                <option
-                    :disabled="'' == filter.selected"
-                    selected
-                    :value="null"
-                >
+                <option :disabled="'' == filter.selected" selected :value="''">
                     {{ navBar[filter.name].title }}
                 </option>
 
@@ -74,7 +70,6 @@ export default {
             'searchContactBySelections',
             'searchContactByText',
             'fetchCompanyRelation',
-            'selectEmptyRelation',
         ]),
         rearrangeArray(arr, selectedValue) {
             const index = arr.indexOf(selectedValue)
@@ -82,19 +77,9 @@ export default {
             const afterSelected = arr.slice(index + 1, selectedValue.length - 1)
 
             beforeSelected.reverse()
-            return [
-                ...beforeSelected.map((value) => ({
-                    value,
-                    toTop: false,
-                })),
-                ...afterSelected.map((value) => ({
-                    value,
-                    toTop: true,
-                })),
-            ]
+            return [...beforeSelected, ...afterSelected]
         },
         async selectOption({ value, id }) {
-            console.log(value, id)
             this.$store.commit('selectCompany', {
                 select: value,
                 id,
@@ -106,22 +91,9 @@ export default {
                 'departments',
                 'groups',
             ]
-            let change = []
-            if (!value) {
-                let index = companiesInfo.indexOf(id)
-                change = companiesInfo.slice(
-                    index - 1 < 0 ? 0 : index - 1,
-                    index + 2
-                )
-                await this.selectEmptyRelation(change)
-            }
+
             let reranged = this.rearrangeArray(companiesInfo, id)
-            if (!value) {
-                reranged = reranged.filter(({ value }) => {
-                    return !change.includes(value)
-                })
-            }
-            this.fetchCompanyRelation(this.rearrangeArray(companiesInfo, id))
+            this.fetchCompanyRelation(reranged)
             this.tryCatchForAPIAction(async () => {
                 await this.searchContactBySelections()
                 await this.searchContactByText()

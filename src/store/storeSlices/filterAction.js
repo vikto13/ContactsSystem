@@ -17,3 +17,7 @@ export function filterSameId(array) {
         return result;
     }, [])
 }
+
+export function getWithSameId(array1, array2) {
+    return array1.filter(item1 => array2.some(item2 => item2.id === item1.id));
+}

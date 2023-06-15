@@ -7,7 +7,7 @@
             ref="fileInput"
             type="file"
             accept="image/*"
-            @change="uploadImage"
+            @change="(e) => upload(e)"
             style="display: none"
         />
         <img :src="getImage" alt="Nuotrauka" class="mt-2" />
@@ -31,6 +31,10 @@ export default {
                 this.$refs.fileInput.click()
                 this.$store.commit('imageButtonPressed', false)
             }
+        },
+        upload(e) {
+            let [image] = e.target.files
+            this.uploadImage(image)
         },
     },
     destroyed() {

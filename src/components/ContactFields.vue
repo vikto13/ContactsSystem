@@ -10,17 +10,13 @@
                 :key="index"
                 :icon-name="column.icon"
                 :bottom-text="
-                    !column.notRequired
-                        ? messageById({
-                              [column.input]: employee[column.input],
-                          })
-                        : ''
+                    messageById({
+                        [column.input]: employee[column.input],
+                    })
                 "
                 :title="`${column.title}:`"
                 :is-not-valid="
-                    !column.notRequired
-                        ? isInvalid({ [column.input]: employee[column.input] })
-                        : null
+                    isInvalid({ [column.input]: employee[column.input] })
                 "
             >
                 <input
@@ -29,11 +25,9 @@
                     class="form-control"
                     :placeholder="column.placeholder"
                     :class="{
-                        'is-invalid':
-                            !column.notRequired &&
-                            isInvalid({
-                                [column.input]: employee[column.input],
-                            }),
+                        'is-invalid': isInvalid({
+                            [column.input]: employee[column.input],
+                        }),
                     }"
                     style="background-color: #f1f2f4"
                     :style="{ 'border-left-width': column.icon ? 0 : null }"
@@ -102,7 +96,6 @@ export default {
                             placeholder: 'Įveskite telefono numerį...',
                             icon: 'phone',
                             input: 'phone_number',
-                            notRequired: true,
                         },
                     ],
                 },
@@ -130,6 +123,7 @@ export default {
                     'surname',
                     'position',
                     'email',
+                    'phone_number',
                 ]
                     .map((value) =>
                         this.isInvalid({

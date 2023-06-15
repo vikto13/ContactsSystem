@@ -8,8 +8,11 @@ export default {
     },
     mutations: {
         setImage(state, image) {
-            state.file = image
-            state.name = image.name
+
+            for (let info in state) {
+                state[info] = image[info]
+            }
+
         },
         clearImageState(state) {
             for (let value in state) {
@@ -24,25 +27,22 @@ export default {
         }
     },
     actions: {
-        uploadImage({ commit }, e) {
-            const [image] = e.target.files
+        uploadImage({ commit }, image) {
             const reader = new FileReader();
             reader.onload = (event) => {
                 commit("setResult", event.target.result)
             };
             reader.readAsDataURL(image);
-
             commit('setImage', image)
         },
-        async setImageFromApi({ commit }, { tableName, entity, imageName, commitName }) {
+        async setImageFromApi({ commit, dispatch }, { tableName, entity, imageName, commitName }) {
             let image = await axios.get(
                 `${import.meta.env.VITE_POCKET_BASE_URL
                 }/api/files/${tableName}/${entity}/${imageName}?thumb=100x300`,
                 { responseType: 'blob' }
             )
-            let avatar = new FileReader()
-            avatar.readAsDataURL(image.data)
-            commit('setImage', { file: avatar, name: imageName })
+            dispatch("uploadImage", image.data)
+
         },
     },
     getters: {

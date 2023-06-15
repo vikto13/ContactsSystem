@@ -33,12 +33,13 @@ export const LoginMixin = {
             return !email
                 ? `Elektroninis paštas turi būti įvestas`
                 : `Elektroninis paštas turi būti validus`
-
         },
-        passwordMessage(password) {
-            return password.length < 8
-                ? `Slaptažodis turi būti sudarytas iš 8 raidžių`
-                : `Slaptažodis turi būti įvestas`
+        phoneMessage(phone_number) {
+            return phone_number ?
+                phone_number[0] != '+'
+                    ? "Turi prasidėti pliuso(+) ženklu"
+                    : phone_number.length > 2 && /^\+\d+$/.test(phone_number) ? "" : "Numeris turi būti validus"
+                : ""
         },
         isInvalid(input) {
             switch (Object.keys(input)[0]) {
@@ -48,15 +49,22 @@ export const LoginMixin = {
                     return this.showEmailMessage(Object.values(input)[0])
                 case 'street_number':
                     return !Boolean(/\d/.test(Object.values(input)[0])) && this.messageIsSubmitted
+                case 'phone_number':
+                    return Boolean(this.phoneMessage(Object.values(input)[0])) && this.messageIsSubmitted
                 default:
                     return !Object.values(input)[0] && this.messageIsSubmitted
             }
         },
         messageById(info) {
-            if (Object.keys(info)[0] == 'email') {
-                return this.emailMessage(Object.values(info)[0])
+            switch (Object.keys(info)[0]) {
+                case 'email':
+                    return this.emailMessage(Object.values(info)[0])
+                case 'phone_number':
+                    return this.phoneMessage(Object.values(info)[0]) || "/n"
+                default:
+                    return this.messageTexts[Object.keys(info)[0]]
             }
-            return this.messageTexts[Object.keys(info)[0]]
+
         },
         havePermission(permission) {
             return this.user.token ? this.user.permissions_id[permission] : false;

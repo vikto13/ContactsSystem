@@ -103,10 +103,9 @@ export default {
         ]),
         relationList() {
             return [
-                this.companyDetails.groups,
                 this.companyDetails.departments,
                 this.companyDetails.divisions,
-                this.companyDetails.offices,
+                this.companyDetails.groups,
             ]
         },
         getInputNameText() {

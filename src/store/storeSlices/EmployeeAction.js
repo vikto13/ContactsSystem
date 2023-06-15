@@ -121,7 +121,7 @@ export default {
         },
         async setOfficeByDivisionAndCompany({ commit, state }) {
             let { division_id, company_id } = state.employee
-            if (!division_id && !company_id) {
+            if (!division_id || !company_id) {
                 return
             }
             let data =
