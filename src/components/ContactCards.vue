@@ -23,6 +23,7 @@
                     `Adresas: ${getAddress(contact)}`,
                 ]"
                 :id="contact.id"
+                :imagePath="getImage(contact)"
                 @buttonClicked="edit"
                 @cardClicked="see"
             ></card>
@@ -40,5 +41,14 @@ export default {
         DivideComponents,
     },
     mixins: [ContactsMixin, LoginMixin],
+    methods: {
+        getImage(employee) {
+            return employee.photo
+                ? `${
+                      import.meta.env.VITE_POCKET_BASE_URL
+                  }/api/files/b2oym7fr4tkhpsr/${employee.id}/${employee.photo}`
+                : ''
+        },
+    },
 }
 </script>

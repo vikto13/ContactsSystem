@@ -10,7 +10,13 @@
             @change="(e) => upload(e)"
             style="display: none"
         />
-        <img :src="getImage" alt="Nuotrauka" class="mt-2" />
+        <img
+            :src="getImage"
+            alt="Nuotrauka"
+            class="mt-2"
+            width="190"
+            height="190"
+        />
     </div>
 </template>
 <script>

@@ -109,9 +109,7 @@ export default {
             let data = await pocketBase
                 .collection(state.collectionName)
                 .getFirstListItem(`id="${id}"`, { expand: 'permissions_id' });
-
-            data.avatar && dispatch("setImageFromApi", { tableName: data.collectionName, entity: data.id, imageName: data.avatar })
-            commit("setAdmin", expanding(data))
+            await commit("setAdmin", expanding(data))
         },
         setWhatDo({ commit }, what) {
             commit("setAdminAction", what)

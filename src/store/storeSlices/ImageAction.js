@@ -36,13 +36,13 @@ export default {
             reader.readAsDataURL(image);
 
         },
-        async setImageFromApi({ commit, dispatch }, { tableName, entity, imageName, commitName }) {
+        async setImageFromApi({ commit, dispatch }, { tableName, entity, imageName }) {
             let image = await axios.get(
                 `${import.meta.env.VITE_POCKET_BASE_URL
                 }/api/files/${tableName}/${entity}/${imageName}?thumb=100x300`,
                 { responseType: 'blob' }
             )
-            dispatch("uploadImage", image.data)
+            await dispatch("uploadImage", image.data)
 
         },
     },

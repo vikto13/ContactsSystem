@@ -41,7 +41,7 @@
                     class="md-icon-button md-raised"
                     style="background-color: white !important"
                 >
-                    <img v-if="user.avatar" :src="image" />
+                    <img v-if="user.avatar" :src="getImage" />
                     <md-icon v-else>person</md-icon>
                 </md-button>
 
@@ -63,10 +63,11 @@ import { mapActions, mapGetters } from 'vuex'
 import { LoginMixin } from '../../views/mixins/LoginMixin'
 export default {
     computed: {
-        ...mapGetters(['user', 'navBar']),
-        image() {
-            let showImage = this.user.avatarUrl.result
-            return showImage
+        ...mapGetters(['user', 'navBar', 'image']),
+        getImage() {
+            return `${
+                import.meta.env.VITE_POCKET_BASE_URL
+            }/api/files/_pb_users_auth_/${this.user.id}/${this.user.avatar}`
         },
     },
     mixins: [LoginMixin],

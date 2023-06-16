@@ -4,7 +4,9 @@
             <md-ripple>
                 <md-card-header>
                     <md-avatar>
+                        <img v-if="imagePath" :src="imagePath" />
                         <svg
+                            v-else
                             class="h-12 w-12 text-brown-300"
                             viewBox="0 0 24 24"
                             fill="#F1F2F4"
@@ -64,6 +66,10 @@ export default {
         },
         id: {
             type: String,
+        },
+        imagePath: {
+            type: String,
+            default: null,
         },
     },
 }
