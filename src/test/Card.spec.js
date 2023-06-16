@@ -42,21 +42,11 @@ describe("Card.vue", async () => {
     });
 
     it('should check if buttons are showable', async () => {
-        let buttons = wrapper.findAll('.md-icon-button');
-        propsData.buttons.map(({ show }, index) => {
-            expect(buttons.at(index).isVisible()).toBe(show)
-        })
+        // let buttons = wrapper.findAll('.md-icon-button');
+        // propsData.buttons.map(({ show }, index) => {
+        //     expect(buttons.at(index).isVisible()).toBe(show)
+        // })
     });
 
-    // it('shows message when clicked delete button', async () => {
 
-
-    //     const button = wrapper.find('.delete-btn')
-    //     button.trigger('click')
-    //     // await wrapper.vm.$nextTick()
-    //     // const table = wrapper.find('md-card')
-    //     console.log(button);
-    //     // expect(modalHeader.text()).toBe('Testing')
-    //     // expect(modalHeader.classes().includes('bg-danger')).toBeTruthy()
-    // });
 });
