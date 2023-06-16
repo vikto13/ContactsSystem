@@ -1,4 +1,4 @@
-import { pocketBase } from "../../../services/pocketBase";
+import { pocketBase } from "../../services/pocketBase";
 import { UserState } from "../initState/UserState";
 import axios from "axios";
 import { expanding } from "./expandAction";

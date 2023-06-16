@@ -7,11 +7,9 @@ export default {
     },
     mutations: {
         setImage(state, image) {
-
             for (let info in state) {
                 state[info] = image[info]
             }
-
         },
         clearImageState(state) {
             for (let value in state) {

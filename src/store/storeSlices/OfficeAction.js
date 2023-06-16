@@ -1,5 +1,5 @@
 import { OfficeState } from "../initState/OfficeState"
-import { pocketBase } from "../../../services/pocketBase";
+import { pocketBase } from "../../services/pocketBase";
 
 export default {
     state: OfficeState(),

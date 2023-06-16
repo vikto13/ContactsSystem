@@ -9,6 +9,7 @@ import Image from "./storeSlices/ImageAction"
 import Message from "./storeSlices/MessageAction"
 import Office from "./storeSlices/OfficeAction"
 import User from "./storeSlices/UserActions"
+import PostsAPI from "../services/postAPI"
 
 export const initializeStore = {
     modules: {
@@ -23,5 +24,6 @@ export const initializeStore = {
         Office,
         Admin,
         User
-    }
+    },
+    plugins: [PostsAPI]
 }

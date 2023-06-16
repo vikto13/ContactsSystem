@@ -1,8 +1,8 @@
 import { CompanyState } from "../initState/CompanyState"
-import { pocketBase } from "../../../services/pocketBase";
+import { pocketBase } from "../../services/pocketBase";
 import axios from "axios";
-import { expanding, expandTheLast } from "./expandAction";
-import { filterSameId, findObjectWithSameId, getWithSameId } from "./filterAction"
+import { expandTheLast } from "./expandAction";
+import { getWithSameId } from "./filterAction"
 
 export default {
     state: CompanyState(),
@@ -73,14 +73,7 @@ export default {
             let data = await pocketBase.collection(`${collectionName}`).create({ name })
 
             await Promise.all(relation.map(async (relId) => {
-                return axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/${relationship}_${collectionName}/records`,
-                    { [id]: data.id, [state.details[relationship].id]: relId },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${getters.user.token}`
-                        }
-                    }
-                )
+                return pocketBase.collection(`${relationship}_${collectionName}`).create({ [id]: data.id, [state.details[relationship].id]: relId }, { '$autoCancel': false })
             }))
 
         },
@@ -180,12 +173,12 @@ export default {
             }
 
         },
-        async editCompany({ state, commit }, entity) {
+        async editCompany({ state }, entity) {
             await pocketBase
                 .collection(entity)
                 .update(state.company.id, { name: state.company.name });
         },
-        async editCompanyRelation({ state, commit, dispatch, getters }) {
+        async editCompanyRelation({ state, getters }) {
 
             let { collectionName, id, name } = state.company.name
             let data = await pocketBase

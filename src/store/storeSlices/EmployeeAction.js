@@ -1,5 +1,5 @@
 import { EmployeeState } from "../initState/EmployeeState"
-import { pocketBase } from "../../../services/pocketBase";
+import { pocketBase } from "../../services/pocketBase";
 import axios from "axios";
 import { expanding, expandTheLast } from "./expandAction";
 import { findObjectWithSameId } from "./filterAction"

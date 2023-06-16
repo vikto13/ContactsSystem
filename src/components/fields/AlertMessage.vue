@@ -1,5 +1,6 @@
 <template>
-    <div v-show="alert.showAlert" class="alert alert-danger" role="alert">
+    <!-- v-show="alert.showAlert"  -->
+    <div v-show="true" class="alert alert-danger" role="alert">
         {{ alert.message[alert.showMessage] }}
     </div>
 </template>

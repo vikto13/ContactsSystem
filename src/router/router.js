@@ -16,7 +16,8 @@ import {
     checkContact,
     verifyToken,
     readAdmins,
-    pathForCompany
+    pathForCompany,
+    pathForRelation
 } from "./middlewares/middlewares";
 import Offices from "../views/Offices.vue";
 import NotFound from "../views/NotFound.vue";
@@ -73,7 +74,7 @@ export const router = new VueRouter({
             component: Relationship,
             props: true,
             meta: {
-                middleware: [authenticate, needsAuth],
+                middleware: [authenticate, needsAuth, pathForRelation],
             },
         },
         {

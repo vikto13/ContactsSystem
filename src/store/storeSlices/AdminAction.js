@@ -1,4 +1,4 @@
-import { pocketBase } from "../../../services/pocketBase";
+import { pocketBase } from "../../services/pocketBase";
 import { AdminState } from "../initState/AdminState";
 import axios from 'axios';
 import generator from "generate-password-browser";
@@ -46,35 +46,54 @@ export default {
             commit("setRoles", data)
         },
         async fetchAdmins({ commit, state }) {
-            const data = await pocketBase.collection(state.collectionName).getFullList({
-                sort: '-created',
-            })
+            let data = await this.getFullList(state.collectionName)
             commit("setAdmins", data)
         },
         async deleteAdmin({ commit, state }) {
             let { id, permissions_id } = state.admin
-            await pocketBase.collection(state.collectionName).delete(id)
-            await pocketBase.collection('user_permissions').delete(permissions_id.id)
-
-
+            await this.deleteRecord(state.collectionName, id)
+            await this.deleteRecord('user_permissions', permissions_id.id)
         },
         async updateAdmin({ getters, state }) {
-            await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${state.admin.id}`,
-                {
-                    name: state.admin.name,
-                    email: state.admin.email,
-                    avatar: getters.image.file,
-                    permissions_id: state.admin.permissions_id.id,
-                    emailVisibility: true,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${getters.user.token}`
 
-                    }
-                }
-            )
+            let data = {
+                name: state.admin.name,
+                email: state.admin.email,
+
+                permissions_id: state.admin.permissions_id.id,
+                emailVisibility: true,
+            }
+            try {
+                await this.updateRecord(state.collectionName, state.admin.id, data)
+            } catch (err) {
+                console.log(err)
+            }
+
+
+            // await this.updateRecord(state.collectionName, state.admin.id, {
+            //     name: state.admin.name,
+            //     email: state.admin.email,
+            //     avatar: getters.image.file,
+            //     permissions_id: state.admin.permissions_id.id,
+            //     emailVisibility: true,
+            // },)
+
+            // await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${state.admin.id}`,
+            //     {
+            //         name: state.admin.name,
+            //         email: state.admin.email,
+            //         avatar: getters.image.file,
+            //         permissions_id: state.admin.permissions_id.id,
+            //         emailVisibility: true,
+            //     },
+            //     {
+            //         headers: {
+            //             'Content-Type': 'multipart/form-data',
+            //             Authorization: `Bearer ${getters.user.token}`
+
+            //         }
+            //     }
+            // )
         },
         async updateRoles({ state }) {
             await pocketBase.collection('user_permissions').update(state.admin.permissions_id.id, getPermissions(state));
@@ -91,6 +110,10 @@ export default {
 
             await commit("setPassword", password)
             let { id } = await pocketBase.collection('user_permissions').create(getPermissions(state));
+
+
+
+
             await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records`,
                 {
                     ...state.admin,

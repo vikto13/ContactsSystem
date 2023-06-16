@@ -22,11 +22,11 @@ export default {
                 path: "/companies/records"
             },
             divisions: {
-                what: "diviziją",
-                whose: "Divizijos",
-                textAdd: "Pridėti naują diviziją",
-                textEmpty: "Nėra pridėta divizijų",
-                title: 'Divizija',
+                what: "Padaliniai",
+                whose: "Padalinius",
+                textAdd: "Pridėti naują padalinį",
+                textEmpty: "Nėra pridėta padalinių",
+                title: 'Padaliniai',
             },
             groups: {
                 what: "grupę",
@@ -36,11 +36,11 @@ export default {
                 title: 'Grupė'
             },
             departments: {
-                what: "departamentą",
-                whose: "Departamentai",
-                textAdd: "Pridėti naują departamentą",
-                textEmpty: "Nėra pridėta departamentų",
-                title: 'Departamentai',
+                what: "skyrių",
+                whose: "Skyrius",
+                textAdd: "Pridėti naują skyrių",
+                textEmpty: "Nėra pridėta skyriaus",
+                title: 'Skyriai',
                 path: 'departments'
             },
             offices: {

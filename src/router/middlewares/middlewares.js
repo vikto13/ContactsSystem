@@ -3,19 +3,14 @@ import jwt_decode from "jwt-decode";
 export async function authenticate({ next, store }) {
 
     let haveToken = store.getters.user.token
-
+    let data = JSON.parse(localStorage.getItem('pocketbase_auth'))
     try {
-        let data = localStorage.getItem('pocketbase_auth')
-        if (!data) {
-            throw null;
-        }
-
-        let { model, token } = JSON.parse(data)
+        let { model, token } = data
         if (!haveToken && token) {
             await store.dispatch("authWithToken", { id: model.id, token, password: '', passwordConfirm: '' })
         }
     } catch {
-        store.commit("clearUserData")
+        data && store.commit("setUser", { token: data.token, ...data.model })
     }
     return next()
 }
@@ -40,7 +35,7 @@ export async function checkContact({ next, to, store }) {
     }
 }
 
-export function verifyToken({ next, to, store }) {
+export function verifyToken({ next, to }) {
     try {
         jwt_decode(to.params.token)
         return next()
@@ -49,15 +44,14 @@ export function verifyToken({ next, to, store }) {
     }
 }
 
-export function readAdmins({ next, to, store }) {
+export function readAdmins({ next, store }) {
     if (store.getters.user.token && store.getters.user.permissions_id.read_permissions) {
         return next()
     }
     return next({ path: `/admins/login` });
 }
 
-export function pathForCompany({ next, to, store }) {
-
+export function pathForCompany({ next, to }) {
     if ([
         'companies',
         'groups',
@@ -67,5 +61,15 @@ export function pathForCompany({ next, to, store }) {
         return next()
     }
     return next({ name: "notFound" })
+}
 
+export function pathForRelation({ next, to }) {
+    if ([
+        'divisions',
+        'departments',
+        'groups'
+    ].includes(to.params.id)) {
+        return next()
+    }
+    return next({ name: "notFound" })
 }
