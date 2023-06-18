@@ -5,13 +5,12 @@ export const ContactsMixin = {
         ...mapGetters(["currentPage", "sizeOfPaginate", "employees", "employee"]),
         showCards: {
             get() {
+                console.log(this.employees)
                 let size = this.currentPage * this.sizeOfPaginate;
-
                 if (this.employees.length == size && this.currentPage) {
                     this.$store.commit("previuosPage");
                     size = size - this.sizeOfPaginate;
                 }
-
                 return this.employees.slice(size, size + this.sizeOfPaginate);
             },
             set() {

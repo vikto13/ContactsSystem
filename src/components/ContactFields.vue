@@ -135,11 +135,13 @@ export default {
                 return
             }
             this.tryCatchForAPIAction(async () => {
-                this.employee.id
-                    ? await this.editEmployee()
-                    : await this.saveEmployee()
-                this.dismissDialog()
-                this.fetchEmployees()
+                if (this.employee.id) {
+                    await this.editEmployee()
+                } else {
+                    await this.saveEmployee()
+                }
+                await this.dismissDialog()
+                await this.fetchEmployees()
             })
         },
     },

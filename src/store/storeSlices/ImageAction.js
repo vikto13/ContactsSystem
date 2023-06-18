@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { pocketBase } from '../../services/pocketBase'
 export default {
     state: {
         file: null,
@@ -26,13 +27,12 @@ export default {
     actions: {
         uploadImage({ commit }, image) {
             const reader = new FileReader();
-
             reader.onload = (event) => {
+                console.log(event)
                 commit("setResult", event.target.result)
             };
             commit('setImage', { file: image })
             reader.readAsDataURL(image);
-
         },
         async setImageFromApi({ commit, dispatch }, { tableName, entity, imageName }) {
             let image = await axios.get(
@@ -41,7 +41,10 @@ export default {
                 { responseType: 'blob' }
             )
             await dispatch("uploadImage", image.data)
-
+        },
+        async getImageFromApi({ commit }, { record, fileName }) {
+            let url = pocketBase.files.getUrl(record, fileName)
+            commit("setResult", url)
         },
     },
     getters: {

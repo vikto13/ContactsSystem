@@ -42,61 +42,29 @@ export default {
     },
     actions: {
         async fetchRoles({ commit }) {
-            const data = await pocketBase.collection('user_permissions').getFullList()
+            let data = await this.getFullList('user_permissions')
             commit("setRoles", data)
         },
         async fetchAdmins({ commit, state }) {
             let data = await this.getFullList(state.collectionName)
             commit("setAdmins", data)
         },
-        async deleteAdmin({ commit, state }) {
+        async deleteAdmin({ state }) {
             let { id, permissions_id } = state.admin
             await this.deleteRecord(state.collectionName, id)
             await this.deleteRecord('user_permissions', permissions_id.id)
         },
         async updateAdmin({ getters, state }) {
-
-            let data = {
+            const data = {
                 name: state.admin.name,
                 email: state.admin.email,
-
+                avatar: getters.image.file,
                 permissions_id: state.admin.permissions_id.id,
-                emailVisibility: true,
             }
-            try {
-                await this.updateRecord(state.collectionName, state.admin.id, data)
-            } catch (err) {
-                console.log(err)
-            }
-
-
-            // await this.updateRecord(state.collectionName, state.admin.id, {
-            //     name: state.admin.name,
-            //     email: state.admin.email,
-            //     avatar: getters.image.file,
-            //     permissions_id: state.admin.permissions_id.id,
-            //     emailVisibility: true,
-            // },)
-
-            // await axios.patch(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records/${state.admin.id}`,
-            //     {
-            //         name: state.admin.name,
-            //         email: state.admin.email,
-            //         avatar: getters.image.file,
-            //         permissions_id: state.admin.permissions_id.id,
-            //         emailVisibility: true,
-            //     },
-            //     {
-            //         headers: {
-            //             'Content-Type': 'multipart/form-data',
-            //             Authorization: `Bearer ${getters.user.token}`
-
-            //         }
-            //     }
-            // )
+            await this.updateRecord(state.collectionName, state.admin.id, data)
         },
         async updateRoles({ state }) {
-            await pocketBase.collection('user_permissions').update(state.admin.permissions_id.id, getPermissions(state));
+            await this.updateRecord('user_permissions', state.admin.permissions_id.id, getPermissions(state))
         },
         clearAdminData({ commit }) {
             commit("clearAdmin")
@@ -109,29 +77,16 @@ export default {
                 })
 
             await commit("setPassword", password)
-            let { id } = await pocketBase.collection('user_permissions').create(getPermissions(state));
-
-
-
-
-            await axios.post(`${import.meta.env.VITE_POCKET_BASE_URL}/api/collections/users/records`,
-                {
-                    ...state.admin,
-                    permissions_id: id,
-                    avatar: getters.image.file,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${getters.user.token}`
-                    }
-                }
-            )
+            let { id } = await this.saveRecord('user_permissions', getPermissions(state))
+            await this.saveRecord(state.collectionName, {
+                ...state.admin,
+                permissions_id: id,
+                avatar: getters.image.file,
+            })
         },
         async fetchAdmin({ commit, state, dispatch }, id) {
-            let data = await pocketBase
-                .collection(state.collectionName)
-                .getFirstListItem(`id="${id}"`, { expand: 'permissions_id' });
+            let data = await this.getFirstList(state.collectionName, id, { expand: 'permissions_id' })
+            dispatch("getImageFromApi", { record: data, fileName: data.avatar })
             await commit("setAdmin", expanding(data))
         },
         setWhatDo({ commit }, what) {

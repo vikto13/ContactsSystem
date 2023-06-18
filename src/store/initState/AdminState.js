@@ -11,7 +11,8 @@ export function AdminState() {
             passwordConfirm: '',
             emailVisibility: true,
             username: null,
-            roles: []
+            roles: [],
+            avatar: ''
         },
         admins: [],
         collectionName: 'users',

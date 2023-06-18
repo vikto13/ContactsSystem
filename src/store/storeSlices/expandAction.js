@@ -26,6 +26,23 @@ function expand(data, callback) {
     }
 }
 
-export function changeNotSameId() {
-
+export function expandValues(data) {
+    let expanded = []
+    expands(data, (value) => {
+        console.log(value)
+        expanded.push(value)
+    })
+    return expanded
+}
+function expands(data, callback) {
+    console.log(data)
+    if (typeof data === 'object' && !Array.isArray(data)) {
+        if (data.expand) {
+            Object.values(data.expand).forEach(value => expands(value, callback))
+        } else {
+            callback(data)
+        }
+    } else if (Array.isArray(data)) {
+        Object.values(data).forEach(value => expands(value, callback))
+    }
 }
