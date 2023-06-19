@@ -21,21 +21,26 @@ export default {
         },
     },
     actions: {
-        async findOffice({ commit, state }, id) {
+        async FIND_OFFICE({ commit, state }, id) {
             const data = await this.getFirstList(state.collectionName, id)
             let savedCompanies = await this.getFullList('companies_offices', {
                 filter: `office_id="${data.id}"`,
             })
-            commit('setOffice', {
+            commit('SET_OFFICE', {
                 ...data,
                 savedCompanies,
                 company: savedCompanies.map(({ company_id }) => company_id),
             })
         },
-        async saveOffice({ state }) {
+        async POST_OFFICE({ state }) {
             let { city, country, street, street_number, company } = state.office
+            let officeData = {}
+            for (let info in state.office) {
+                let setData = state.office[info]
+                if (setData) officeData[info] = state.office[info]
+            }
             let { id } = await this.saveRecord(state.collectionName, {
-                ...state.office,
+                ...officeData,
                 name: `${street} ${street_number}, ${city}, ${country}`,
             })
             await Promise.all(
@@ -47,11 +52,11 @@ export default {
                 })
             )
         },
-        async fetchOffices({ commit, state }) {
+        async FETCH_OFFICES({ commit, state }) {
             let allOffice = await this.getFullList(state.collectionName)
-            commit('setOffices', allOffice)
+            commit('SET_OFFICES', allOffice)
         },
-        async editOffice({ state }) {
+        async EDIT_OFFICE({ state }) {
             let { city, country, street, street_number } = state.office
             let { id } = await this.updateRecord(
                 state.collectionName,
@@ -87,7 +92,7 @@ export default {
                     })
             )
         },
-        async deleteOffice({ state }) {
+        async DELETE_OFFICE({ state }) {
             await this.deleteRecord(state.collectionName, state.office.id)
         },
     },

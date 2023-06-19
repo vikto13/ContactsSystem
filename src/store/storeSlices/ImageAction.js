@@ -23,18 +23,18 @@ export default {
         },
     },
     actions: {
-        uploadImage({ commit }, image) {
+        UPLOAD_IMAGE({ commit }, image) {
             const reader = new FileReader()
             reader.onload = (event) => {
                 console.log(event)
-                commit('setResult', event.target.result)
+                commit('SET_RESULT', event.target.result)
             }
-            commit('setImage', { file: image })
+            commit('SET_IMAGE', { file: image })
             reader.readAsDataURL(image)
         },
-        async getImageFromApi({ commit }, { record, fileName }) {
+        async GET_IMAGE_FROM_API({ commit }, { record, fileName }) {
             let url = this.getUrl(record, fileName)
-            commit('setResult', url)
+            commit('SET_RESULT', url)
         },
     },
     getters: {

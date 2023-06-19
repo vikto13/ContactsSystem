@@ -5,7 +5,7 @@ export async function authenticate({ next, store }) {
     try {
         let { model, token } = data
         if (!haveToken && token) {
-            await store.dispatch('authWithToken', {
+            await store.dispatch('AUTH_WITH_TOKEN', {
                 id: model.id,
                 token,
                 password: '',
@@ -14,7 +14,7 @@ export async function authenticate({ next, store }) {
         }
     } catch (err) {
         data &&
-            (await store.commit('setUser', {
+            (await store.commit('SET_USER', {
                 token: data.token,
                 ...data.model,
             }))
@@ -32,7 +32,7 @@ export function needsAuth({ next, store }) {
 
 export async function checkContact({ next, to, store }) {
     try {
-        await store.dispatch('findAndExpandEmployee', to.params.id)
+        await store.dispatch('FIND_AND_EXPAND_EMPLOYEE', to.params.id)
         return next()
     } catch (error) {
         if (error.status == 404) {

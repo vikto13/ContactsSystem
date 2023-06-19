@@ -30,21 +30,21 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['uploadImage']),
+        ...mapActions(['UPLOAD_IMAGE']),
         addImage() {
             if (!this.image.buttonIsPressed) {
-                this.$store.commit('imageButtonPressed', true)
+                this.$store.commit('SET_IMAGE_BUTTON_PRESSED', true)
                 this.$refs.fileInput.click()
-                this.$store.commit('imageButtonPressed', false)
+                this.$store.commit('SET_IMAGE_BUTTON_PRESSED', false)
             }
         },
         upload(e) {
             let [image] = e.target.files
-            this.uploadImage(image)
+            this.UPLOAD_IMAGE(image)
         },
     },
     destroyed() {
-        this.$store.commit('clearImageState')
+        this.$store.commit('REMOVE_IMAGE')
     },
 }
 </script>

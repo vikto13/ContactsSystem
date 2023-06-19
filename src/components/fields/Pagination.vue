@@ -69,7 +69,9 @@ export default {
         },
         currentPage: {
             set(isNext) {
-                this.$store.commit(isNext ? 'nextPage' : 'previuosPage')
+                this.$store.commit(
+                    isNext ? ' SET_TO_NEXT_PAGE' : ' SET_TO_PREVIUOS_PAGE'
+                )
             },
             get() {
                 return this.$store.getters.currentPage

@@ -46,29 +46,29 @@ export default {
     },
     methods: {
         ...mapActions([
-            'saveCompany',
-            'fetchCompanies',
-            'dismissDialog',
-            'editCompany',
-            'setToSubmit',
+            'POST_COMPANY',
+            'FETCH_COMPANIES',
+            'DISMISS_DIALOG',
+            'EDIT_COMPANY',
+            'SUBMIT_MESSAGE',
         ]),
         async save() {
             this.tryCatchForAPIAction(async () => {
                 if (!this.company.name) {
-                    await this.setToSubmit()
+                    await this.SUBMIT_MESSAGE()
                     return
                 }
                 this.company.id.length
-                    ? await this.editCompany('companies')
-                    : await this.saveCompany('companies')
-                await this.fetchCompanies('companies')
-                this.dismissDialog()
+                    ? await this.EDIT_COMPANY('companies')
+                    : await this.POST_COMPANY('companies')
+                await this.FETCH_COMPANIES('companies')
+                this.DISMISS_DIALOG()
             })
         },
     },
     destroyed() {
-        this.$store.commit('clearCompanyData')
-        this.$store.commit('submitMessage', false)
+        this.$store.commit('REMOVE_COMPANY')
+        this.$store.commit('SET_TO_SUBMIT_MESSAGE', false)
     },
 }
 </script>

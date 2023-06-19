@@ -125,7 +125,7 @@ export default {
         }
     },
     destroyed() {
-        this.$store.commit('clearEmployee')
+        this.$store.commit('REMOVE_EMPLOYEE')
     },
     methods: {
         isNoText(text) {

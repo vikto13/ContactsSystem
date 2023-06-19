@@ -65,8 +65,8 @@ export default {
     mixins: [LoginMixin],
     async mounted() {
         await Promise.all([
-            this.setCompaniesInType('companies'),
-            this.setCompaniesInType('offices'),
+            this.FETCH_COMPANIES('companies'),
+            this.FETCH_COMPANIES('offices'),
         ])
     },
     computed: {
@@ -88,7 +88,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['setCompaniesInType', 'setCompanyRealation']),
+        ...mapActions(['FETCH_COMPANIES', 'POST_COMPANY_RELATIONSHIP']),
         async selected({ selected, value, name }) {
             let index = this.showCompanies.findIndex(
                 (obj) => obj.name === selected.name
@@ -97,7 +97,7 @@ export default {
                 index + 1,
                 this.showCompanies.length
             )
-            this.$store.commit('setEmployee', {
+            this.$store.commit('SET_EMPLOYEE', {
                 ...filteredArr.reduce((prev, curr) => {
                     return { ...prev, [curr.id]: '' }
                 }, {}),
@@ -106,7 +106,7 @@ export default {
             let show = []
             index == 0 && show.push({ name: 'offices' })
 
-            this.setCompanyRealation([
+            this.POST_COMPANY_RELATIONSHIP([
                 ...show,
                 ...this.showCompanies.slice(index + 1, index + 2),
             ])

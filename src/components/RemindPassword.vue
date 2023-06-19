@@ -43,14 +43,14 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['resetPassword', 'triggerMessage']),
+        ...mapActions(['RESET_PASSWORD', 'SHOW_MESSAGE']),
         async send() {
             try {
-                await this.resetPassword()
+                await this.RESET_PASSWORD()
                 this.isSended = true
                 return
             } catch {
-                this.triggerMessage({
+                this.SHOW_MESSAGE({
                     title: 'Įvyko klaida',
                     content: `Pabandykite dar kartą`,
                     isAlert: true,

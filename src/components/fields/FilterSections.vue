@@ -59,17 +59,16 @@ export default {
                     this.companyDetails.divisions,
                     this.companyDetails.groups,
                     this.companyDetails.offices,
-                ].map(({ name }) => this.fetchCompanies(name))
+                ].map(({ name }) => this.FETCH_COMPANIES(name))
             )
         })
     },
     methods: {
         ...mapActions([
-            'fetchCompanies',
-            'selectCompany',
-            'searchContactBySelections',
-            'searchContactByText',
-            'fetchCompanyRelation',
+            'FETCH_COMPANIES',
+            'SEARCH_CONTACT_BY_SELECTIONS',
+            'SEARCH_CONTACT_BY_TEXT',
+            'FETCH_COMPANY_RELATION',
         ]),
         rearrangeArray(arr, selectedValue) {
             const index = arr.indexOf(selectedValue)
@@ -80,7 +79,7 @@ export default {
             return [...beforeSelected, ...afterSelected]
         },
         async selectOption({ value, id }) {
-            this.$store.commit('selectCompany', {
+            this.$store.commit('SET_TO_SELECT_COMPANY', {
                 select: value,
                 id,
             })
@@ -93,10 +92,10 @@ export default {
             ]
 
             let reranged = this.rearrangeArray(companiesInfo, id)
-            this.fetchCompanyRelation(reranged)
+            this.FETCH_COMPANY_RELATION(reranged)
             this.tryCatchForAPIAction(async () => {
-                await this.searchContactBySelections()
-                await this.searchContactByText()
+                await this.SEARCH_CONTACT_BY_SELECTIONS()
+                await this.SEARCH_CONTACT_BY_TEXT()
             })
         },
     },

@@ -22,10 +22,10 @@ export const LoginMixin = {
     },
     methods: {
         ...mapActions([
-            'showAlert',
-            'disableAlert',
-            'triggerMessage',
-            'resetPassword',
+            'DISABLE_ALERT',
+            'DISABLE_ALERT',
+            'SHOW_MESSAGE',
+            'RESET_PASSWORD',
         ]),
         showCompareMessage(password, secPassword) {
             return this.messageIsSubmitted && password !== secPassword
@@ -49,8 +49,8 @@ export const LoginMixin = {
                 ? phone_number[0] != '+'
                     ? 'Turi prasidėti pliuso(+) ženklu'
                     : phone_number.length > 2 && /^\+\d+$/.test(phone_number)
-                    ? ''
-                    : 'Numeris turi būti validus'
+                        ? ''
+                        : 'Numeris turi būti validus'
                 : ''
         },
         isInvalid(input) {
@@ -91,7 +91,7 @@ export const LoginMixin = {
         async updatePassword() {
             let message
             try {
-                await this.resetPassword()
+                await this.RESET_PASSWORD()
                 message = {
                     title: 'Žinutė išsiųsta',
                     content: `Patikrinkite savo elektroninį paštą`,
@@ -102,7 +102,7 @@ export const LoginMixin = {
                     content: `Pabandykite dar kartą`,
                 }
             }
-            this.triggerMessage({
+            this.SHOW_MESSAGE({
                 ...message,
                 isAlert: true,
             })
@@ -111,10 +111,13 @@ export const LoginMixin = {
         async tryCatchForAPIAction(action) {
             try {
                 await action()
-                this.alert.showAlert && this.disableAlert()
             } catch (err) {
-                console.log(err)
-                // this.showAlert(404);
+                this.SHOW_MESSAGE({
+                    title: 'Įvyko klaida',
+                    content: err.message,
+                    isAlert: true,
+                })
+                // this.DISABLE_ALERT(404);
             }
         },
     },

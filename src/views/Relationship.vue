@@ -6,7 +6,7 @@
             <field-to-create
                 v-show="havePermission('edit_structure')"
                 :text="'Pridėti naują struktūrą'"
-                @pressed="triggerDialog('add-relationship')"
+                @pressed="SHOW_DIALOG('add-relationship')"
             >
             </field-to-create>
 
@@ -89,7 +89,7 @@ export default {
         FieldToCreate,
     },
     async mounted() {
-        await this.fetchAllCompaniesRelation(this.relations)
+        await this.FETCH_COMPANIES_RELATION(this.relations)
     },
     mixins: [ContactsMixin, LoginMixin],
     computed: {
@@ -110,26 +110,26 @@ export default {
     },
     methods: {
         ...mapActions([
-            'triggerDialog',
-            'triggerMessage',
-            'fetchAllCompaniesRelation',
-            'deleteCompany',
-            'findCompanyRelation',
-            'deleteCompanyRelation',
-            'checkIfIsRelation',
+            'SHOW_DIALOG',
+            'SHOW_MESSAGE',
+            'FETCH_COMPANIES_RELATION',
+            'DELETE_COMPANY',
+            'FIND_COMPANY_RELATION',
+            'DELETE_COMPANY_RELATION',
+            'CHECK_IF_IS_RELATION',
         ]),
         async edit(find) {
-            await this.findCompanyRelation(find)
-            this.triggerDialog('add-relationship')
+            await this.FIND_COMPANY_RELATION(find)
+            this.SHOW_DIALOG('add-relationship')
         },
         async deleting(find) {
             console.log(this.id, find.id)
-            await this.checkIfIsRelation({
+            await this.CHECK_IF_IS_RELATION({
                 id: find[this.companyDetails[this.id].id].id,
                 collectionName: this.id,
             })
             if (this.company.relation.length) {
-                this.triggerMessage({
+                this.SHOW_MESSAGE({
                     title: `Negalite ištrinti ${
                         this.navBar[this.id].whose
                     } duomenis`,
@@ -141,20 +141,23 @@ export default {
                     isAlert: true,
                 })
             } else {
-                this.triggerMessage({
+                this.SHOW_MESSAGE({
                     title: 'Ar tikrai norite ištrinti struktūrą?',
                     content: `Pavadinimu: ${find.name}`,
                     action: async () => {
                         this.tryCatchForAPIAction(async () => {
-                            await this.findCompanyRelation(find)
-                            await this.deleteCompanyRelation()
+                            await this.FIND_COMPANY_RELATION(find)
+                            await this.DELETE_COMPANY_RELATION()
 
                             try {
                                 let { collectionName, id } = this.company.name
-                                await this.deleteCompany({ collectionName, id })
+                                await this.DELETE_COMPANY({
+                                    collectionName,
+                                    id,
+                                })
                             } catch {}
-                            this.$store.commit('clearCompanyData')
-                            await this.fetchAllCompaniesRelation([
+                            this.$store.commit('REMOVE_COMPANY')
+                            await this.FETCH_COMPANIES_RELATION([
                                 this.companyDetails[this.id],
                             ])
                         })

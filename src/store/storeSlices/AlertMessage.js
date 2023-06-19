@@ -18,11 +18,11 @@ export default {
         },
     },
     actions: {
-        disableAlert({ commit }) {
-            commit('setToNotShowAlert')
+        DISABLE_ALERT({ commit }) {
+            commit('SET_TO_NOT_SHOW_ALERT')
         },
-        showAlert({ commit }, status) {
-            commit('setToShowAlert', status)
+        SHOW_ALERT({ commit }, status) {
+            commit('SET_TO_SHOW_ALERT', status)
         },
     },
     getters: {

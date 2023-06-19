@@ -40,20 +40,20 @@ export default {
         },
     },
     actions: {
-        async fetchRoles({ commit }) {
+        async FETCH_ROLES({ commit }) {
             let data = await this.getFullList('user_permissions')
             commit('SET_ROLES', data)
         },
-        async fetchAdmins({ commit, state }) {
+        async FETCH_ADMINS({ commit, state }) {
             let data = await this.getFullList(state.collectionName)
             commit('SET_ADMINS', data)
         },
-        async deleteAdmin({ state }) {
+        async DELETE_ADMIN({ state }) {
             let { id, permissions_id } = state.admin
             await this.deleteRecord(state.collectionName, id)
             await this.deleteRecord('user_permissions', permissions_id.id)
         },
-        async updateAdmin({ getters, state }) {
+        async UPDATE_ADMIN({ getters, state }) {
             const data = {
                 name: state.admin.name,
                 email: state.admin.email,
@@ -62,17 +62,17 @@ export default {
             }
             await this.updateRecord(state.collectionName, state.admin.id, data)
         },
-        async updateRoles({ state }) {
+        async UPDATE_ROLES({ state }) {
             await this.updateRecord(
                 'user_permissions',
                 state.admin.permissions_id.id,
                 getPermissions(state)
             )
         },
-        clearAdminData({ commit }) {
+        REMOVE_ADMIN_STATE({ commit }) {
             commit('REMOVE_ADMIN')
         },
-        async saveAdmin({ state, getters, commit }) {
+        async POST_ADMIN({ state, getters, commit }) {
             let password = generator.generate({
                 length: 8,
                 numbers: true,
@@ -96,14 +96,14 @@ export default {
                 avatar: getters.image.file,
             })
         },
-        async fetchAdmin({ commit, state, dispatch }, id) {
+        async FETCH_ADMIN({ commit, state, dispatch }, id) {
             let data = await this.getFirstList(state.collectionName, id, {
                 expand: 'permissions_id',
             })
-            dispatch('getImageFromApi', { record: data, fileName: data.avatar })
+            dispatch('GET_IMAGE_FROM_API', { record: data, fileName: data.avatar })
             await commit('SET_ADMIN', expanding(data))
         },
-        setWhatDo({ commit }, what) {
+        SET_WHAT_DO_ADMIN({ commit }, what) {
             commit('SET_ADMIN_ACTION', what)
         },
     },

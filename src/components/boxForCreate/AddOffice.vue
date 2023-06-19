@@ -96,14 +96,14 @@ export default {
     },
     methods: {
         ...mapActions([
-            'saveOffice',
-            'dismissDialog',
-            'fetchOffices',
-            'editOffice',
-            'setToSubmit',
+            'POST_OFFICE',
+            'DISMISS_DIALOG',
+            'FETCH_OFFICES',
+            'EDIT_OFFICE',
+            'SUBMIT_MESSAGE',
         ]),
         async add() {
-            await this.setToSubmit()
+            await this.SUBMIT_MESSAGE()
             if (
                 this.inputs
                     .map(({ id }) => this.office[id])
@@ -116,16 +116,16 @@ export default {
             }
             this.tryCatchForAPIAction(async () => {
                 this.office.id
-                    ? await this.editOffice()
-                    : await this.saveOffice()
-                await this.fetchOffices()
-                this.dismissDialog()
+                    ? await this.EDIT_OFFICE()
+                    : await this.POST_OFFICE()
+                await this.FETCH_OFFICES()
+                this.DISMISS_DIALOG()
             })
         },
     },
     destroyed() {
-        this.$store.commit('clearOfficeState')
-        this.$store.commit('submitMessage')
+        this.$store.commit('REMOVE_OFFICE')
+        this.$store.commit('SET_TO_SUBMIT_MESSAGE')
     },
 }
 </script>

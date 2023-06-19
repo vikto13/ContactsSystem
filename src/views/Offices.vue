@@ -6,7 +6,7 @@
             <field-to-create
                 v-show="havePermission('edit_offices')"
                 :text="navBar.offices.textAdd"
-                @pressed="triggerDialog('add-office')"
+                @pressed="SHOW_DIALOG('add-office')"
             >
             </field-to-create>
             <md-table
@@ -63,8 +63,10 @@ export default {
     },
     mixins: [LoginMixin],
     async mounted() {
-        await this.fetchOffices()
-        await this.fetchAllCompanies()
+        this.tryCatchForAPIAction(async () => {
+            await this.FETCH_OFFICES()
+            await this.FETCH_ALL_COMPANIES()
+        })
     },
     computed: {
         ...mapGetters(['office', 'navBar', 'company']),
@@ -78,47 +80,48 @@ export default {
 
     methods: {
         ...mapActions([
-            'triggerDialog',
-            'fetchOffices',
-            'triggerMessage',
-            'findOffice',
-            'deleteOffice',
-            'fetchAllCompanies',
-            'checkIfIsRelation',
+            'SHOW_DIALOG',
+            'FETCH_OFFICES',
+            'SHOW_MESSAGE',
+            'FIND_OFFICE',
+            'DELETE_OFFICE',
+            'FETCH_ALL_COMPANIES',
+            'CHECK_IF_IS_RELATION',
         ]),
         async edit(id) {
             this.tryCatchForAPIAction(async () => {
-                await this.findOffice(id)
-                this.triggerDialog('add-office')
+                await this.FIND_OFFICE(id)
+                this.SHOW_DIALOG('add-office')
             })
         },
         async deleting(id) {
             this.tryCatchForAPIAction(async () => {
-                await this.findOffice(id)
-                await this.checkIfIsRelation({ id, collectionName: 'offices' })
+                await this.FIND_OFFICE(id)
+                await this.CHECK_IF_IS_RELATION({
+                    id,
+                    collectionName: 'offices',
+                })
 
                 if (this.company.relation.length) {
-                    this.triggerMessage({
+                    this.SHOW_MESSAGE({
                         title: 'Negalite ištrinti ofiso duomenis',
                         content:
                             `Ofisas ${this.office.name} turi rysius :<br>` +
                             this.company.relation.join('<br>'),
                         isAlert: true,
                     })
-                    this.$store.commit('clearOfficeState')
+                    this.$store.commit('REMOVE_OFFICE')
                 } else {
-                    this.triggerMessage({
+                    this.SHOW_MESSAGE({
                         title: 'Ar tikrai norite ištrinti ofiso duomenis?',
                         content: `Ofisas yra: ${this.office.country}, ${this.office.city}, ${this.office.street} ${this.office.street_number}`,
                         action: async () => {
-                            this.tryCatchForAPIAction(async () => {
-                                await this.deleteOffice()
-                                this.$store.commit('clearOfficeState')
-                                await this.fetchOffices()
-                            })
+                            await this.DELETE_OFFICE()
+                            this.$store.commit('REMOVE_OFFICE')
+                            await this.FETCH_OFFICES()
                         },
                         cancelAction: () => {
-                            this.$store.commit('clearOfficeState')
+                            this.$store.commit('REMOVE_OFFICE')
                         },
                     })
                 }

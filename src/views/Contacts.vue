@@ -59,7 +59,7 @@
                         <md-button
                             v-show="havePermission('edit_companies')"
                             class="md-icon-button md-raised ml-3 edit-btn"
-                            @click="() => triggerDialog('add-contacts')"
+                            @click="() => SHOW_DIALOG('add-contacts')"
                         >
                             <md-icon class="icon-colors">add</md-icon>
                         </md-button>
@@ -98,7 +98,7 @@ export default {
         FilterSections,
     },
     async mounted() {
-        await this.fetchEmployees()
+        await this.FETCH_EMPLOYEES()
     },
     mixins: [LoginMixin],
     data() {
@@ -132,17 +132,19 @@ export default {
     },
     methods: {
         ...mapActions([
-            'fetchEmployees',
-            'triggerDialog',
-            'searchContactBySelections',
-            'searchContactByText',
+            'FETCH_EMPLOYEES',
+            'SHOW_DIALOG',
+            'SEARCH_CONTACT_BY_SELECTIONS',
+            'SEARCH_CONTACT_BY_TEXT',
         ]),
         async searching() {
-            await this.searchContactBySelections()
-            await this.searchContactByText()
+            this.tryCatchForAPIAction(async () => {
+                await this.SEARCH_CONTACT_BY_SELECTIONS()
+                await this.SEARCH_CONTACT_BY_TEXT()
+            })
         },
         setPaginate(size) {
-            this.$store.commit('setPagine', size)
+            this.$store.commit('SET_PAGINE', size)
         },
         selectCardStyle() {
             localStorage.setItem('cardStyle', this.buttons[this.isSelected])

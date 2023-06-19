@@ -32,7 +32,7 @@
                     style="background-color: #f1f2f4"
                     :style="{ 'border-left-width': column.icon ? 0 : null }"
                     @input="
-                        $store.commit('setEmployee', {
+                        $store.commit('SET_EMPLOYEE', {
                             [column.input]: $event.target.value,
                         })
                     "
@@ -104,16 +104,16 @@ export default {
     },
     methods: {
         ...mapActions([
-            'saveEmployee',
-            'editEmployee',
-            'dismissDialog',
-            'fetchEmployees',
-            'setToSubmit',
-            'setOfficeByDivisionAndCompany',
+            'POST_EMPLOYEE',
+            'EDIT_EMPLOYEE',
+            'DISMISS_DIALOG',
+            'FETCH_EMPLOYEES',
+            'SUBMIT_MESSAGE',
+            'GET_OFFICE_BY_RELATION',
         ]),
         async save() {
-            await this.setToSubmit()
-            await this.setOfficeByDivisionAndCompany()
+            await this.SUBMIT_MESSAGE()
+            await this.GET_OFFICE_BY_RELATION()
             if (
                 ![
                     this.companyDetails.companies.id,
@@ -136,12 +136,12 @@ export default {
             }
             this.tryCatchForAPIAction(async () => {
                 if (this.employee.id) {
-                    await this.editEmployee()
+                    await this.EDIT_EMPLOYEE()
                 } else {
-                    await this.saveEmployee()
+                    await this.POST_EMPLOYEE()
                 }
-                await this.dismissDialog()
-                await this.fetchEmployees()
+                await this.DISMISS_DIALOG()
+                await this.FETCH_EMPLOYEES()
             })
         },
     },

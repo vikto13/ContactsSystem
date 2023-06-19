@@ -35,11 +35,11 @@ export default {
         },
     },
     actions: {
-        async findCompany({ commit }, { id, entity }) {
+        async FIND_COMPANY({ commit }, { id, entity }) {
             let data = await this.getFirstList(entity, id)
-            commit('setCompany', data)
+            commit('SET_COMPANY', data)
         },
-        async findCompanyRelation({ state, commit }, value) {
+        async FIND_COMPANY_RELATION({ state, commit }, value) {
             let tables = value.collectionName.split('_')
             let { id } = state.details[tables[1]]
             let data = await this.getFullList(value.collectionName, {
@@ -55,15 +55,14 @@ export default {
                 relation: data.map((data) => data[state.details[tables[0]].id]),
                 table: value.collectionName,
             }
-            commit('setCompany', generated)
+            commit('SET_COMPANY', generated)
         },
-        async saveCompany({ state }, entity) {
+        async POST_COMPANY({ state }, entity) {
             await this.saveRecord(entity, { name: state.company.name })
         },
-        async saveCompanyRelation({ state }) {
+        async POST_COMPANY_RELATION({ state }) {
             let { collectionName, name, relation } = state.company
             let { relationship, id } = state.details[collectionName]
-            console.log(collectionName, { name })
             let data = await this.saveRecord(collectionName, { name })
             await Promise.all(
                 relation.map((relId) => {
@@ -77,15 +76,15 @@ export default {
                 })
             )
         },
-        async fetchCompanies({ commit }, entity) {
+        async FETCH_COMPANIES({ commit }, entity) {
             let list = await this.getFullList(entity)
-            commit('setCompanies', { list, entity })
+            commit('SET_COMPANIES', { list, entity })
         },
-        async setCompaniesInType({ commit }, entity) {
+        async SET_COMPANIES_IN_TYPE({ commit }, entity) {
             let list = await this.getFullList(entity)
-            commit('setType', { list, entity })
+            commit('SET_TYPE', { list, entity })
         },
-        async fetchAllCompaniesRelation({ commit, state }, search) {
+        async FETCH_COMPANIES_RELATION({ commit, state }, search) {
             let fetched = await Promise.all(
                 search.map(async ({ name, relationship }) => {
                     let data = await this.getFullList(
@@ -114,13 +113,13 @@ export default {
                     return prev
                 }, {})
                 let { name } = search[index]
-                commit('setType', {
+                commit('SET_TYPE', {
                     list: Object.values(results),
                     entity: name,
                 })
             })
         },
-        async fetchAllCompanies({ state, commit }) {
+        async FETCH_ALL_COMPANIES({ state, commit }) {
             let search = [
                 state.details.groups,
                 state.details.departments,
@@ -132,10 +131,10 @@ export default {
                 search.map(({ name }) => this.getFullList(name))
             )
             fetched.map((list, index) => {
-                commit('setCompanies', { list, entity: search[index].name })
+                commit('SET_COMPANIES', { list, entity: search[index].name })
             })
         },
-        async setCompanyRealation(
+        async POST_COMPANY_RELATIONSHIP(
             { commit, state, getters, dispatch },
             values
         ) {
@@ -152,7 +151,7 @@ export default {
                     selected,
                     fetchFrom[1].path
                 )
-                commit('setType', {
+                commit('SET_TYPE', {
                     list: expandValues(data, name),
                     entity: name,
                 })
@@ -163,11 +162,11 @@ export default {
                         return this.getOneRecord(table, id, path)
                     })
                 )
-                commit('setType', { list: reduceArrays(fetched), entity: name })
+                commit('SET_TYPE', { list: reduceArrays(fetched), entity: name })
             }
-            dispatch('setCompanyRealation', values.slice(1, values.length))
+            dispatch('ADD_COMPANY_RELATIONS', values.slice(1, values.length))
         },
-        async fetchCompanyRelation({ state, commit, dispatch }, value) {
+        async FETCH_COMPANY_RELATION({ state, commit, dispatch }, value) {
             if (value.length) {
                 let search = state.details[value[0]]
                 let { fetchFrom, name } = search
@@ -185,9 +184,9 @@ export default {
                                 ({ table }) => state.details[table].selected
                             ).length != fetchFrom.length
                         ) {
-                            await commit('setCompanies', { list, entity: name })
+                            await commit('SET_COMPANIES', { list, entity: name })
                             return dispatch(
-                                'fetchCompanyRelation',
+                                'FETCH_COMPANY_RELATION',
                                 value.slice(1, value.length)
                             )
                         } else {
@@ -200,7 +199,7 @@ export default {
                         results.push(reduceArrays(data))
                     }
                 }
-                await commit('setCompanies', {
+                await commit('SET_COMPANIES', {
                     list:
                         results.length == 2
                             ? getWithSameId(results[0], results[1])
@@ -208,17 +207,17 @@ export default {
                     entity: name,
                 })
                 await dispatch(
-                    'fetchCompanyRelation',
+                    'FETCH_COMPANY_RELATION',
                     value.slice(1, value.length)
                 )
             }
         },
-        async editCompany({ state }, entity) {
+        async EDIT_COMPANY({ state }, entity) {
             await this.updateRecord(entity, state.company.id, {
                 name: state.company.name,
             })
         },
-        async editCompanyRelation({ state, getters }) {
+        async EDIT_COMPANY_RELATION({ state }) {
             let { collectionName, id, name } = state.company.name
             let data = await this.updateRecord(collectionName, id, { name })
             const { relation, id: relId, collectionName: coll } = state.company
@@ -236,7 +235,7 @@ export default {
                     })
             )
         },
-        async deleteCompany({ state }, info) {
+        async DELETE_COMPANY({ state }, info) {
             let { id, collectionName } = state.company
             if (info) {
                 collectionName = info.collectionName
@@ -244,7 +243,7 @@ export default {
             }
             await this.deleteRecord(collectionName, id)
         },
-        async deleteCompanyRelation({ state }) {
+        async DELETE_COMPANY_RELATION({ state }) {
             await Promise.all(
                 state.company.id.map(({ id }) => {
                     let { collectionName } = state.company
@@ -256,7 +255,7 @@ export default {
                 })
             )
         },
-        async checkIfIsRelation(
+        async CHECK_IF_IS_RELATION(
             { state, commit, getters },
             { collectionName, id }
         ) {
@@ -276,7 +275,7 @@ export default {
                     .map((relation) => getters.navBar[relation].title)
                     .join(' -> ')
             )
-            commit('addComanyState', { relation })
+            commit('ADD_COMPANY_STATE', { relation })
         },
     },
     getters: {

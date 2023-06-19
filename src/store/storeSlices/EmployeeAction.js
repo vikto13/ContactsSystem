@@ -24,44 +24,44 @@ export default {
         },
     },
     actions: {
-        async findEmployee({ commit, state, dispatch }, id) {
+        async FIND_EMPLOYEE({ commit, state, dispatch }, id) {
             let data = await this.getFirstList(state.collectionName, id)
             data.photo &&
-                dispatch('getImageFromApi', {
+                dispatch('GET_IMAGE_FROM_API', {
                     record: data,
                     fileName: data.photo,
                 })
-            commit('setEmployee', data)
+            commit('SET_EMPLOYEE', data)
         },
-        async findAndExpandEmployee({ commit, state }, id) {
+        async FIND_AND_EXPAND_EMPLOYEE({ commit, state }, id) {
             let data = await this.getFirstList(state.collectionName, id, {
                 expand: 'department_id,company_id,division_id,office_id,group_id',
             })
-            commit('setEmployee', expanding(data))
+            commit('SET_EMPLOYEE', expanding(data))
         },
-        async saveEmployee({ state, getters }) {
+        async POST_EMPLOYEE({ state, getters }) {
             await this.saveRecord(
                 state.collectionName,
                 generateEmployeeData(state, getters)
             )
         },
-        async fetchEmployees({ commit, state }) {
+        async FETCH_EMPLOYEES({ commit, state }) {
             let data = await this.getFullList(state.collectionName, {
                 expand: 'department_id,division_id,group_id,office_id,company_id',
             })
-            await commit('setEmployees', data)
+            await commit('SET_EMPLOYEES', data)
         },
-        async editEmployee({ state, getters }) {
+        async EDIT_EMPLOYEE({ state, getters }) {
             this.updateRecord(
                 state.collectionName,
                 state.employee.id,
                 generateEmployeeData(state, getters)
             )
         },
-        async deleteEmployee({ state }) {
+        async DELETE_EMPLOYEE({ state }) {
             await this.deleteRecord(state.collectionName, state.employee.id)
         },
-        async searchContactByText({ commit, state }) {
+        async SEARCH_CONTACT_BY_TEXT({ commit, state }) {
             let filteredItems = state.filteredEmployees
             if (state.contactSearch) {
                 let filter = `filter=(email~'${state.contactSearch}'||name~'${state.contactSearch}'||phone_number~'${state.contactSearch}'||position~'${state.contactSearch}'||surname~'${state.contactSearch}')`
@@ -76,9 +76,9 @@ export default {
                     )
                 )
             }
-            commit('setEmployees', filteredItems)
+            commit('SET_EMPLOYEES', filteredItems)
         },
-        async searchContactBySelections({ commit, state, dispatch, getters }) {
+        async SEARCH_CONTACT_BY_SELECTIONS({ commit, state, dispatch, getters }) {
             const find = {}
             for (let company in getters.companyDetails) {
                 let { selected } = getters.companyDetails[company]
@@ -86,24 +86,23 @@ export default {
             }
             let { items } = Object.keys(find).length
                 ? await this.getListByFilter(
-                      state.collectionName,
-                      Object.keys(find)
-                          .map(
-                              (id) =>
-                                  `${
-                                      getters.companyDetails[find[id]].id
-                                  }='${id}'`
-                          )
-                          .join('&&'),
-                      'office_id'
-                  )
+                    state.collectionName,
+                    Object.keys(find)
+                        .map(
+                            (id) =>
+                                `${getters.companyDetails[find[id]].id
+                                }='${id}'`
+                        )
+                        .join('&&'),
+                    'office_id'
+                )
                 : await this.getFullList(state.collectionName, {
-                      expand: 'office_id',
-                  })
+                    expand: 'office_id',
+                })
             let filteredItems = items.map((employee) => expanding(employee))
-            commit('setFilteredEmployees', filteredItems)
+            commit('SET_FILTERED_EMPLOYEES', filteredItems)
         },
-        async setOfficeByDivisionAndCompany({ commit, state }) {
+        async GET_OFFICE_BY_RELATION({ commit, state }) {
             let { division_id, company_id } = state.employee
             if (!division_id || !company_id) {
                 return
@@ -123,7 +122,7 @@ export default {
 
             let offices = data.map(({ items }) => expandValues(items))
             let { id } = findObjectWithSameId(offices[0], offices[1])
-            commit('setEmployee', { office_id: id })
+            commit('SET_EMPLOYEE', { office_id: id })
         },
     },
     getters: {

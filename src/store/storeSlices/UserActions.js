@@ -22,35 +22,35 @@ export default {
         },
     },
     actions: {
-        async authWithPassword({ commit, state }) {
+        async AUTH_WITH_PASSWORD({ commit, state }) {
             const data = await this.authWithPassword(
                 state.collectionName,
                 state.user.email,
                 state.user.password,
                 'permissions_id'
             )
-            await commit('setUser', {
+            await commit('SET_USER', {
                 ...expanding(data.record),
                 token: data.token,
                 password: '',
                 passwordConfirm: '',
             })
         },
-        async authWithToken({ commit, state }) {
+        async AUTH_WITH_TOKEN({ commit, state }) {
             const { record, token } = await this.authRefresh(
                 state.collectionName,
                 'permissions_id'
             )
             console.log(record)
-            await commit('setUser', { ...expanding(record), token: token })
+            await commit('SET_USER', { ...expanding(record), token: token })
         },
-        async resetPassword({ state }) {
+        async RESET_PASSWORD({ state }) {
             await this.requestPasswordReset(
                 state.collectionName,
                 state.user.email
             )
         },
-        async changePassword({ state }, { token }) {
+        async CHANGE_PASSWORD({ state }, { token }) {
             await this.confirmPasswordReset(state.collectionName, {
                 token,
                 password: state.user.password,

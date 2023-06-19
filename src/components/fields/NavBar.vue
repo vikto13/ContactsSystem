@@ -74,7 +74,7 @@ export default {
         signOut() {
             setTimeout(() => {
                 this.$router.push('/admin/login')
-                this.$store.commit('clearUserData')
+                this.$store.commit('REMOVE_USER')
                 localStorage.removeItem('pocketbase_auth')
             }, 500)
         },

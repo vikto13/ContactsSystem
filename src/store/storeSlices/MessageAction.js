@@ -15,14 +15,14 @@ export default {
         },
     },
     actions: {
-        triggerMessage({ commit }, info) {
-            commit('setToShowMessage', { active: true, ...info })
+        SHOW_MESSAGE({ commit }, info) {
+            commit('SET_TO_SHOW_MESSAGE', { active: true, ...info })
         },
-        showLoading({ commit }, show) {
-            commit('setToShowLoading', show)
+        SHOW_LOADING({ commit }, show) {
+            commit('SET_TO_SHOW_LOADING', show)
         },
-        setToSubmit({ commit }) {
-            commit('submitMessage', true)
+        SUBMIT_MESSAGE({ commit }) {
+            commit('SET_TO_SUBMIT_MESSAGE', true)
         },
     },
     getters: {

@@ -61,29 +61,33 @@ export default {
         ...mapGetters(['alert']),
     },
     methods: {
-        ...mapActions(['authWithPassword', 'showAlert', 'setToSubmit']),
+        ...mapActions([
+            'AUTH_WITH_PASSWORD',
+            'DISABLE_ALERT',
+            'SUBMIT_MESSAGE',
+        ]),
         async login() {
             if (!(this.user.password && this.user.email)) {
-                await this.setToSubmit()
+                await this.SUBMIT_MESSAGE()
                 return
             }
             try {
-                await this.authWithPassword()
+                await this.AUTH_WITH_PASSWORD()
                 setTimeout(() => {
                     this.$router.push('/')
-                    this.alert.showAlert && this.disableAlert()
+                    this.alert.showAlert && this.DISABLE_ALERT()
                 }, 10)
             } catch (err) {
                 if (err.status) {
-                    this.showAlert(400)
+                    this.DISABLE_ALERT(400)
                     return
                 }
-                this.showAlert(404)
+                this.DISABLE_ALERT(404)
             }
         },
     },
     destroyed() {
-        this.$store.commit('submitMessage')
+        this.$store.commit('SET_TO_SUBMIT_MESSAGE')
     },
 }
 </script>

@@ -86,61 +86,63 @@ export default {
                     this.companyDetails.departments,
                     this.companyDetails.divisions,
                     this.companyDetails.groups,
-                ].map(({ name }) => this.fetchCompanies(name))
+                ].map(({ name }) => this.FETCH_COMPANIES(name))
             )
         })
     },
     methods: {
         ...mapActions([
-            'triggerDialog',
-            'fetchCompanies',
-            'deleteCompany',
-            'triggerMessage',
-            'findCompany',
-            'checkIfIsRelation',
+            'SHOW_DIALOG',
+            'FETCH_COMPANIES',
+            'DELETE_COMPANY',
+            'SHOW_MESSAGE',
+            'FIND_COMPANY',
+            'CHECK_IF_IS_RELATION',
         ]),
         async edit(event) {
             this.tryCatchForAPIAction(async () => {
                 event &&
-                    (await this.findCompany({
+                    (await this.FIND_COMPANY({
                         id: event,
                         entity: 'companies',
                     }))
 
-                this.triggerDialog('add-company')
+                this.SHOW_DIALOG('add-company')
             })
         },
         async deleteIt(event) {
-            await this.findCompany({
-                id: event,
-                entity: 'companies',
-            })
-            await this.checkIfIsRelation({
-                id: event,
-                collectionName: 'companies',
-            })
+            this.tryCatchForAPIAction(async () => {
+                await this.FIND_COMPANY({
+                    id: event,
+                    entity: 'companies',
+                })
+                await this.CHECK_IF_IS_RELATION({
+                    id: event,
+                    collectionName: 'companies',
+                })
 
-            if (this.company.relation.length) {
-                await this.triggerMessage({
-                    title: `Negalite ištrinti`,
-                    content:
-                        `${this.navBar['companies'].title} turi ryšius: <br>` +
-                        this.company.relation.join('<br>'),
-                    isAlert: true,
-                })
-                this.$store.commit('clearCompanyData')
-            } else {
-                this.triggerMessage({
-                    title: `Ar tikrai norite ištrinti ${this.navBar['companies'].what}?`,
-                    content: `${this.navBar['companies'].whose} pavadinimas: ${this.company.name}`,
-                    action: async () => {
-                        await this.deleteCompany()
-                        this.$store.commit('clearCompanyData')
-                        await this.fetchCompanies('companies')
-                    },
-                    cancelAction: () => {},
-                })
-            }
+                if (this.company.relation.length) {
+                    await this.SHOW_MESSAGE({
+                        title: `Negalite ištrinti`,
+                        content:
+                            `${this.navBar['companies'].title} turi ryšius: <br>` +
+                            this.company.relation.join('<br>'),
+                        isAlert: true,
+                    })
+                    this.$store.commit('REMOVE_COMPANY')
+                } else {
+                    this.SHOW_MESSAGE({
+                        title: `Ar tikrai norite ištrinti ${this.navBar['companies'].what}?`,
+                        content: `${this.navBar['companies'].whose} pavadinimas: ${this.company.name}`,
+                        action: async () => {
+                            await this.DELETE_COMPANY()
+                            this.$store.commit('REMOVE_COMPANY')
+                            await this.FETCH_COMPANIES('companies')
+                        },
+                        cancelAction: () => {},
+                    })
+                }
+            })
         },
     },
 }

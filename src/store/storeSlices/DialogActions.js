@@ -12,11 +12,11 @@ export default {
         },
     },
     actions: {
-        triggerDialog({ commit }, show) {
-            commit('setToShowDialog', show)
+        SHOW_DIALOG({ commit }, show) {
+            commit('SET_TO_SHOW_DIALOG', show)
         },
-        dismissDialog({ commit }) {
-            commit('disableDialog')
+        DISMISS_DIALOG({ commit }) {
+            commit('SET_TO_DISABLE_DIALOG')
         },
     },
     getters: {

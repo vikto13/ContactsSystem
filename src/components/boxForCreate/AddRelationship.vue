@@ -92,7 +92,7 @@ export default {
     },
     mixins: [LoginMixin],
     async mounted() {
-        await this.fetchAllCompanies()
+        await this.FETCH_ALL_COMPANIES()
     },
     computed: {
         ...mapGetters([
@@ -132,12 +132,12 @@ export default {
     },
     methods: {
         ...mapActions([
-            'dismissDialog',
-            'fetchAllCompaniesRelation',
-            'saveCompanyRelation',
-            'fetchAllCompanies',
-            'setToSubmit',
-            'editCompanyRelation',
+            'DISMISS_DIALOG',
+            'FETCH_COMPANIES_RELATION',
+            'POST_COMPANY_RELATION',
+            'FETCH_ALL_COMPANIES',
+            'SUBMIT_MESSAGE',
+            'EDIT_COMPANY_RELATION',
         ]),
         async add() {
             this.tryCatchForAPIAction(async () => {
@@ -148,20 +148,20 @@ export default {
                         this.company.relation.length
                     )
                 ) {
-                    await this.setToSubmit()
+                    await this.SUBMIT_MESSAGE()
                     return
                 }
 
                 this.company.id.length
-                    ? await this.editCompanyRelation()
-                    : await this.saveCompanyRelation()
+                    ? await this.EDIT_COMPANY_RELATION()
+                    : await this.POST_COMPANY_RELATION()
 
-                this.fetchAllCompaniesRelation(this.relationList)
-                await this.dismissDialog()
+                this.FETCH_COMPANIES_RELATION(this.relationList)
+                await this.DISMISS_DIALOG()
             })
         },
         editType(e) {
-            this.$store.commit('setCompany', {
+            this.$store.commit('SET_COMPANY', {
                 ...this.company,
                 collectionName: e.target.value,
                 relation: [],
@@ -169,8 +169,8 @@ export default {
         },
     },
     destroyed() {
-        this.$store.commit('clearCompanyData')
-        this.$store.commit('submitMessage')
+        this.$store.commit('REMOVE_COMPANY')
+        this.$store.commit('SET_TO_SUBMIT_MESSAGE')
     },
 }
 </script>

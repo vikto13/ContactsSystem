@@ -6,7 +6,7 @@
             <field-to-create
                 v-show="user.permissions_id.edit_permissions"
                 :text="'Sukurti naują admin paskyrą'"
-                @pressed="triggerDialog('add-admin')"
+                @pressed="SHOW_DIALOG('add-admin')"
                 :title="'Sukurti admin paskyrą'"
             >
             </field-to-create>
@@ -64,17 +64,17 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import FieldToCreate from '../components/fields/FieldToCreate.vue'
+import { LoginMixin } from './mixins/LoginMixin'
 export default {
     components: {
         FieldToCreate,
     },
     async mounted() {
-        try {
-            await this.fetchAdmins()
-        } catch {
-            this.showMessage()
-        }
+        this.tryCatchForAPIAction(async () => {
+            await this.FETCH_ADMINS()
+        })
     },
+    mixins: [LoginMixin],
     computed: {
         ...mapGetters([
             'admin',
@@ -97,33 +97,37 @@ export default {
     },
     methods: {
         ...mapActions([
-            'triggerDialog',
-            'fetchAdmins',
-            'fetchAdmin',
-            'setWhatDo',
-            'triggerMessage',
-            'deleteAdmin',
-            'clearAdminData',
+            'SHOW_DIALOG',
+            'FETCH_ADMINS',
+            'FETCH_ADMIN',
+            'SET_WHAT_DO_ADMIN',
+            'SHOW_MESSAGE',
+            'DELETE_ADMIN',
+            'REMOVE_ADMIN_STATE',
         ]),
         async deleting(id) {
-            await this.fetchAdmin(id)
-            this.triggerMessage({
-                title: 'Ar tikrai norite ištrinti adminą?',
-                content: `Admino vardas: ${this.admin.name}`,
-                action: async () => {
-                    await this.deleteAdmin()
-                    await this.fetchAdmins()
-                },
-                cancelAction: () => {
-                    this.clearAdminData()
-                },
+            this.tryCatchForAPIAction(async () => {
+                await this.FETCH_ADMIN(id)
+                this.SHOW_MESSAGE({
+                    title: 'Ar tikrai norite ištrinti adminą?',
+                    content: `Admino vardas: ${this.admin.name}`,
+                    action: async () => {
+                        await this.DELETE_ADMIN()
+                        await this.FETCH_ADMINS()
+                    },
+                    cancelAction: () => {
+                        this.REMOVE_ADMIN_STATE()
+                    },
+                })
             })
         },
         async change(id, action) {
-            await this.fetchAdmin(id)
-            action || (await this.$store.commit('SET_ADMIN_ROLE'))
-            this.setWhatDo(action)
-            this.triggerDialog('add-admin')
+            this.tryCatchForAPIAction(async () => {
+                await this.FETCH_ADMIN(id)
+                action || (await this.$store.commit('SET_ADMIN_ROLE'))
+                this.SET_WHAT_DO_ADMIN(action)
+                this.SHOW_DIALOG('add-admin')
+            })
         },
     },
 }

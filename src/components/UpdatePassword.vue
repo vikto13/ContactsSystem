@@ -89,9 +89,9 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['changePassword', 'setToSubmit']),
+        ...mapActions(['CHANGE_PASSWORD', 'SUBMIT_MESSAGE']),
         async change() {
-            await this.setToSubmit()
+            await this.SUBMIT_MESSAGE()
 
             if (
                 this.user.passwordConfirm !== this.user.password ||
@@ -100,7 +100,7 @@ export default {
                 return
             }
             this.tryCatchForAPIAction(async () => {
-                await this.changePassword({
+                await this.CHANGE_PASSWORD({
                     token: this.token,
                 })
             })

@@ -71,8 +71,8 @@ export default {
         ...mapGetters(['adminRoles', 'admin', 'admins', 'image']),
     },
     async mounted() {
-        this.admin.whatDo == null && this.clearAdminData()
-        await this.fetchRoles()
+        this.admin.whatDo == null && this.REMOVE_ADMIN_STATE()
+        await this.FETCH_ROLES()
     },
     data() {
         return {
@@ -90,24 +90,24 @@ export default {
     },
     methods: {
         ...mapActions([
-            'fetchRoles',
-            'saveAdmin',
-            'dismissDialog',
-            'fetchAdmins',
-            'clearAdminData',
-            'updateAdmin',
-            'triggerMessage',
-            'updateRoles',
-            'setToSubmit',
-            'authWithToken',
+            'FETCH_ROLES',
+            'POST_ADMIN',
+            'DISMISS_DIALOG',
+            'FETCH_ADMINS',
+            'REMOVE_ADMIN_STATE',
+            'UPDATE_ADMIN',
+            'SHOW_MESSAGE',
+            'UPDATE_ADMIN',
+            'SUBMIT_MESSAGE',
+            'AUTH_WITH_TOKEN',
         ]),
         async save() {
             if (this.admin.whatDo === 0) {
-                await this.updateRoles()
-                await this.authWithToken()
-                return this.dismissDialog()
+                await this.UPDATE_ADMIN()
+                await this.AUTH_WITH_TOKEN()
+                return this.DISMISS_DIALOG()
             } else {
-                await this.setToSubmit()
+                await this.SUBMIT_MESSAGE()
                 if (
                     !(
                         this.admin.name &&
@@ -119,22 +119,22 @@ export default {
 
                 try {
                     if (this.admin.whatDo != null) {
-                        await this.updateAdmin()
-                        await this.dismissDialog()
+                        await this.UPDATE_ADMIN()
+                        await this.DISMISS_DIALOG()
                     } else {
-                        await this.saveAdmin()
+                        await this.POST_ADMIN()
 
-                        this.dismissDialog()
-                        this.triggerMessage({
+                        this.DISMISS_DIALOG()
+                        this.SHOW_MESSAGE({
                             title: 'Admin paskyra sukurta sėkmingai',
                             content: `Elektroninis paštas: ${this.admin.email} ir slaptažodis: ${this.admin.password}`,
                             isAlert: true,
                         })
                     }
-                    await this.authWithToken()
-                    await this.fetchAdmins()
+                    await this.AUTH_WITH_TOKEN()
+                    await this.FETCH_ADMINS()
                 } catch (err) {
-                    this.triggerMessage({
+                    this.SHOW_MESSAGE({
                         title: 'Negalima sukurti',
                         content: `${getFromObjectText(
                             err.response.data.data,
@@ -147,8 +147,8 @@ export default {
         },
     },
     destroyed() {
-        this.clearAdminData()
-        this.$store.commit('submitMessage')
+        this.REMOVE_ADMIN_STATE()
+        this.$store.commit('SET_TO_SUBMIT_MESSAGE')
     },
 }
 </script>
