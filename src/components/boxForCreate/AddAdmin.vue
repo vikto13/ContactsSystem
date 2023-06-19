@@ -104,6 +104,7 @@ export default {
         async save() {
             if (this.admin.whatDo === 0) {
                 await this.updateRoles()
+                await this.authWithToken()
                 return this.dismissDialog()
             } else {
                 await this.setToSubmit()
@@ -119,7 +120,7 @@ export default {
                 try {
                     if (this.admin.whatDo != null) {
                         await this.updateAdmin()
-                        this.dismissDialog()
+                        await this.dismissDialog()
                     } else {
                         await this.saveAdmin()
 
@@ -130,8 +131,8 @@ export default {
                             isAlert: true,
                         })
                     }
-                    await this.fetchAdmins()
                     await this.authWithToken()
+                    await this.fetchAdmins()
                 } catch (err) {
                     this.triggerMessage({
                         title: 'Negalima sukurti',

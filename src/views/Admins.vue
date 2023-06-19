@@ -90,7 +90,6 @@ export default {
             set() {},
         },
         getTitle() {
-            console
             return this.user.permissions_id.edit_permissions
                 ? 'Sukurti admin paskyra'
                 : 'Admin paskyra'

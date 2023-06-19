@@ -1,5 +1,4 @@
 import { OfficeState } from "../initState/OfficeState"
-import { pocketBase } from "../../services/pocketBase";
 
 export default {
     state: OfficeState(),
@@ -23,55 +22,39 @@ export default {
     },
     actions: {
         async findOffice({ commit, state }, id) {
-            const data = await pocketBase
-                .collection(state.collectionName)
-                .getFirstListItem(`id="${id}"`);
-
-            let savedCompanies = await pocketBase.collection('companies_offices').getFullList({ filter: `office_id="${data.id}"` });
+            const data = await this.getFirstList(state.collectionName, id)
+            let savedCompanies = await this.getFullList('companies_offices', { filter: `office_id="${data.id}"` })
             commit("setOffice", { ...data, savedCompanies, company: savedCompanies.map(({ company_id }) => company_id) })
         },
         async saveOffice({ state }) {
 
             let { city, country, street, street_number, company } = state.office;
-            let { id } = await pocketBase
-                .collection(state.collectionName)
-                .create({ ...state.office, name: `${street} ${street_number}, ${city}, ${country}` });
+            let { id } = await this.saveRecord(state.collectionName, { ...state.office, name: `${street} ${street_number}, ${city}, ${country}` })
             await Promise.all(
                 company.map(((company_id) => {
-                    return pocketBase
-                        .collection('companies_offices')
-                        .create({ office_id: id, company_id }, { '$autoCancel': false });
+                    return this.saveRecords('companies_offices', { office_id: id, company_id })
                 }))
             )
-
         },
         async fetchOffices({ commit, state }) {
-            let allOffice = await pocketBase.collection(state.collectionName).getFullList({ sort: '-created' });
+            let allOffice = await this.getFullList(state.collectionName);
             commit('setOffices', allOffice)
         },
         async editOffice({ state }) {
             let { city, country, street, street_number } = state.office;
-            let { id } = await pocketBase
-                .collection(state.collectionName)
-                .update(state.office.id, { ...state.office, name: `${street} ${street_number}, ${city}, ${country}` });
+            let { id } = await this.updateRecord(state.collectionName, state.office.id, { ...state.office, name: `${street} ${street_number}, ${city}, ${country}` })
+
             await Promise.all(state.office.company.filter((value) => {
                 return !state.office.savedCompanies.some(obj => obj.company_id == value)
-            })
-                .map(company_id => {
-                    return pocketBase
-                        .collection('companies_offices')
-                        .create({ office_id: id, company_id }, { '$autoCancel': false });
-                }))
-            await Promise.all(state.office.savedCompanies.filter(({ company_id }) => !state.office.company.some((id) => id == company_id)).map(({ id }) => {
-                return pocketBase.collection('companies_offices').delete(id)
+            }).map(company_id => {
+                return this.saveRecords('companies_offices', { office_id: id, company_id })
             }))
-
-
+            await Promise.all(state.office.savedCompanies.filter(({ company_id }) => !state.office.company.some((id) => id == company_id)).map(({ id }) => {
+                return this.deleteRecord('companies_offices', id)
+            }))
         },
-        async deleteOffice({ commit, state }) {
-            await pocketBase
-                .collection(state.collectionName)
-                .delete(state.office.id)
+        async deleteOffice({ state }) {
+            await this.deleteRecord(state.collectionName, state.office.id)
         },
     },
     getters: {

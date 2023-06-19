@@ -2,24 +2,27 @@
     <div>
         <slot></slot>
         <h1 style="font-weight: normal" class="mt-5 ml-5">
-            {{ navBar[id].whose }}
+            {{ navBar['companies'].whose }}
         </h1>
         <field-to-create
             v-show="havePermission('edit_companies')"
-            :text="navBar[id].textAdd"
+            :text="navBar['companies'].textAdd"
             @pressed="edit(null)"
             class="ml-5"
         >
         </field-to-create>
 
         <div class="m-5 pb-5">
-            <h5 v-if="!companyDetails[id].all.length" class="mt-5 text-center">
-                {{ navBar[id].textEmpty }}
+            <h5
+                v-if="!companyDetails['companies'].all.length"
+                class="mt-5 text-center"
+            >
+                {{ navBar['companies'].textEmpty }}
             </h5>
 
             <div v-else>
                 <divide-components
-                    v-for="company in companyDetails[id].all"
+                    v-for="company in companyDetails['companies'].all"
                     :key="company.id"
                     :size-xl="40"
                     :size-l="50"
@@ -66,11 +69,6 @@ import FieldToCreate from '../components/fields/FieldToCreate.vue'
 import { LoginMixin } from './mixins/LoginMixin'
 
 export default {
-    props: {
-        id: {
-            type: String,
-        },
-    },
     components: {
         Card,
         DivideComponents,
@@ -106,7 +104,7 @@ export default {
                 event &&
                     (await this.findCompany({
                         id: event,
-                        entity: this.id,
+                        entity: 'companies',
                     }))
 
                 this.triggerDialog('add-company')
@@ -115,34 +113,30 @@ export default {
         async deleteIt(event) {
             await this.findCompany({
                 id: event,
-                entity: this.id,
+                entity: 'companies',
             })
             await this.checkIfIsRelation({
                 id: event,
-                collectionName: this.id,
+                collectionName: 'companies',
             })
 
             if (this.company.relation.length) {
                 await this.triggerMessage({
                     title: `Negalite ištrinti`,
                     content:
-                        `${this.navBar[this.id].title} turi ryšius: <br>` +
+                        `${this.navBar['companies'].title} turi ryšius: <br>` +
                         this.company.relation.join('<br>'),
                     isAlert: true,
                 })
                 this.$store.commit('clearCompanyData')
             } else {
                 this.triggerMessage({
-                    title: `Ar tikrai norite ištrinti ${
-                        this.navBar[this.id].what
-                    }?`,
-                    content: `${this.navBar[this.id].whose} pavadinimas: ${
-                        this.company.name
-                    }`,
+                    title: `Ar tikrai norite ištrinti ${this.navBar['companies'].what}?`,
+                    content: `${this.navBar['companies'].whose} pavadinimas: ${this.company.name}`,
                     action: async () => {
                         await this.deleteCompany()
                         this.$store.commit('clearCompanyData')
-                        await this.fetchCompanies(this.id)
+                        await this.fetchCompanies('companies')
                     },
                     cancelAction: () => {},
                 })

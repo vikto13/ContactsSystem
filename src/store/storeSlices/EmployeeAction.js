@@ -1,8 +1,6 @@
-import { EmployeeState } from "../initState/EmployeeState"
-import { pocketBase } from "../../services/pocketBase";
-import axios from "axios";
-import { expanding, expandTheLast, expandValues } from "./expandAction";
-import { findObjectWithSameId } from "./filterAction"
+import { EmployeeState } from '../initState/EmployeeState'
+import { expanding, expandValues } from './expandAction'
+import { findObjectWithSameId } from './filterAction'
 
 export default {
     state: EmployeeState(),
@@ -28,24 +26,37 @@ export default {
     actions: {
         async findEmployee({ commit, state, dispatch }, id) {
             let data = await this.getFirstList(state.collectionName, id)
-            console.log(data)
-            data.photo && dispatch("getImageFromApi", { record: data, fileName: data.photo })
-            commit("setEmployee", data)
-
+            data.photo &&
+                dispatch('getImageFromApi', {
+                    record: data,
+                    fileName: data.photo,
+                })
+            commit('setEmployee', data)
         },
         async findAndExpandEmployee({ commit, state }, id) {
-            let data = await this.getFirstList(state.collectionName, id, { expand: 'department_id,company_id,division_id,office_id,group_id' })
-            commit("setEmployee", expanding(data))
+            let data = await this.getFirstList(state.collectionName, id, {
+                expand: 'department_id,company_id,division_id,office_id,group_id',
+            })
+            commit('setEmployee', expanding(data))
         },
         async saveEmployee({ state, getters }) {
-            await this.saveRecord(state.collectionName, generateEmployeeData(state, getters))
+            await this.saveRecord(
+                state.collectionName,
+                generateEmployeeData(state, getters)
+            )
         },
         async fetchEmployees({ commit, state }) {
-            let data = await this.getFullList(state.collectionName, { expand: 'department_id,division_id,group_id,office_id,company_id' })
+            let data = await this.getFullList(state.collectionName, {
+                expand: 'department_id,division_id,group_id,office_id,company_id',
+            })
             await commit('setEmployees', data)
         },
         async editEmployee({ state, getters }) {
-            this.updateRecord(state.collectionName, state.employee.id, generateEmployeeData(state, getters))
+            this.updateRecord(
+                state.collectionName,
+                state.employee.id,
+                generateEmployeeData(state, getters)
+            )
         },
         async deleteEmployee({ state }) {
             await this.deleteRecord(state.collectionName, state.employee.id)
@@ -54,25 +65,42 @@ export default {
             let filteredItems = state.filteredEmployees
             if (state.contactSearch) {
                 let filter = `filter=(email~'${state.contactSearch}'||name~'${state.contactSearch}'||phone_number~'${state.contactSearch}'||position~'${state.contactSearch}'||surname~'${state.contactSearch}')`
-                let { items } = await this.getListByFilter(state.collectionName, filter, 'office_id')
-                filteredItems = items.filter(employee =>
-                    filteredItems.some(obj2 => obj2.id === expanding(employee).id)
+                let { items } = await this.getListByFilter(
+                    state.collectionName,
+                    filter,
+                    'office_id'
+                )
+                filteredItems = items.filter((employee) =>
+                    filteredItems.some(
+                        (obj2) => obj2.id === expanding(employee).id
+                    )
                 )
             }
             commit('setEmployees', filteredItems)
-
         },
         async searchContactBySelections({ commit, state, dispatch, getters }) {
-            const find = {};
+            const find = {}
             for (let company in getters.companyDetails) {
-                let { selected } = getters.companyDetails[company];
+                let { selected } = getters.companyDetails[company]
                 if (selected) find[selected] = company
             }
-            let { items } =
-                Object.keys(find).length
-                    ? await this.getListByFilter(state.collectionName, Object.keys(find).map((id) => `${getters.companyDetails[find[id]].id}='${id}'`).join("&&"), 'office_id')
-                    : await this.getFullList(state.collectionName, { expand: 'office_id' })
-            let filteredItems = items.map(employee => expanding(employee))
+            let { items } = Object.keys(find).length
+                ? await this.getListByFilter(
+                      state.collectionName,
+                      Object.keys(find)
+                          .map(
+                              (id) =>
+                                  `${
+                                      getters.companyDetails[find[id]].id
+                                  }='${id}'`
+                          )
+                          .join('&&'),
+                      'office_id'
+                  )
+                : await this.getFullList(state.collectionName, {
+                      expand: 'office_id',
+                  })
+            let filteredItems = items.map((employee) => expanding(employee))
             commit('setFilteredEmployees', filteredItems)
         },
         async setOfficeByDivisionAndCompany({ commit, state }) {
@@ -80,11 +108,18 @@ export default {
             if (!division_id || !company_id) {
                 return
             }
-            let data =
-                await Promise.all([
-                    this.getList('companies', company_id, 'companies_offices(company_id).office_id'),
-                    this.getList('divisions', division_id, 'offices_divisions(division_id).office_id')
-                ])
+            let data = await Promise.all([
+                this.getList(
+                    'companies',
+                    company_id,
+                    'companies_offices(company_id).office_id'
+                ),
+                this.getList(
+                    'divisions',
+                    division_id,
+                    'offices_divisions(division_id).office_id'
+                ),
+            ])
 
             let offices = data.map(({ items }) => expandValues(items))
             let { id } = findObjectWithSameId(offices[0], offices[1])

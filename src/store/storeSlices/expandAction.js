@@ -26,23 +26,27 @@ function expand(data, callback) {
     }
 }
 
-export function expandValues(data) {
+export function expandValues(data, collectionName) {
     let expanded = []
-    expands(data, (value) => {
-        console.log(value)
+    expands(data, collectionName, (value) => {
         expanded.push(value)
     })
     return expanded
 }
-function expands(data, callback) {
-    console.log(data)
+function expands(data, collectionName = null, callback) {
+
     if (typeof data === 'object' && !Array.isArray(data)) {
-        if (data.expand) {
-            Object.values(data.expand).forEach(value => expands(value, callback))
+        if (Object.keys(data.expand).length) {
+            Object.values(data.expand).forEach(value => expands(value, collectionName, callback))
         } else {
-            callback(data)
+            if (collectionName) {
+                data.collectionName === collectionName && callback(data)
+            } else {
+                callback(data)
+            }
+
         }
     } else if (Array.isArray(data)) {
-        Object.values(data).forEach(value => expands(value, callback))
+        Object.values(data).forEach(value => expands(value, collectionName, callback))
     }
 }

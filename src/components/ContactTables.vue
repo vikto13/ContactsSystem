@@ -30,15 +30,21 @@
                 getAddress(item)
             }}</md-table-cell>
 
-            <md-table-cell v-if="user.token" md-label="Veiksmas">
+            <md-table-cell
+                v-if="
+                    havePermission('edit_employees') &&
+                    havePermission('delete_employees')
+                "
+                md-label="Veiksmas"
+            >
                 <md-button
-                    v-show="havePermission('delete_companies')"
+                    v-show="havePermission('edit_employees')"
                     class="md-dense md-raised md-primary edit-btn m-1"
                     @click.stop="edit({ button: 0, id: item.id })"
                     >Redaguoti</md-button
                 >
                 <md-button
-                    v-show="havePermission('edit_companies')"
+                    v-show="havePermission('delete_employees')"
                     class="md-dense md-raised md-primary delete-btn m-1"
                     @click.stop="() => edit({ button: 1, id: item.id })"
                     >Ištrinti</md-button

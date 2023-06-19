@@ -1,13 +1,11 @@
-import { pocketBase } from "../../services/pocketBase";
-import { UserState } from "../initState/UserState";
-import axios from "axios";
-import { expanding } from "./expandAction";
+import { UserState } from '../initState/UserState'
+import { expanding } from './expandAction'
 
 export default {
     state: UserState(),
     mutations: {
         setUser(state, record) {
-            let { user } = state
+            let { user } = UserState()
             for (let userInfo in user) {
                 let info = record[userInfo]
                 state.user[userInfo] = info ? info : user[userInfo]
@@ -21,42 +19,46 @@ export default {
         },
         setUserImageUrl(state, image) {
             state.user.avatarUrl = image
-        }
+        },
     },
     actions: {
-        async authWithPassword({ commit, dispatch, state }) {
-            const data = await pocketBase.collection(state.collectionName).authWithPassword(
+        async authWithPassword({ commit, state }) {
+            const data = await this.authWithPassword(
+                state.collectionName,
                 state.user.email,
-                state.user.password, {}, { expand: "permissions_id" });
-            await commit("setUser", { ...expanding(data.record), token: data.token, password: '', passwordConfirm: '' })
-            await dispatch("setUserAvatar")
+                state.user.password,
+                'permissions_id'
+            )
+            await commit('setUser', {
+                ...expanding(data.record),
+                token: data.token,
+                password: '',
+                passwordConfirm: '',
+            })
         },
-        async authWithToken({ commit, dispatch }) {
-            const { record, token } = await pocketBase.collection('users').authRefresh({}, { expand: "permissions_id" });
-            await commit("setUser", { ...expanding(record), token: token })
-            await dispatch("setUserAvatar")
-        },
-        async setUserAvatar({ commit, state }) {
-            if (state.user.avatar) {
-                let image = await axios.get(
-                    `${import.meta.env.VITE_POCKET_BASE_URL}/api/files/users/${state.user.id
-                    }/${state.user.avatar}?thumb=100x300`,
-                    { responseType: "blob" }
-                );
-                let avatar = new FileReader();
-                avatar.readAsDataURL(image.data);
-                commit("setUserImageUrl", avatar)
-            }
-
+        async authWithToken({ commit, state }) {
+            const { record, token } = await this.authRefresh(
+                state.collectionName,
+                'permissions_id'
+            )
+            console.log(record)
+            await commit('setUser', { ...expanding(record), token: token })
         },
         async resetPassword({ state }) {
-            await pocketBase.collection(state.collectionName).requestPasswordReset(state.user.username == 'admin' ? "admin@teltonika.lt" : state.user.email)
+            await this.requestPasswordReset(
+                state.collectionName,
+                state.user.email
+            )
         },
         async changePassword({ state }, { token }) {
-            await pocketBase.collection(state.collectionName).confirmPasswordReset({ token, password: state.user.password, passwordConfirm: state.user.passwordConfirm });
-        }
+            await this.confirmPasswordReset(state.collectionName, {
+                token,
+                password: state.user.password,
+                passwordConfirm: state.user.passwordConfirm,
+            })
+        },
     },
     getters: {
-        user: (state) => state.user
-    }
+        user: (state) => state.user,
+    },
 }

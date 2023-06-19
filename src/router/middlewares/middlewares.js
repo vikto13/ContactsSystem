@@ -1,16 +1,23 @@
-import jwt_decode from "jwt-decode";
-
+import jwt_decode from 'jwt-decode'
 export async function authenticate({ next, store }) {
-
     let haveToken = store.getters.user.token
     let data = JSON.parse(localStorage.getItem('pocketbase_auth'))
     try {
         let { model, token } = data
         if (!haveToken && token) {
-            await store.dispatch("authWithToken", { id: model.id, token, password: '', passwordConfirm: '' })
+            await store.dispatch('authWithToken', {
+                id: model.id,
+                token,
+                password: '',
+                passwordConfirm: '',
+            })
         }
-    } catch {
-        data && store.commit("setUser", { token: data.token, ...data.model })
+    } catch (err) {
+        data &&
+            (await store.commit('setUser', {
+                token: data.token,
+                ...data.model,
+            }))
     }
     return next()
 }
@@ -20,17 +27,16 @@ export function needsAuth({ next, store }) {
     if (haveToken) {
         return next()
     }
-    return next({ path: `/users/auth-with-password` });
-
+    return next({ path: `/admin/login` })
 }
 
 export async function checkContact({ next, to, store }) {
     try {
-        await store.dispatch("findAndExpandEmployee", to.params.id);
+        await store.dispatch('findAndExpandEmployee', to.params.id)
         return next()
     } catch (error) {
         if (error.status == 404) {
-            return next({ path: "notFound" })
+            return next({ path: 'notFound' })
         }
     }
 }
@@ -40,36 +46,30 @@ export function verifyToken({ next, to }) {
         jwt_decode(to.params.token)
         return next()
     } catch {
-        return next({ name: "notFound" })
+        return next({ name: 'notFound' })
     }
 }
 
 export function readAdmins({ next, store }) {
-    if (store.getters.user.token && store.getters.user.permissions_id.read_permissions) {
+    if (
+        store.getters.user.token &&
+        store.getters.user.permissions_id.read_permissions
+    ) {
         return next()
     }
-    return next({ path: `/admins/login` });
-}
-
-export function pathForCompany({ next, to }) {
-    if ([
-        'companies',
-        'groups',
-        'departments',
-        'divisions'
-    ].includes(to.params.id)) {
-        return next()
-    }
-    return next({ name: "notFound" })
+    return next({ path: `/admin/login` })
 }
 
 export function pathForRelation({ next, to }) {
-    if ([
-        'divisions',
-        'departments',
-        'groups'
-    ].includes(to.params.id)) {
+    if (['divisions', 'departments', 'groups'].includes(to.params.id)) {
         return next()
     }
-    return next({ name: "notFound" })
+    return next({ name: 'notFound' })
+}
+
+export function needsPermission({ next, to, store }) {
+    if (!store.getters.navBar[to.path.split('/')[1]].show) {
+        return next({ name: 'notFound' })
+    }
+    return next()
 }

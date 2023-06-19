@@ -11,18 +11,7 @@
 
         <template>
             <li
-                v-for="(tab, index) in [
-                    { ...navBar.contacts, show: Boolean(user.token) },
-                    { ...navBar.companies, show: Boolean(user.token) },
-                    { ...navBar.relationship, show: Boolean(user.token) },
-                    { ...navBar.offices, show: Boolean(user.token) },
-                    {
-                        ...navBar.admins,
-                        show: Boolean(
-                            user.token && user.permissions_id.edit_permissions
-                        ),
-                    },
-                ]"
+                v-for="(tab, index) in navBarSelections"
                 :key="index"
                 class="nav-item d-flex flex-row p-3"
             >
@@ -34,7 +23,6 @@
                     >{{ tab.title }}</router-link
                 >
             </li>
-
             <md-menu v-show="user.token" md-size="medium" md-align-trigger>
                 <md-button
                     md-menu-trigger
@@ -69,15 +57,34 @@ export default {
                 import.meta.env.VITE_POCKET_BASE_URL
             }/api/files/_pb_users_auth_/${this.user.id}/${this.user.avatar}`
         },
+        navBarSelections() {
+            let show = [
+                { ...this.navBar.contacts, show: Boolean(this.user.token) },
+                this.navBar.companies,
+                this.navBar.relationship,
+                this.navBar.offices,
+                this.navBar.admins,
+            ]
+            let filtered = show.filter(({ show }) => show)
+            return filtered.length > 1 ? filtered : show
+        },
     },
     mixins: [LoginMixin],
     methods: {
         signOut() {
             setTimeout(() => {
-                this.$router.push('/admins/login')
+                this.$router.push('/admin/login')
                 this.$store.commit('clearUserData')
                 localStorage.removeItem('pocketbase_auth')
             }, 500)
+        },
+        showPermission(permissionName) {
+            return (
+                this.user.permissions_id &&
+                permissionName
+                    .map((name) => this.user.permissions_id[name])
+                    .includes(true)
+            )
         },
     },
 }

@@ -38,7 +38,7 @@
         </div>
         <div style="padding-bottom: 1rem">
             Pamiršote slaptažodį?
-            <a href="#/users/auth-refresh"> Pakeisti slaptažodį </a>
+            <a href="#/admin/auth-refresh"> Pakeisti slaptažodį </a>
         </div>
         <div class="mb-3">
             <button class="btn w-100" @click.stop="() => login()">
@@ -71,13 +71,14 @@ export default {
                 await this.authWithPassword()
                 setTimeout(() => {
                     this.$router.push('/')
+                    this.alert.showAlert && this.disableAlert()
                 }, 10)
             } catch (err) {
                 if (err.status) {
                     this.showAlert(400)
                     return
                 }
-                this.showAlert(401)
+                this.showAlert(404)
             }
         },
     },

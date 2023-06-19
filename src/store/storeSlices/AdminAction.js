@@ -1,8 +1,6 @@
-import { pocketBase } from "../../services/pocketBase";
-import { AdminState } from "../initState/AdminState";
-import axios from 'axios';
-import generator from "generate-password-browser";
-import { expanding } from "./expandAction";
+import { AdminState } from '../initState/AdminState'
+import generator from 'generate-password-browser'
+import { expanding } from './expandAction'
 
 export default {
     state: AdminState(),
@@ -14,7 +12,7 @@ export default {
             state.admins = admins
         },
         clearAdmin(state) {
-            let { admin } = AdminState();
+            let { admin } = AdminState()
             for (let adminState in admin) {
                 state.admin[adminState] = admin[adminState]
             }
@@ -24,7 +22,7 @@ export default {
             state.admin.passwordConfirm = password
         },
         setAdmin(state, info) {
-            let { admin } = AdminState();
+            let { admin } = AdminState()
             for (let adminState in admin) {
                 let setInfo = info[adminState]
                 state.admin[adminState] = setInfo ? setInfo : admin[adminState]
@@ -33,21 +31,22 @@ export default {
         setAdminRole(state) {
             let roles = Object.keys(state.permissions)
             for (let index in roles) {
-                state.admin.permissions_id[roles[index]] && state.admin.roles.push(roles[index])
+                state.admin.permissions_id[roles[index]] &&
+                    state.admin.roles.push(roles[index])
             }
         },
         setAdminAction(state, action) {
             state.admin.whatDo = action
-        }
+        },
     },
     actions: {
         async fetchRoles({ commit }) {
             let data = await this.getFullList('user_permissions')
-            commit("setRoles", data)
+            commit('setRoles', data)
         },
         async fetchAdmins({ commit, state }) {
             let data = await this.getFullList(state.collectionName)
-            commit("setAdmins", data)
+            commit('setAdmins', data)
         },
         async deleteAdmin({ state }) {
             let { id, permissions_id } = state.admin
@@ -64,33 +63,48 @@ export default {
             await this.updateRecord(state.collectionName, state.admin.id, data)
         },
         async updateRoles({ state }) {
-            await this.updateRecord('user_permissions', state.admin.permissions_id.id, getPermissions(state))
+            await this.updateRecord(
+                'user_permissions',
+                state.admin.permissions_id.id,
+                getPermissions(state)
+            )
         },
         clearAdminData({ commit }) {
-            commit("clearAdmin")
+            commit('clearAdmin')
         },
         async saveAdmin({ state, getters, commit }) {
-            let password =
-                generator.generate({
-                    length: 8,
-                    numbers: true,
-                })
+            let password = generator.generate({
+                length: 8,
+                numbers: true,
+            })
 
-            await commit("setPassword", password)
-            let { id } = await this.saveRecord('user_permissions', getPermissions(state))
+            await commit('setPassword', password)
+            let { id } = await this.saveRecord(
+                'user_permissions',
+                getPermissions(state)
+            )
+
+            let adminData = {}
+            for (let info in state.admin) {
+                let data = state.admin[info]
+                if (data) adminData[info] = data
+            }
+
             await this.saveRecord(state.collectionName, {
-                ...state.admin,
+                ...adminData,
                 permissions_id: id,
                 avatar: getters.image.file,
             })
         },
         async fetchAdmin({ commit, state, dispatch }, id) {
-            let data = await this.getFirstList(state.collectionName, id, { expand: 'permissions_id' })
-            dispatch("getImageFromApi", { record: data, fileName: data.avatar })
-            await commit("setAdmin", expanding(data))
+            let data = await this.getFirstList(state.collectionName, id, {
+                expand: 'permissions_id',
+            })
+            dispatch('getImageFromApi', { record: data, fileName: data.avatar })
+            await commit('setAdmin', expanding(data))
         },
         setWhatDo({ commit }, what) {
-            commit("setAdminAction", what)
+            commit('setAdminAction', what)
         },
     },
     getters: {
@@ -98,7 +112,7 @@ export default {
         admin: (state) => state.admin,
         admins: (state) => state.admins,
         adminPages: (state) => state.pages,
-    }
+    },
 }
 
 function getPermissions({ permissions, admin }) {
