@@ -104,7 +104,6 @@ export default {
             'triggerMessage',
             'deleteAdmin',
             'clearAdminData',
-            'setAdminRole',
         ]),
         async deleting(id) {
             await this.fetchAdmin(id)
@@ -122,7 +121,7 @@ export default {
         },
         async change(id, action) {
             await this.fetchAdmin(id)
-            action || (await this.$store.commit('setAdminRole'))
+            action || (await this.$store.commit('SET_ADMIN_ROLE'))
             this.setWhatDo(action)
             this.triggerDialog('add-admin')
         },

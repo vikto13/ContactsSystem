@@ -1,32 +1,31 @@
-
 export default {
     state: {
         showAlert: false,
         showMessage: null,
         message: {
-            404: "Kažkas nutiko, pabandykite dar kartą",
-            400: "Neteisingas elektroninis paštas arba slaptažodis",
-            405: 'Jums leidimas tokiam veiksmui nėra duotas'
+            404: 'Kažkas nutiko, pabandykite dar kartą',
+            400: 'Neteisingas elektroninis paštas arba slaptažodis',
+            405: 'Jums leidimas tokiam veiksmui nėra duotas',
         },
     },
     mutations: {
-        setToNotShowAlert(state) {
+        SET_TO_NOT_SHOW_ALERT(state) {
             state.showAlert = false
         },
-        setToShowAlert(state, message) {
+        SET_TO_SHOW_ALERT(state, message) {
             state.showAlert = true
             state.showMessage = message
-        }
+        },
     },
     actions: {
         disableAlert({ commit }) {
-            commit("setToNotShowAlert")
+            commit('setToNotShowAlert')
         },
         showAlert({ commit }, status) {
-            commit("setToShowAlert", status)
+            commit('setToShowAlert', status)
         },
     },
     getters: {
         alert: (state) => state,
-    }
+    },
 }

@@ -4,20 +4,20 @@ import { expanding } from './expandAction'
 export default {
     state: UserState(),
     mutations: {
-        setUser(state, record) {
+        SET_USER(state, record) {
             let { user } = UserState()
             for (let userInfo in user) {
                 let info = record[userInfo]
                 state.user[userInfo] = info ? info : user[userInfo]
             }
         },
-        clearUserData(state) {
+        REMOVE_USER(state) {
             let userState = UserState()
             for (let user in userState.user) {
                 state.user[user] = userState.user[user]
             }
         },
-        setUserImageUrl(state, image) {
+        SET_USER_IMAGE_URL(state, image) {
             state.user.avatarUrl = image
         },
     },

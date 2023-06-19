@@ -1,34 +1,34 @@
-import { MessageState } from "../initState/MessageState"
+import { MessageState } from '../initState/MessageState'
 export default {
     state: MessageState,
     mutations: {
-        setToShowMessage(state, add) {
+        SET_TO_SHOW_MESSAGE(state, add) {
             for (let action in state.message) {
                 state.message[action] = add[action]
             }
         },
-        setToShowLoading(state, isLoading) {
+        SET_TO_SHOW_LOADING(state, isLoading) {
             state.loading = isLoading
         },
-        submitMessage(state, show) {
+        SET_TO_SUBMIT_MESSAGE(state, show) {
             state.submit = show
-        }
+        },
     },
     actions: {
         triggerMessage({ commit }, info) {
-            commit("setToShowMessage", { active: true, ...info })
+            commit('setToShowMessage', { active: true, ...info })
         },
         showLoading({ commit }, show) {
-            commit("setToShowLoading", show)
+            commit('setToShowLoading', show)
         },
         setToSubmit({ commit }) {
-            commit("submitMessage", true)
-        }
+            commit('submitMessage', true)
+        },
     },
     getters: {
         message: (state) => state.message,
         isLoading: (state) => state.loading,
         messageTexts: (state) => state.messageTexts,
-        messageIsSubmitted: (state) => state.submit
-    }
+        messageIsSubmitted: (state) => state.submit,
+    },
 }

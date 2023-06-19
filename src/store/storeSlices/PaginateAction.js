@@ -5,19 +5,19 @@ export default {
         options: [5, 10, 25, 50, 100],
     },
     mutations: {
-        nextPage(state) {
-            state.currentPage = state.currentPage + 1;
+        SET_TO_NEXT_PAGE(state) {
+            state.currentPage = state.currentPage + 1
         },
-        previuosPage(state) {
-            state.currentPage = state.currentPage - 1;
+        SET_TO_PREVIUOS_PAGE(state) {
+            state.currentPage = state.currentPage - 1
         },
-        setPagine(state, size) {
+        SET_PAGINE(state, size) {
             state.sizeOfPaginate = size
-        }
+        },
     },
     getters: {
         currentPage: (state) => state.currentPage,
         sizeOfPaginate: (state) => state.sizeOfPaginate,
-        optionsForPaginate: (state) => state.options
+        optionsForPaginate: (state) => state.options,
     },
-};
+}

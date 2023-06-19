@@ -5,36 +5,36 @@ export default {
         buttonIsPressed: false,
     },
     mutations: {
-        setImage(state, image) {
+        SET_IMAGE(state, image) {
             for (let info in state) {
                 state[info] = image[info]
             }
         },
-        clearImageState(state) {
+        REMOVE_IMAGE(state) {
             for (let value in state) {
                 state[value] = null
             }
         },
-        setResult(state, result) {
+        SET_RESULT(state, result) {
             state.result = result
         },
-        imageButtonPressed(state, isPressed) {
+        SET_IMAGE_BUTTON_PRESSED(state, isPressed) {
             state.buttonIsPressed = isPressed
-        }
+        },
     },
     actions: {
         uploadImage({ commit }, image) {
-            const reader = new FileReader();
+            const reader = new FileReader()
             reader.onload = (event) => {
                 console.log(event)
-                commit("setResult", event.target.result)
-            };
+                commit('setResult', event.target.result)
+            }
             commit('setImage', { file: image })
-            reader.readAsDataURL(image);
+            reader.readAsDataURL(image)
         },
         async getImageFromApi({ commit }, { record, fileName }) {
             let url = this.getUrl(record, fileName)
-            commit("setResult", url)
+            commit('setResult', url)
         },
     },
     getters: {

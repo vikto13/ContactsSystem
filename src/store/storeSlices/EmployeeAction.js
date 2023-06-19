@@ -5,21 +5,21 @@ import { findObjectWithSameId } from './filterAction'
 export default {
     state: EmployeeState(),
     mutations: {
-        setEmployee(state, employee) {
+        SET_EMPLOYEE(state, employee) {
             for (let key in employee) {
                 state.employee[key] = employee[key]
             }
         },
-        clearEmployee(state) {
+        REMOVE_EMPLOYEE(state) {
             let { employee } = EmployeeState()
             for (let key in employee) {
                 state.employee[key] = employee[key]
             }
         },
-        setEmployees(state, list) {
+        SET_EMPLOYEES(state, list) {
             state.employees = list
         },
-        setFilteredEmployees(state, list) {
+        SET_FILTERED_EMPLOYEES(state, list) {
             state.filteredEmployees = list
         },
     },

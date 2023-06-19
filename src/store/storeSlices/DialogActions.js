@@ -1,25 +1,25 @@
-import { DialogState } from "../initState/DialogState";
+import { DialogState } from '../initState/DialogState'
 
 export default {
     state: DialogState,
     mutations: {
-        setToShowDialog(state, show) {
+        SET_TO_SHOW_DIALOG(state, show) {
             state.screen = show
             state.show = true
         },
-        disableDialog(state) {
+        SET_TO_DISABLE_DIALOG(state) {
             state.show = false
-        }
+        },
     },
     actions: {
         triggerDialog({ commit }, show) {
-            commit("setToShowDialog", show)
+            commit('setToShowDialog', show)
         },
         dismissDialog({ commit }) {
-            commit("disableDialog")
-        }
+            commit('disableDialog')
+        },
     },
     getters: {
-        dialog: (state) => state
-    }
+        dialog: (state) => state,
+    },
 }

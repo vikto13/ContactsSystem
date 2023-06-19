@@ -5,30 +5,30 @@ import { getWithSameId } from './filterAction'
 export default {
     state: CompanyState(),
     mutations: {
-        setCompany(state, data) {
+        SET_COMPANY(state, data) {
             for (let value in state.company) {
                 state.company[value] = data[value]
             }
         },
-        setCompanies(state, { list, entity }) {
+        SET_COMPANIES(state, { list, entity }) {
             state.details[entity].all = list
         },
-        selectCompany(state, { select, id }) {
+        SET_TO_SELECT_COMPANY(state, { select, id }) {
             state.details[id].selected = select
         },
-        clearCompanyData(state) {
+        REMOVE_COMPANY(state) {
             let { company } = CompanyState()
             for (let value in state.company) {
                 state.company[value] = company[value]
             }
         },
-        setType(state, { list, entity }) {
+        SET_TYPE(state, { list, entity }) {
             state.details[entity].types = list
         },
-        addRelations(state, { who, index, list }) {
+        ADD_COMPANY_RELATIONS(state, { who, index, list }) {
             state.details[who].relations[index].relation = list
         },
-        addComanyState(state, values) {
+        ADD_COMPANY_STATE(state, values) {
             for (let value in values) {
                 state.company[value] = values[value]
             }

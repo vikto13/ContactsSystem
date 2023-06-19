@@ -5,48 +5,48 @@ import { expanding } from './expandAction'
 export default {
     state: AdminState(),
     mutations: {
-        setRoles(state, roles) {
+        SET_ROLES(state, roles) {
             state.roles = roles
         },
-        setAdmins(state, admins) {
+        SET_ADMINS(state, admins) {
             state.admins = admins
         },
-        clearAdmin(state) {
+        REMOVE_ADMIN(state) {
             let { admin } = AdminState()
             for (let adminState in admin) {
                 state.admin[adminState] = admin[adminState]
             }
         },
-        setPassword(state, password) {
+        SET_PASSWORD(state, password) {
             state.admin.password = password
             state.admin.passwordConfirm = password
         },
-        setAdmin(state, info) {
+        SET_ADMIN(state, info) {
             let { admin } = AdminState()
             for (let adminState in admin) {
                 let setInfo = info[adminState]
                 state.admin[adminState] = setInfo ? setInfo : admin[adminState]
             }
         },
-        setAdminRole(state) {
+        SET_ADMIN_ROLE(state) {
             let roles = Object.keys(state.permissions)
             for (let index in roles) {
                 state.admin.permissions_id[roles[index]] &&
                     state.admin.roles.push(roles[index])
             }
         },
-        setAdminAction(state, action) {
+        SET_ADMIN_ACTION(state, action) {
             state.admin.whatDo = action
         },
     },
     actions: {
         async fetchRoles({ commit }) {
             let data = await this.getFullList('user_permissions')
-            commit('setRoles', data)
+            commit('SET_ROLES', data)
         },
         async fetchAdmins({ commit, state }) {
             let data = await this.getFullList(state.collectionName)
-            commit('setAdmins', data)
+            commit('SET_ADMINS', data)
         },
         async deleteAdmin({ state }) {
             let { id, permissions_id } = state.admin
@@ -70,7 +70,7 @@ export default {
             )
         },
         clearAdminData({ commit }) {
-            commit('clearAdmin')
+            commit('REMOVE_ADMIN')
         },
         async saveAdmin({ state, getters, commit }) {
             let password = generator.generate({
@@ -78,7 +78,7 @@ export default {
                 numbers: true,
             })
 
-            await commit('setPassword', password)
+            await commit('SET_PASSWORD', password)
             let { id } = await this.saveRecord(
                 'user_permissions',
                 getPermissions(state)
@@ -101,10 +101,10 @@ export default {
                 expand: 'permissions_id',
             })
             dispatch('getImageFromApi', { record: data, fileName: data.avatar })
-            await commit('setAdmin', expanding(data))
+            await commit('SET_ADMIN', expanding(data))
         },
         setWhatDo({ commit }, what) {
-            commit('setAdminAction', what)
+            commit('SET_ADMIN_ACTION', what)
         },
     },
     getters: {
