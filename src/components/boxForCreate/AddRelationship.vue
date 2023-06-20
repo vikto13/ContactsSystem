@@ -92,7 +92,9 @@ export default {
     },
     mixins: [LoginMixin],
     async mounted() {
-        await this.FETCH_ALL_COMPANIES()
+        this.tryCatchForAPIAction(async () => {
+            await this.FETCH_ALL_COMPANIES()
+        })
     },
     computed: {
         ...mapGetters([

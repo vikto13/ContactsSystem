@@ -65,9 +65,18 @@ export default {
     mixins: [LoginMixin],
     async mounted() {
         await Promise.all([
-            this.FETCH_COMPANIES('companies'),
-            this.FETCH_COMPANIES('offices'),
+            this.FETCH_COMPANIES_TYPE('companies'),
+            this.FETCH_COMPANIES_TYPE('offices'),
         ])
+
+        this.employee.id &&
+            this.tryCatchForAPIAction(async () => {
+                await this.ADD_COMPANY_RELATIONS([
+                    this.companyDetails.divisions,
+                    this.companyDetails.departments,
+                    this.companyDetails.groups,
+                ])
+            })
     },
     computed: {
         ...mapGetters(['companyDetails', 'employee', 'navBar']),
@@ -88,15 +97,15 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['FETCH_COMPANIES', 'POST_COMPANY_RELATIONSHIP']),
+        ...mapActions(['FETCH_COMPANIES_TYPE', 'ADD_COMPANY_RELATIONS']),
         async selected({ selected, value, name }) {
             let index = this.showCompanies.findIndex(
                 (obj) => obj.name === selected.name
             )
-            let filteredArr = this.showCompanies.slice(
-                index + 1,
-                this.showCompanies.length
-            )
+            let filteredArr = index
+                ? this.showCompanies.slice(index + 1, this.showCompanies.length)
+                : [this.companyDetails.offices, ...this.showCompanies]
+
             this.$store.commit('SET_EMPLOYEE', {
                 ...filteredArr.reduce((prev, curr) => {
                     return { ...prev, [curr.id]: '' }
@@ -105,11 +114,12 @@ export default {
             })
             let show = []
             index == 0 && show.push({ name: 'offices' })
-
-            this.POST_COMPANY_RELATIONSHIP([
-                ...show,
-                ...this.showCompanies.slice(index + 1, index + 2),
-            ])
+            this.tryCatchForAPIAction(async () => {
+                await this.ADD_COMPANY_RELATIONS([
+                    ...show,
+                    ...this.showCompanies.slice(index + 1, index + 2),
+                ])
+            })
         },
     },
 }

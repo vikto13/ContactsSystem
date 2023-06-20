@@ -38,6 +38,11 @@ export async function checkContact({ next, to, store }) {
         if (error.status == 404) {
             return next({ path: 'notFound' })
         }
+        store.dispatch('SHOW_MESSAGE', {
+            title: 'Įvyko klaida',
+            content: error.message,
+            isAlert: true,
+        })
     }
 }
 

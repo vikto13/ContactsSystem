@@ -91,8 +91,9 @@ export default {
     methods: {
         ...mapActions(['CHANGE_PASSWORD', 'SUBMIT_MESSAGE']),
         async change() {
-            await this.SUBMIT_MESSAGE()
-
+            this.tryCatchForAPIAction(async () => {
+                await this.SUBMIT_MESSAGE()
+            })
             if (
                 this.user.passwordConfirm !== this.user.password ||
                 this.isInvalid({ password: this.user.password })

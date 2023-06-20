@@ -89,7 +89,9 @@ export default {
         FieldToCreate,
     },
     async mounted() {
-        await this.FETCH_COMPANIES_RELATION(this.relations)
+        this.tryCatchForAPIAction(async () => {
+            await this.FETCH_COMPANIES_RELATION(this.relations)
+        })
     },
     mixins: [ContactsMixin, LoginMixin],
     computed: {
@@ -119,52 +121,57 @@ export default {
             'CHECK_IF_IS_RELATION',
         ]),
         async edit(find) {
-            await this.FIND_COMPANY_RELATION(find)
-            this.SHOW_DIALOG('add-relationship')
+            this.tryCatchForAPIAction(async () => {
+                await this.FIND_COMPANY_RELATION(find)
+                this.SHOW_DIALOG('add-relationship')
+            })
         },
         async deleting(find) {
-            console.log(this.id, find.id)
-            await this.CHECK_IF_IS_RELATION({
-                id: find[this.companyDetails[this.id].id].id,
-                collectionName: this.id,
-            })
-            if (this.company.relation.length) {
-                this.SHOW_MESSAGE({
-                    title: `Negalite ištrinti ${
-                        this.navBar[this.id].whose
-                    } duomenis`,
-                    content:
-                        `${this.navBar[this.id].title} "${
-                            find.name
-                        }" turi rysius :<br>` +
-                        this.company.relation.join('<br>'),
-                    isAlert: true,
+            this.tryCatchForAPIAction(async () => {
+                await this.CHECK_IF_IS_RELATION({
+                    id: find[this.companyDetails[this.id].id].id,
+                    collectionName: this.id,
                 })
-            } else {
-                this.SHOW_MESSAGE({
-                    title: 'Ar tikrai norite ištrinti struktūrą?',
-                    content: `Pavadinimu: ${find.name}`,
-                    action: async () => {
-                        this.tryCatchForAPIAction(async () => {
-                            await this.FIND_COMPANY_RELATION(find)
-                            await this.DELETE_COMPANY_RELATION()
+                if (this.company.relation.length) {
+                    this.SHOW_MESSAGE({
+                        title: `Negalite ištrinti ${
+                            this.navBar[this.id].whose
+                        } duomenis`,
+                        content:
+                            `${this.navBar[this.id].title} "${
+                                find.name
+                            }" turi rysius :<br>` +
+                            this.company.relation.join('<br>'),
+                        isAlert: true,
+                    })
+                    this.$store.commit('REMOVE_COMPANY')
+                } else {
+                    this.SHOW_MESSAGE({
+                        title: 'Ar tikrai norite ištrinti struktūrą?',
+                        content: `Pavadinimu: ${find.name}`,
+                        action: async () => {
+                            this.tryCatchForAPIAction(async () => {
+                                await this.FIND_COMPANY_RELATION(find)
+                                await this.DELETE_COMPANY_RELATION()
 
-                            try {
-                                let { collectionName, id } = this.company.name
-                                await this.DELETE_COMPANY({
-                                    collectionName,
-                                    id,
-                                })
-                            } catch {}
-                            this.$store.commit('REMOVE_COMPANY')
-                            await this.FETCH_COMPANIES_RELATION([
-                                this.companyDetails[this.id],
-                            ])
-                        })
-                    },
-                    cancelAction: () => {},
-                })
-            }
+                                try {
+                                    let { collectionName, id } =
+                                        this.company.name
+                                    await this.DELETE_COMPANY({
+                                        collectionName,
+                                        id,
+                                    })
+                                } catch {}
+                                this.$store.commit('REMOVE_COMPANY')
+                                await this.FETCH_COMPANIES_RELATION([
+                                    this.companyDetails[this.id],
+                                ])
+                            })
+                        },
+                        cancelAction: () => {},
+                    })
+                }
+            })
         },
     },
 }

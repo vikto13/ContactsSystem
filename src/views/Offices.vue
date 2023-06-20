@@ -111,14 +111,17 @@ export default {
                         isAlert: true,
                     })
                     this.$store.commit('REMOVE_OFFICE')
+                    this.$store.commit('REMOVE_COMPANY')
                 } else {
                     this.SHOW_MESSAGE({
                         title: 'Ar tikrai norite ištrinti ofiso duomenis?',
                         content: `Ofisas yra: ${this.office.country}, ${this.office.city}, ${this.office.street} ${this.office.street_number}`,
                         action: async () => {
-                            await this.DELETE_OFFICE()
-                            this.$store.commit('REMOVE_OFFICE')
-                            await this.FETCH_OFFICES()
+                            this.tryCatchForAPIAction(async () => {
+                                await this.DELETE_OFFICE()
+                                this.$store.commit('REMOVE_OFFICE')
+                                await this.FETCH_OFFICES()
+                            })
                         },
                         cancelAction: () => {
                             this.$store.commit('REMOVE_OFFICE')

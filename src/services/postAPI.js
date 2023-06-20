@@ -68,7 +68,6 @@ const postsAPI = (store) => {
             .authWithPassword(email, password, {}, { expand })
     }
     store.authRefresh = async function (tableName, expand) {
-        console.log({ expand })
         return pocketBase
             .collection(tableName)
             .authRefresh({}, { expand: 'permissions_id' })

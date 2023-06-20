@@ -98,7 +98,9 @@ export default {
         FilterSections,
     },
     async mounted() {
-        await this.FETCH_EMPLOYEES()
+        this.tryCatchForAPIAction(async () => {
+            await this.FETCH_EMPLOYEES()
+        })
     },
     mixins: [LoginMixin],
     data() {

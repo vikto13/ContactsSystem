@@ -3,7 +3,7 @@ migrate((db) => {
     {
       "id": "_pb_users_auth_",
       "created": "2023-02-20 09:47:22.917Z",
-      "updated": "2023-06-16 07:34:00.506Z",
+      "updated": "2023-06-20 06:47:22.437Z",
       "name": "users",
       "type": "auth",
       "system": false,
@@ -80,7 +80,7 @@ migrate((db) => {
     {
       "id": "sgv7cbhlqq9svxa",
       "created": "2023-02-20 09:49:13.646Z",
-      "updated": "2023-06-16 07:34:00.508Z",
+      "updated": "2023-06-20 06:47:22.437Z",
       "name": "offices",
       "type": "base",
       "system": false,
@@ -165,7 +165,7 @@ migrate((db) => {
     {
       "id": "bakpn5k6ntn68n3",
       "created": "2023-02-20 09:49:13.646Z",
-      "updated": "2023-06-16 07:34:00.508Z",
+      "updated": "2023-06-20 06:47:22.438Z",
       "name": "divisions",
       "type": "base",
       "system": false,
@@ -198,7 +198,7 @@ migrate((db) => {
     {
       "id": "bthy7mqw35rkvvb",
       "created": "2023-02-20 09:49:13.646Z",
-      "updated": "2023-06-16 07:34:00.509Z",
+      "updated": "2023-06-20 06:47:22.439Z",
       "name": "departments",
       "type": "base",
       "system": false,
@@ -231,7 +231,7 @@ migrate((db) => {
     {
       "id": "57faccb7837p3uh",
       "created": "2023-02-20 09:49:13.646Z",
-      "updated": "2023-06-16 07:34:00.510Z",
+      "updated": "2023-06-20 06:47:22.440Z",
       "name": "groups",
       "type": "base",
       "system": false,
@@ -264,7 +264,7 @@ migrate((db) => {
     {
       "id": "b2oym7fr4tkhpsr",
       "created": "2023-02-20 09:49:13.647Z",
-      "updated": "2023-06-16 07:34:00.511Z",
+      "updated": "2023-06-20 06:47:22.441Z",
       "name": "employees",
       "type": "base",
       "system": false,
@@ -452,7 +452,7 @@ migrate((db) => {
     {
       "id": "adadquft6s38bg8",
       "created": "2023-02-20 09:49:13.647Z",
-      "updated": "2023-06-16 07:34:00.512Z",
+      "updated": "2023-06-20 06:47:22.441Z",
       "name": "user_permissions",
       "type": "base",
       "system": false,
@@ -570,7 +570,7 @@ migrate((db) => {
     {
       "id": "zzim4v132ojclwp",
       "created": "2023-02-20 10:06:06.660Z",
-      "updated": "2023-06-16 07:34:00.513Z",
+      "updated": "2023-06-20 06:47:22.442Z",
       "name": "offices_divisions",
       "type": "base",
       "system": false,
@@ -619,7 +619,7 @@ migrate((db) => {
     {
       "id": "6pm3nos89zp7y7o",
       "created": "2023-02-20 11:43:15.941Z",
-      "updated": "2023-06-16 07:34:00.514Z",
+      "updated": "2023-06-20 06:47:22.443Z",
       "name": "companies",
       "type": "base",
       "system": false,
@@ -652,7 +652,7 @@ migrate((db) => {
     {
       "id": "69msfhns5ee63rg",
       "created": "2023-02-20 11:43:42.546Z",
-      "updated": "2023-06-16 07:34:00.515Z",
+      "updated": "2023-06-20 06:47:22.443Z",
       "name": "companies_offices",
       "type": "base",
       "system": false,
@@ -701,7 +701,7 @@ migrate((db) => {
     {
       "id": "ter9l3qqq9aqgj2",
       "created": "2023-02-20 12:02:24.476Z",
-      "updated": "2023-06-16 07:34:00.515Z",
+      "updated": "2023-06-20 06:47:22.444Z",
       "name": "divisions_departments",
       "type": "base",
       "system": false,
@@ -750,7 +750,7 @@ migrate((db) => {
     {
       "id": "tc5kfi49ge03emy",
       "created": "2023-02-20 12:04:04.552Z",
-      "updated": "2023-06-16 07:34:00.516Z",
+      "updated": "2023-06-20 06:47:22.445Z",
       "name": "departments_groups",
       "type": "base",
       "system": false,

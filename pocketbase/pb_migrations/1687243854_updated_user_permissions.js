@@ -2,7 +2,8 @@ migrate((db) => {
   const dao = new Dao(db)
   const collection = dao.findCollectionByNameOrId("adadquft6s38bg8")
 
-  collection.listRule = "@request.auth.id != \"\" && @request.auth.permissions_id= @request.data.id || @request.auth.permissions_id.read_permissions = true"
+  collection.listRule = ""
+  collection.viewRule = ""
 
   return dao.saveCollection(collection)
 }, (db) => {
@@ -10,6 +11,7 @@ migrate((db) => {
   const collection = dao.findCollectionByNameOrId("adadquft6s38bg8")
 
   collection.listRule = null
+  collection.viewRule = null
 
   return dao.saveCollection(collection)
 })

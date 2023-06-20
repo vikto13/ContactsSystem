@@ -78,7 +78,12 @@ export default {
             }
             commit('SET_EMPLOYEES', filteredItems)
         },
-        async SEARCH_CONTACT_BY_SELECTIONS({ commit, state, dispatch, getters }) {
+        async SEARCH_CONTACT_BY_SELECTIONS({
+            commit,
+            state,
+            dispatch,
+            getters,
+        }) {
             const find = {}
             for (let company in getters.companyDetails) {
                 let { selected } = getters.companyDetails[company]
@@ -86,19 +91,20 @@ export default {
             }
             let { items } = Object.keys(find).length
                 ? await this.getListByFilter(
-                    state.collectionName,
-                    Object.keys(find)
-                        .map(
-                            (id) =>
-                                `${getters.companyDetails[find[id]].id
-                                }='${id}'`
-                        )
-                        .join('&&'),
-                    'office_id'
-                )
+                      state.collectionName,
+                      Object.keys(find)
+                          .map(
+                              (id) =>
+                                  `${
+                                      getters.companyDetails[find[id]].id
+                                  }='${id}'`
+                          )
+                          .join('&&'),
+                      'office_id'
+                  )
                 : await this.getFullList(state.collectionName, {
-                    expand: 'office_id',
-                })
+                      expand: 'office_id',
+                  })
             let filteredItems = items.map((employee) => expanding(employee))
             commit('SET_FILTERED_EMPLOYEES', filteredItems)
         },

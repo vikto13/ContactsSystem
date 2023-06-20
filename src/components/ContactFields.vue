@@ -112,8 +112,10 @@ export default {
             'GET_OFFICE_BY_RELATION',
         ]),
         async save() {
-            await this.SUBMIT_MESSAGE()
-            await this.GET_OFFICE_BY_RELATION()
+            this.tryCatchForAPIAction(async () => {
+                await this.SUBMIT_MESSAGE()
+                await this.GET_OFFICE_BY_RELATION()
+            })
             if (
                 ![
                     this.companyDetails.companies.id,

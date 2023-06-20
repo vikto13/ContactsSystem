@@ -68,7 +68,9 @@ export default {
         ]),
         async login() {
             if (!(this.user.password && this.user.email)) {
-                await this.SUBMIT_MESSAGE()
+                this.tryCatchForAPIAction(async () => {
+                    await this.SUBMIT_MESSAGE()
+                })
                 return
             }
             try {

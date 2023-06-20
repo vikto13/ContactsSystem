@@ -26,7 +26,6 @@ export default {
         UPLOAD_IMAGE({ commit }, image) {
             const reader = new FileReader()
             reader.onload = (event) => {
-                console.log(event)
                 commit('SET_RESULT', event.target.result)
             }
             commit('SET_IMAGE', { file: image })

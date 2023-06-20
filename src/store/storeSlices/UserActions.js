@@ -41,7 +41,6 @@ export default {
                 state.collectionName,
                 'permissions_id'
             )
-            console.log(record)
             await commit('SET_USER', { ...expanding(record), token: token })
         },
         async RESET_PASSWORD({ state }) {

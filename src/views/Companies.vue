@@ -135,9 +135,11 @@ export default {
                         title: `Ar tikrai norite ištrinti ${this.navBar['companies'].what}?`,
                         content: `${this.navBar['companies'].whose} pavadinimas: ${this.company.name}`,
                         action: async () => {
-                            await this.DELETE_COMPANY()
-                            this.$store.commit('REMOVE_COMPANY')
-                            await this.FETCH_COMPANIES('companies')
+                            this.tryCatchForAPIAction(async () => {
+                                await this.DELETE_COMPANY()
+                                this.$store.commit('REMOVE_COMPANY')
+                                await this.FETCH_COMPANIES('companies')
+                            })
                         },
                         cancelAction: () => {},
                     })

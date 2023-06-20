@@ -7,7 +7,8 @@ export default {
     mutations: {
         SET_COMPANY(state, data) {
             for (let value in state.company) {
-                state.company[value] = data[value]
+                let setData = data[value]
+                if (setData) state.company[value] = data[value]
             }
         },
         SET_COMPANIES(state, { list, entity }) {
@@ -80,7 +81,7 @@ export default {
             let list = await this.getFullList(entity)
             commit('SET_COMPANIES', { list, entity })
         },
-        async SET_COMPANIES_IN_TYPE({ commit }, entity) {
+        async FETCH_COMPANIES_TYPE({ commit }, entity) {
             let list = await this.getFullList(entity)
             commit('SET_TYPE', { list, entity })
         },
@@ -134,7 +135,7 @@ export default {
                 commit('SET_COMPANIES', { list, entity: search[index].name })
             })
         },
-        async POST_COMPANY_RELATIONSHIP(
+        async ADD_COMPANY_RELATIONS(
             { commit, state, getters, dispatch },
             values
         ) {
@@ -162,7 +163,10 @@ export default {
                         return this.getOneRecord(table, id, path)
                     })
                 )
-                commit('SET_TYPE', { list: reduceArrays(fetched), entity: name })
+                commit('SET_TYPE', {
+                    list: reduceArrays(fetched),
+                    entity: name,
+                })
             }
             dispatch('ADD_COMPANY_RELATIONS', values.slice(1, values.length))
         },
@@ -184,7 +188,10 @@ export default {
                                 ({ table }) => state.details[table].selected
                             ).length != fetchFrom.length
                         ) {
-                            await commit('SET_COMPANIES', { list, entity: name })
+                            await commit('SET_COMPANIES', {
+                                list,
+                                entity: name,
+                            })
                             return dispatch(
                                 'FETCH_COMPANY_RELATION',
                                 value.slice(1, value.length)
@@ -255,10 +262,8 @@ export default {
                 })
             )
         },
-        async CHECK_IF_IS_RELATION(
-            { state, commit, getters },
-            { collectionName, id }
-        ) {
+        async CHECK_IF_IS_RELATION({ state, commit, getters }, info) {
+            let { collectionName, id } = info
             const datas = await Promise.all(
                 state.details[collectionName].relations.map((table) => {
                     return this.getList(collectionName, id, table.path)
@@ -268,7 +273,9 @@ export default {
                 prev[curr.collectionName] = curr
                 return prev
             }, {})
-
+            if (!Object.keys(relations).length) {
+                return
+            }
             let relation = Object.values(relations).map((rel) =>
                 rel.collectionName
                     .split('_')
@@ -299,7 +306,7 @@ function reduceArrays(fetched) {
             if (curr.items) {
                 curr.items.map(({ expand }) => {
                     if (Object.keys(expand).length) {
-                        prev.push(expand)
+                        prev.push(Object.values(expand))
                     }
                 })
             } else if (curr.expand) {

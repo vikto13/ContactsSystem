@@ -2,7 +2,8 @@ migrate((db) => {
   const dao = new Dao(db)
   const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
 
-  collection.listRule = "@request.auth.id != \"\" && @request.auth.username =\"admin\""
+  collection.listRule = ""
+  collection.viewRule = ""
 
   return dao.saveCollection(collection)
 }, (db) => {
@@ -10,6 +11,7 @@ migrate((db) => {
   const collection = dao.findCollectionByNameOrId("_pb_users_auth_")
 
   collection.listRule = null
+  collection.viewRule = null
 
   return dao.saveCollection(collection)
 })

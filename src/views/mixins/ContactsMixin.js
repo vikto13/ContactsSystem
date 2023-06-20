@@ -17,7 +17,7 @@ export const ContactsMixin = {
                 }
                 return this.employees.slice(size, size + this.sizeOfPaginate)
             },
-            set() { },
+            set() {},
         },
     },
     methods: {
@@ -36,25 +36,27 @@ export const ContactsMixin = {
             this.$router.push(`/contact/${id}`)
         },
         async edit({ button, id }) {
-            await this.FIND_EMPLOYEE(id)
-            if (button) {
-                this.SHOW_MESSAGE({
-                    title: 'Ar tikrai norite ištrinti kontaktą?',
-                    content: `Kontaktas: ${this.employee.name} ${this.employee.surname}`,
-                    action: async () => {
-                        this.tryCatchForAPIAction(async () => {
-                            await this.DELETE_EMPLOYEE()
-                            await this.FETCH_EMPLOYEES()
+            this.tryCatchForAPIAction(async () => {
+                await this.FIND_EMPLOYEE(id)
+                if (button) {
+                    this.SHOW_MESSAGE({
+                        title: 'Ar tikrai norite ištrinti kontaktą?',
+                        content: `Kontaktas: ${this.employee.name} ${this.employee.surname}`,
+                        action: async () => {
+                            this.tryCatchForAPIAction(async () => {
+                                await this.DELETE_EMPLOYEE()
+                                await this.FETCH_EMPLOYEES()
+                                this.$store.commit('REMOVE_EMPLOYEE')
+                            })
+                        },
+                        cancelAction: () => {
                             this.$store.commit('REMOVE_EMPLOYEE')
-                        })
-                    },
-                    cancelAction: () => {
-                        this.$store.commit('REMOVE_EMPLOYEE')
-                    },
-                })
-            } else {
-                this.SHOW_DIALOG('add-contacts')
-            }
+                        },
+                    })
+                } else {
+                    this.SHOW_DIALOG('add-contacts')
+                }
+            })
         },
         findProperty(obj, propertyName) {
             for (let key in obj) {

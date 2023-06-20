@@ -49,8 +49,8 @@ export const LoginMixin = {
                 ? phone_number[0] != '+'
                     ? 'Turi prasidėti pliuso(+) ženklu'
                     : phone_number.length > 2 && /^\+\d+$/.test(phone_number)
-                        ? ''
-                        : 'Numeris turi būti validus'
+                    ? ''
+                    : 'Numeris turi būti validus'
                 : ''
         },
         isInvalid(input) {
@@ -117,7 +117,6 @@ export const LoginMixin = {
                     content: err.message,
                     isAlert: true,
                 })
-                // this.DISABLE_ALERT(404);
             }
         },
     },

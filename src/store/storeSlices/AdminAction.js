@@ -54,11 +54,14 @@ export default {
             await this.deleteRecord('user_permissions', permissions_id.id)
         },
         async UPDATE_ADMIN({ getters, state }) {
-            const data = {
+            let data = {
                 name: state.admin.name,
                 email: state.admin.email,
-                avatar: getters.image.file,
                 permissions_id: state.admin.permissions_id.id,
+            }
+
+            if (getters.image.file) {
+                data['avatar'] = getters.image.file
             }
             await this.updateRecord(state.collectionName, state.admin.id, data)
         },
@@ -89,18 +92,25 @@ export default {
                 let data = state.admin[info]
                 if (data) adminData[info] = data
             }
-
+            let avatar = getters.image.file
+            if (avatar) {
+                adminData = { ...adminData, avatar }
+            }
             await this.saveRecord(state.collectionName, {
                 ...adminData,
                 permissions_id: id,
-                avatar: getters.image.file,
             })
         },
         async FETCH_ADMIN({ commit, state, dispatch }, id) {
             let data = await this.getFirstList(state.collectionName, id, {
                 expand: 'permissions_id',
             })
-            dispatch('GET_IMAGE_FROM_API', { record: data, fileName: data.avatar })
+
+            data.avatar &&
+                dispatch('GET_IMAGE_FROM_API', {
+                    record: data,
+                    fileName: data.avatar,
+                })
             await commit('SET_ADMIN', expanding(data))
         },
         SET_WHAT_DO_ADMIN({ commit }, what) {

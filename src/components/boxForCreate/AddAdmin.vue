@@ -71,8 +71,10 @@ export default {
         ...mapGetters(['adminRoles', 'admin', 'admins', 'image']),
     },
     async mounted() {
-        this.admin.whatDo == null && this.REMOVE_ADMIN_STATE()
-        await this.FETCH_ROLES()
+        this.tryCatchForAPIAction(async () => {
+            this.admin.whatDo == null && this.REMOVE_ADMIN_STATE()
+            await this.FETCH_ROLES()
+        })
     },
     data() {
         return {
@@ -103,9 +105,11 @@ export default {
         ]),
         async save() {
             if (this.admin.whatDo === 0) {
-                await this.UPDATE_ADMIN()
-                await this.AUTH_WITH_TOKEN()
-                return this.DISMISS_DIALOG()
+                this.tryCatchForAPIAction(async () => {
+                    await this.UPDATE_ADMIN()
+                    await this.AUTH_WITH_TOKEN()
+                    return this.DISMISS_DIALOG()
+                })
             } else {
                 await this.SUBMIT_MESSAGE()
                 if (

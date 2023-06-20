@@ -92,8 +92,8 @@ export default {
             ]
 
             let reranged = this.rearrangeArray(companiesInfo, id)
-            this.FETCH_COMPANY_RELATION(reranged)
             this.tryCatchForAPIAction(async () => {
+                await this.FETCH_COMPANY_RELATION(reranged)
                 await this.SEARCH_CONTACT_BY_SELECTIONS()
                 await this.SEARCH_CONTACT_BY_TEXT()
             })
