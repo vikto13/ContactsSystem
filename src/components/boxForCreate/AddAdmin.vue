@@ -50,7 +50,11 @@
                 >
             </div>
         </div>
-        <md-button class="btn m-0 mt-1 pl-2 text-start w-100" @click="save">
+        <md-button
+            type="button"
+            class="btn m-0 mt-1 pl-2 text-start w-100"
+            @click="save"
+        >
             {{ button[admin.whatDo] }}
         </md-button>
     </div>

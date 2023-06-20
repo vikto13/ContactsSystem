@@ -1,10 +1,9 @@
 import { shallowMount } from '@vue/test-utils'
-import storeActions from './storeActions';
-
+import storeActions from './storeActions'
+import { vi } from 'vitest'
 export function isObject(item) {
-    return (item && typeof item === 'object' && !Array.isArray(item))
+    return item && typeof item === 'object' && !Array.isArray(item)
 }
-
 
 export function mergeDeep(target, ...sources) {
     if (!sources.length) return target
@@ -29,24 +28,22 @@ function createWrapper(page, overrides) {
         mocks: {
             $axios: {
                 get: () => {
-                    return new Promise(resolve => resolve({}))
+                    return new Promise((resolve) => resolve({}))
                 },
                 put: () => Promise.resolve({}),
                 post: () => Promise.resolve({}),
             },
-            $store: storeActions
+            $store: storeActions,
+            $router: {
+                push: (info) => {
+                    console.log('caleeeeeeeed')
+                },
+            },
         },
         stubs: {},
-        propsData: {}
-
+        propsData: {},
     }
-    return shallowMount(
-        page,
-        mergeDeep(
-            defaultMountingOptions,
-            overrides
-        )
-    )
+    return shallowMount(page, mergeDeep(defaultMountingOptions, overrides))
 }
 
 export default createWrapper
