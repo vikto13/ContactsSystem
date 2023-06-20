@@ -91,20 +91,19 @@ export default {
             }
             let { items } = Object.keys(find).length
                 ? await this.getListByFilter(
-                      state.collectionName,
-                      Object.keys(find)
-                          .map(
-                              (id) =>
-                                  `${
-                                      getters.companyDetails[find[id]].id
-                                  }='${id}'`
-                          )
-                          .join('&&'),
-                      'office_id'
-                  )
+                    state.collectionName,
+                    Object.keys(find)
+                        .map(
+                            (id) =>
+                                `${getters.companyDetails[find[id]].id
+                                }='${id}'`
+                        )
+                        .join('&&'),
+                    'office_id'
+                )
                 : await this.getFullList(state.collectionName, {
-                      expand: 'office_id',
-                  })
+                    expand: 'office_id',
+                })
             let filteredItems = items.map((employee) => expanding(employee))
             commit('SET_FILTERED_EMPLOYEES', filteredItems)
         },

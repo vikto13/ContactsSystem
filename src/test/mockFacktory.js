@@ -35,9 +35,7 @@ function createWrapper(page, overrides) {
             },
             $store: storeActions,
             $router: {
-                push: (info) => {
-                    console.log('caleeeeeeeed')
-                },
+                push: vi.fn(),
             },
         },
         stubs: {},

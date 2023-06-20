@@ -1,7 +1,7 @@
 <template>
     <div style="width: 42rem">
-        <div :class="true ? 'md-layout' : null">
-            <contact-fields v-show="true"></contact-fields>
+        <div :class="'md-layout'">
+            <contact-fields></contact-fields>
             <company-details-select></company-details-select>
         </div>
     </div>
@@ -16,7 +16,7 @@ export default {
     },
     destroyed() {
         this.$store.commit('REMOVE_EMPLOYEE')
-        this.$store.commit('SET_TO_SUBMIT_MESSAGE')
+        this.$store.commit('SET_TO_SUBMIT_MESSAGE', false)
     },
 }
 </script>

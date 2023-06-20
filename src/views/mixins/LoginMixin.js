@@ -8,14 +8,13 @@ export const LoginMixin = {
         ...mapGetters([
             'alert',
             'messageTexts',
-            'messageTexts',
             'messageIsSubmitted',
         ]),
         user: {
             get() {
                 return this.$store.state.User.user
             },
-            se(user) {
+            set(user) {
                 this.$store.state.User.user = user
             },
         },
@@ -49,8 +48,8 @@ export const LoginMixin = {
                 ? phone_number[0] != '+'
                     ? 'Turi prasidėti pliuso(+) ženklu'
                     : phone_number.length > 2 && /^\+\d+$/.test(phone_number)
-                    ? ''
-                    : 'Numeris turi būti validus'
+                        ? ''
+                        : 'Numeris turi būti validus'
                 : ''
         },
         isInvalid(input) {
