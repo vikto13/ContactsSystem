@@ -8,7 +8,7 @@ describe('NavBar.vue', async () => {
 
     it('should logo navigate to main page', async () => {
         let logo = wrapper.find('router-link-stub')
-        console.log(wrapper.html())
+        // console.log(wrapper.html())
         expect(logo.attributes().to).toEqual('/')
     })
 
@@ -22,7 +22,7 @@ describe('NavBar.vue', async () => {
     })
     it('should show user image if is not set avatar url', async () => {
         const button = wrapper.findAll('md-menu-item-stub')
-        console.log(wrapper.html())
+        // console.log(wrapper.html())
         await button.at(1).trigger('click')
         // let logo = wrapper.findAll('md-menu-item-stub')
         // await logo.at(0).trigger('click')

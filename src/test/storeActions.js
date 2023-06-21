@@ -157,6 +157,7 @@ export default new vuex.Store({
             email: 'email',
             photo: null,
         },
+        employees: [],
         office: {
             name: '',
             id: null,
@@ -300,6 +301,11 @@ export default new vuex.Store({
             show: false,
             screen: '',
         },
+        paginate: {
+            currentPage: 0,
+            sizeOfPaginate: 5,
+            options: [5, 10, 25, 50, 100],
+        }
     }),
     getters: {
         user: (state) => state.user,
@@ -315,6 +321,10 @@ export default new vuex.Store({
         alert: (state) => state.alert,
         dialog: (state) => state.dialog,
         message: (state) => state.Message.message,
+        employees: (state) => state.employees,
+        sizeOfPaginate: (state) => state.paginate.sizeOfPaginate,
+        currentPage: (state) => state.paginate.currentPage
+
     },
     actions: {
         FETCH_ROLES: vi.fn(),
@@ -343,6 +353,12 @@ export default new vuex.Store({
             for (let value in state.image) {
                 state.image[value] = null
             }
+        },
+        SET_TO_NEXT_PAGE(state) {
+            state.paginate.currentPage = state.paginate.currentPage + 1
+        },
+        SET_TO_PREVIUOS_PAGE(state) {
+            state.paginate.currentPage = state.paginate.currentPage - 1
         },
     },
 })

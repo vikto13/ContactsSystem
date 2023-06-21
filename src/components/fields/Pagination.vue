@@ -5,7 +5,7 @@
                 class="md-dense md-raised md-primary text-uppercase w-100 btn"
                 :style="{ opacity: currentPage ? null : 0 }"
                 :disabled="!currentPage"
-                @click="currentPage = 0"
+                @click.native="currentPage = 0"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@
             <md-button
                 class="md-dense md-raised md-primary text-uppercase btn"
                 style="width: 100%"
-                @click="currentPage = 1"
+                @click.native="currentPage = 1"
                 :style="{ opacity: !goNext ? null : 0 }"
                 :disabled="goNext"
             >
@@ -70,7 +70,7 @@ export default {
         currentPage: {
             set(isNext) {
                 this.$store.commit(
-                    isNext ? ' SET_TO_NEXT_PAGE' : ' SET_TO_PREVIUOS_PAGE'
+                    isNext ? 'SET_TO_NEXT_PAGE' : 'SET_TO_PREVIUOS_PAGE'
                 )
             },
             get() {

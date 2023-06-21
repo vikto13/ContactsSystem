@@ -3,7 +3,7 @@ import storeActions from './storeActions'
 import { vi } from 'vitest'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
-Vue.use(VueRouter)
+
 
 export function isObject(item) {
     return item && typeof item === 'object' && !Array.isArray(item)
@@ -38,8 +38,11 @@ function createWrapper(page, overrides) {
                 post: () => Promise.resolve({}),
             },
             $store: storeActions,
+            $router: {
+                push: () => { }
+            }
         },
-        stubs: {},
+        stubs: ['router-link', 'router-view'],
         propsData: {},
     }
     return shallowMount(page, mergeDeep(defaultMountingOptions, overrides))

@@ -1,5 +1,5 @@
 import NavigatorBack from '../components/utils/NavigatorBack.vue'
-import { describe, it, expect } from 'vitest'
+import { describe, it, vi, expect } from 'vitest'
 import createWrapper from './mockFacktory'
 import { changeState } from './addValues'
 
@@ -10,11 +10,11 @@ describe('NavigatorBack.vue', async () => {
     const wrapper = createWrapper(NavigatorBack, { propsData })
 
     it('should trigger route change on button click', async () => {
-        const buttonStub = wrapper.findComponent({ name: 'md-button-stub' })
+        const button = wrapper.find("md-button-stub")
+        vi.spyOn(wrapper.vm.$router, "push")
+        await button.trigger("click")
 
-        // await button.trigger('click')
-        // await wrapper.vm.$nextTick()
-        console.log(buttonStub)
-        console.log(wrapper.html())
+        expect(wrapper.vm.$router.push).toHaveBeenCalled([propsData.goBackPath])
+
     })
 })

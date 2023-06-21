@@ -34,18 +34,4 @@ describe('Message.vue', async () => {
         expect(alertConfim.exists()).toBeTruthy()
     })
 
-    // it('should show confirm message', async () => {
-    //     wrapper = await mergeDeep(
-    //         wrapper,
-    //         changeState('Message', {
-    //             message: {
-    //                 active: true,
-    //                 isAlert: false,
-    //             },
-    //         })
-    //     )
-    //     let alertConfim = wrapper.find('md-dialog-confirm-stub')
-    //     console.log(wrapper.vm.$listeners)
-    //     // expect(alertConfim.exists()).toBeTruthy()
-    // })
 })
