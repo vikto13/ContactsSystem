@@ -8,24 +8,24 @@ describe('AddContacts.vue', async () => {
     it('should render ContactFields component', () => {
         const contactFields = wrapper.findComponent({ name: 'ContactFields' })
         expect(contactFields.exists()).toBe(true)
-    });
+    })
 
     it('should render CompanyDetailsSelect component', () => {
-        const companyDetailsSelect = wrapper.findComponent({ name: 'CompanyDetailsSelect' })
+        const companyDetailsSelect = wrapper.findComponent({
+            name: 'CompanyDetailsSelect',
+        })
         expect(companyDetailsSelect.exists()).toBe(true)
-    });
+    })
 
     it('should remove employee states when the component is destroyed', () => {
-        wrapper.destroy();
+        wrapper.destroy()
         let { employee } = wrapper.vm.$store.state
         for (let info in employee) {
             expect(Boolean(employee[info])).toBeFalsy()
         }
-    });
+    })
     it('should disable message when the component is destroyed', () => {
-        wrapper.destroy();
-        expect(wrapper.vm.$store.state.message.submit).toBeFalsy()
-    });
-
-
+        wrapper.destroy()
+        expect(wrapper.vm.$store.state.Message.message.submit).toBeFalsy()
+    })
 })

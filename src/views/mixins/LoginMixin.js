@@ -5,11 +5,7 @@ export const LoginMixin = {
         InputBoxIcon,
     },
     computed: {
-        ...mapGetters([
-            'alert',
-            'messageTexts',
-            'messageIsSubmitted',
-        ]),
+        ...mapGetters(['alert', 'messageTexts', 'messageIsSubmitted']),
         user: {
             get() {
                 return this.$store.state.User.user
@@ -48,8 +44,8 @@ export const LoginMixin = {
                 ? phone_number[0] != '+'
                     ? 'Turi prasidėti pliuso(+) ženklu'
                     : phone_number.length > 2 && /^\+\d+$/.test(phone_number)
-                        ? ''
-                        : 'Numeris turi būti validus'
+                    ? ''
+                    : 'Numeris turi būti validus'
                 : ''
         },
         isInvalid(input) {
@@ -60,16 +56,16 @@ export const LoginMixin = {
                     return this.showEmailMessage(Object.values(input)[0])
                 case 'street_number':
                     return (
-                        !Boolean(/\d/.test(Object.values(input)[0])) &&
-                        this.messageIsSubmitted
+                        this.messageIsSubmitted &&
+                        !Boolean(/\d/.test(Object.values(input)[0]))
                     )
                 case 'phone_number':
                     return (
-                        Boolean(this.phoneMessage(Object.values(input)[0])) &&
-                        this.messageIsSubmitted
+                        this.messageIsSubmitted &&
+                        Boolean(this.phoneMessage(Object.values(input)[0]))
                     )
                 default:
-                    return !Object.values(input)[0] && this.messageIsSubmitted
+                    return this.messageIsSubmitted && !Object.values(input)[0]
             }
         },
         messageById(info) {

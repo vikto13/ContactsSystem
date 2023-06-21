@@ -34,13 +34,15 @@
                 </md-button>
 
                 <md-menu-content>
-                    <md-menu-item @click="updatePassword"
+                    <md-menu-item @click.native="updatePassword"
                         >Pakeisti slaptažodį
                         <md-icon style="color: #414042"
                             >arrow_drop_down</md-icon
                         ></md-menu-item
                     >
-                    <md-menu-item @click="signOut">Atsijungti</md-menu-item>
+                    <md-menu-item @click.native="signOut"
+                        >Atsijungti</md-menu-item
+                    >
                 </md-menu-content>
             </md-menu>
         </template>

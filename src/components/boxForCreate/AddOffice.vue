@@ -94,6 +94,9 @@ export default {
             ],
         }
     },
+    created() {
+        console.log(this.office.street)
+    },
     methods: {
         ...mapActions([
             'POST_OFFICE',

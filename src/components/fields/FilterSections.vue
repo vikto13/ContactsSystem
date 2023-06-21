@@ -1,13 +1,7 @@
 <template>
     <div class="md-layout md-gutter md-alignment-center mt-4">
         <divide-components
-            v-for="(filter, index) in [
-                companyDetails.companies,
-                companyDetails.offices,
-                companyDetails.divisions,
-                companyDetails.departments,
-                companyDetails.groups,
-            ]"
+            v-for="(filter, index) in filterCategories"
             :key="index"
         >
             <label class="form-label">{{ navBar[filter.name].title }}: </label>
@@ -49,17 +43,22 @@ export default {
     mixins: [LoginMixin],
     computed: {
         ...mapGetters(['companyDetails', 'navBar']),
+        filterCategories() {
+            return [
+                this.companyDetails.companies,
+                this.companyDetails.offices,
+                this.companyDetails.divisions,
+                this.companyDetails.departments,
+                this.companyDetails.groups,
+            ]
+        },
     },
     async mounted() {
         this.tryCatchForAPIAction(async () => {
             await Promise.all(
-                [
-                    this.companyDetails.companies,
-                    this.companyDetails.departments,
-                    this.companyDetails.divisions,
-                    this.companyDetails.groups,
-                    this.companyDetails.offices,
-                ].map(({ name }) => this.FETCH_COMPANIES(name))
+                this.filterCategories.map(({ name }) =>
+                    this.FETCH_COMPANIES(name)
+                )
             )
         })
     },
