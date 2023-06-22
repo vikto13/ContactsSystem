@@ -25,7 +25,7 @@ export default {
             },
             divisions: {
                 what: 'Padaliniai',
-                whose: 'Padalinius',
+                whose: 'Padalinio',
                 textAdd: 'Pridėti naują padalinį',
                 textEmpty: 'Nėra pridėta padalinių',
                 title: 'Padaliniai',
@@ -39,7 +39,7 @@ export default {
             },
             departments: {
                 what: 'skyrių',
-                whose: 'Skyrius',
+                whose: 'Skyriaus',
                 textAdd: 'Pridėti naują skyrių',
                 textEmpty: 'Nėra pridėta skyriaus',
                 title: 'Skyriai',

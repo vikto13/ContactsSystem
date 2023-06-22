@@ -5,6 +5,7 @@ import 'vue-material/dist/theme/default.css'
 import Vue from 'vue'
 import { vi } from 'vitest'
 import { EmployeeState } from '../store/initState/EmployeeState'
+import AdminState from '../store/initState/AdminState'
 
 Vue.use(vuex)
 Vue.use(VueMaterial)
@@ -20,17 +21,6 @@ export default new vuex.Store({
                 whatDo: 1,
                 name: 'Test1',
                 email: 'Test2',
-            },
-            office: {
-                name: '',
-                id: null,
-                street: '',
-                country: '',
-                city: '',
-                street_number: null,
-                expand: null,
-                company: [],
-                savedCompanies: [],
             },
             permissions: {
                 edit_employees: 'Redaguoti ir kurti kontaktus',
@@ -305,7 +295,7 @@ export default new vuex.Store({
             currentPage: 0,
             sizeOfPaginate: 5,
             options: [5, 10, 25, 50, 100],
-        }
+        },
     }),
     getters: {
         user: (state) => state.user,
@@ -323,18 +313,26 @@ export default new vuex.Store({
         message: (state) => state.Message.message,
         employees: (state) => state.employees,
         sizeOfPaginate: (state) => state.paginate.sizeOfPaginate,
-        currentPage: (state) => state.paginate.currentPage
-
+        currentPage: (state) => state.paginate.currentPage,
     },
     actions: {
         FETCH_ROLES: vi.fn(),
         SUBMIT_MESSAGE: vi.fn(),
         UPDATE_ADMIN: vi.fn(),
-        DISMISS_DIALOG: vi.fn(),
+        DISMISS_DIALOG({ commit }) {
+            commit('REMOVE_DIALOG')
+        },
         AUTH_WITH_TOKEN: vi.fn(),
         FETCH_ADMINS: vi.fn(),
         FETCH_ALL_COMPANIES: vi.fn(),
         FETCH_COMPANIES: vi.fn(),
+        SUBMIT_MESSAGE({ commit }) {
+            commit('SET_TO_SUBMIT_MESSAGE', true)
+        },
+        POST_OFFICE: vi.fn(),
+        FETCH_OFFICES: vi.fn(),
+        RESET_PASSWORD: vi.fn(),
+        SHOW_MESSAGE: vi.fn(),
     },
     mutations: {
         REMOVE_EMPLOYEE: (state) => {
@@ -344,7 +342,7 @@ export default new vuex.Store({
             }
         },
         SET_TO_SUBMIT_MESSAGE(state, show) {
-            state.Message.submit = show
+            state.Message.submitted = show
         },
         SET_IMAGE_BUTTON_PRESSED(state) {
             state.image.result = 'result'
@@ -360,5 +358,9 @@ export default new vuex.Store({
         SET_TO_PREVIUOS_PAGE(state) {
             state.paginate.currentPage = state.paginate.currentPage - 1
         },
+        REMOVE_DIALOG(state) {
+            state.dialog.show = false
+        },
+        REMOVE_USER: vi.fn(),
     },
 })

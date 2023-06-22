@@ -48,7 +48,7 @@
             </md-field>
         </input-box-icon>
 
-        <md-button class="btn w-100 mt-3" @click="add">
+        <md-button class="btn w-100 mt-3" @click.native="add">
             {{ office.id != null ? 'Pakeisti' : 'Pridėti' }}
         </md-button>
     </div>
@@ -93,9 +93,6 @@ export default {
                 },
             ],
         }
-    },
-    created() {
-        console.log(this.office.street)
     },
     methods: {
         ...mapActions([

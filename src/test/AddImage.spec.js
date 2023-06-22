@@ -1,7 +1,7 @@
 import AddImage from '../components/fields/AddImage.vue'
 import { describe, it, expect } from 'vitest'
 import createWrapper, { mergeDeep } from './mockFacktory'
-import SET_IMAGE_BUTTON_PRESSED from './storeActions'
+
 describe('AddImage.vue', async () => {
     let wrapper = createWrapper(AddImage)
 

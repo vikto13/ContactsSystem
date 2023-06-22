@@ -30,8 +30,9 @@ describe('AddRelationship.vue', async () => {
         }
     })
 
-    it('invalids input if is submitted and not entered text', async () => {
+    it('should be input invalid if is submitted and not entered text', async () => {
         let input = wrapper.find('input')
+        let button = wrapper.find('.btn')
         expect(input.classes()).not.toContain('is-invalid')
         wrapper = await mergeDeep(wrapper, {
             vm: {
@@ -43,6 +44,7 @@ describe('AddRelationship.vue', async () => {
                 },
             },
         })
+        await button.trigger('click')
         expect(input.classes()).toContain('is-invalid')
     })
 

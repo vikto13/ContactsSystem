@@ -53,7 +53,7 @@
         <md-button
             type="button"
             class="btn m-0 mt-1 pl-2 text-start w-100"
-            @click="save"
+            @click.native="save"
         >
             {{ button[admin.whatDo] }}
         </md-button>
@@ -156,7 +156,7 @@ export default {
     },
     destroyed() {
         this.REMOVE_ADMIN_STATE()
-        this.$store.commit('SET_TO_SUBMIT_MESSAGE')
+        this.$store.commit('SET_TO_SUBMIT_MESSAGE', false)
     },
 }
 </script>

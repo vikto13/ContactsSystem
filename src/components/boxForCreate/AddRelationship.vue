@@ -35,9 +35,9 @@
                 v-model="getInputName"
                 type="text"
                 class="form-control table-footer"
-                :placeholder="`Įveskite ${
-                    navBar[company.collectionName].whose
-                } pavadinimą`"
+                :placeholder="`Įveskite ${navBar[
+                    company.collectionName
+                ].whose.toLowerCase()} pavadinimą`"
                 :class="{
                     'is-invalid': messageIsSubmitted && !company.name,
                 }"
@@ -76,7 +76,7 @@
             :disabled="!company.collectionName"
             class="btn w-100"
             :style="{ opacity: company.collectionName ? 1 : 0.4 }"
-            @click="add"
+            @click.native="add"
         >
             {{ company.id.length ? 'Pakeisti' : 'Pridėti' }}
         </md-button>

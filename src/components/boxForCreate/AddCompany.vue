@@ -16,7 +16,7 @@
             />
         </input-box-icon>
 
-        <md-button class="w-50 btn" @click="save()">
+        <md-button class="w-50 btn" @click.native="save()">
             {{ buttonTitle }}
         </md-button>
     </div>

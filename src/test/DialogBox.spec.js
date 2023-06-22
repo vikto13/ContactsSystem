@@ -7,9 +7,8 @@ import moduleName from 'module'
 describe('DialogBox.vue', async () => {
     let wrapper = createWrapper(DialogBox)
 
-    it('should show dialog when passing screen name', async () => {
-        let component = wrapper.findComponent({ name: 'md-dialog-content' })
-        // expect(alertMessage.isVisible()).toBeFalsy()
+    it('should disable dialog when button is pressed', async () => {
+        let button = wrapper.find('.btn')
         wrapper = await mergeDeep(
             wrapper,
             changeState('dialog', {
@@ -17,21 +16,8 @@ describe('DialogBox.vue', async () => {
                 screen: 'add-contacts',
             })
         )
-        // expect(alertMessage.isVisible()).toBeTruthy()
-
-        // console.log(wrapper.html())
-        // console.log(component.vm.$children.values())
+        expect(wrapper.vm.$store.getters.dialog.show).toBeTruthy()
+        await button.trigger('click')
+        expect(wrapper.vm.$store.getters.dialog.show).toBeFalsy()
     })
-
-    // it('should show correct alert message', async () => {
-    //     let { message } = wrapper.vm.$store.getters.alert
-    //     for (let info in message) {
-    //         wrapper = await mergeDeep(
-    //             wrapper,
-    //             changeState('alert', { showMessage: info })
-    //         )
-    //         let alertMessage = wrapper.find('.alert')
-    //         expect(alertMessage.text()).toBe(message[info])
-    //     }
-    // })
 })

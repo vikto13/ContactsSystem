@@ -1,9 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
 import storeActions from './storeActions'
-import { vi } from 'vitest'
-import VueRouter from 'vue-router'
-import Vue from 'vue'
-
 
 export function isObject(item) {
     return item && typeof item === 'object' && !Array.isArray(item)
@@ -39,8 +35,8 @@ function createWrapper(page, overrides) {
             },
             $store: storeActions,
             $router: {
-                push: () => { }
-            }
+                push: () => {},
+            },
         },
         stubs: ['router-link', 'router-view'],
         propsData: {},

@@ -21,9 +21,9 @@ describe('AddAdmin.vue', async () => {
         let input = wrapper.findAll('input')
         let { name, email } = wrapper.vm.$store.getters.admin
 
-            ;[name, email].map((adminState, index) => {
-                expect(input.at(index).element.value).toBe(adminState)
-            })
+        ;[name, email].map((adminState, index) => {
+            expect(input.at(index).element.value).toBe(adminState)
+        })
     })
 
     it('should update the admin name when input value changed', async () => {
@@ -70,12 +70,51 @@ describe('AddAdmin.vue', async () => {
         expect(button.text()).toBe(`${data().title[1]}`)
     })
 
-    it('should trigger the save method when the button is clicked', async () => {
-        await wrapper.vm.save()
-        let button = wrapper.findComponent({ name: 'md-button' })
-        // console.log(wrapper.html())
-        // expect(wrapper.vm.save).toHaveBeenCalled()
-        // await saveButton.trigger('click')
-        // expect(wrapper.vm.save).toHaveBeenCalled();
+    it('should show message if name is not valid', async () => {
+        let button = wrapper.find('md-button-stub')
+        let messages = wrapper.findAll('input')
+        expect(messages.at(0).classes()).not.contain('is-invalid')
+        wrapper = await mergeDeep(
+            wrapper,
+            changeState('adminState', { admin: { name: '' } })
+        )
+        await button.trigger('click')
+        expect(messages.at(0).classes()).contain('is-invalid')
+    })
+
+    it('should show message if email is not valid', async () => {
+        let button = wrapper.find('md-button-stub')
+        let messages = wrapper.findAll('input')
+        wrapper = await mergeDeep(
+            wrapper,
+            changeState('adminState', { admin: { email: 'admin@gmail.com' } })
+        )
+        expect(messages.at(1).classes()).not.contain('is-invalid')
+        wrapper = await mergeDeep(
+            wrapper,
+            changeState('adminState', { admin: { email: '' } })
+        )
+        await button.trigger('click')
+        expect(messages.at(1).classes()).contain('is-invalid')
+        wrapper = await mergeDeep(
+            wrapper,
+            changeState('adminState', { admin: { email: 'test123456' } })
+        )
+        expect(messages.at(1).classes()).contain('is-invalid')
+        wrapper = await mergeDeep(
+            wrapper,
+            changeState('adminState', { admin: { email: 'test@' } })
+        )
+        expect(messages.at(1).classes()).contain('is-invalid')
+        wrapper = await mergeDeep(
+            wrapper,
+            changeState('adminState', { admin: { email: 'test@gmail' } })
+        )
+        expect(messages.at(1).classes()).contain('is-invalid')
+        wrapper = await mergeDeep(
+            wrapper,
+            changeState('adminState', { admin: { email: 'test@gmail.c' } })
+        )
+        expect(messages.at(1).classes()).not.contain('is-invalid')
     })
 })

@@ -9,7 +9,7 @@
                 top: 1rem;
             "
         >
-            <md-button class="md-icon-button btn" @click="dialog.show = false">
+            <md-button class="md-icon-button btn" @click.native="dismissDialog">
                 <md-icon class="text-white">close</md-icon>
             </md-button>
         </div>
@@ -19,7 +19,7 @@
     </md-dialog>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import AddContacts from '../boxForCreate/AddContacts.vue'
 import AddCompany from '../boxForCreate/AddCompany.vue'
 import AddAdmin from '../boxForCreate/AddAdmin.vue'
@@ -36,6 +36,12 @@ export default {
     },
     computed: {
         ...mapGetters(['dialog']),
+    },
+    methods: {
+        ...mapActions(['DISMISS_DIALOG']),
+        dismissDialog() {
+            this.DISMISS_DIALOG()
+        },
     },
 }
 </script>
