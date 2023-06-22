@@ -228,17 +228,29 @@ export default {
             let { collectionName, id, name } = state.company.name
             let data = await this.updateRecord(collectionName, id, { name })
             const { relation, id: relId, collectionName: coll } = state.company
+            const { relationship, id: relatId } = state.details[coll]
             await Promise.all(
                 relation
                     .filter(
                         (value) => !relId.some((obj) => obj.relation == value)
                     )
                     .map((id) => {
-                        let { relationship, id: relatId } = state.details[coll]
-                        return this.saveRecord(`${relationship}_${coll}`, {
+                        return this.saveRecords(`${relationship}_${coll}`, {
                             [state.details[relationship].id]: id,
                             [relatId]: data.id,
                         })
+                    })
+            )
+            await Promise.all(
+                relId
+                    .filter(
+                        (value) => !relation.some((id) => id === value.relation)
+                    )
+                    .map((id) => {
+                        return this.deleteRecord(
+                            `${relationship}_${coll}`,
+                            id.id
+                        )
                     })
             )
         },

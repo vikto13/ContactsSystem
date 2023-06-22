@@ -1,23 +1,22 @@
-import { pocketBase } from './pocketBase'
 import PocketBase from 'pocketbase'
 
 const postsAPI = (store) => {
     store.http = new PocketBase(import.meta.env.VITE_POCKET_BASE_URL)
 
     store.getFullList = async function (tableName, expand) {
-        return pocketBase.collection(tableName).getFullList({
+        return this.http.collection(tableName).getFullList({
             sort: '-created',
             $autoCancel: false,
             ...expand,
         })
     }
     store.getFirstList = async function (tableName, id, expand) {
-        return pocketBase
+        return this.http
             .collection(tableName)
             .getFirstListItem(`id="${id}"`, expand ? expand : {})
     }
     store.getListByFilter = async function (tableName, filter, expand) {
-        return pocketBase.collection(tableName).getList(null, null, {
+        return this.http.collection(tableName).getList(null, null, {
             sort: '-created',
             $autoCancel: false,
             expand,
@@ -25,7 +24,7 @@ const postsAPI = (store) => {
         })
     }
     store.getList = async function (tableName, filterId, expand) {
-        return pocketBase.collection(tableName).getList(null, null, {
+        return this.http.collection(tableName).getList(null, null, {
             sort: '-created',
             $autoCancel: false,
             filter: `id="${filterId}"`,
@@ -33,29 +32,27 @@ const postsAPI = (store) => {
         })
     }
     store.getOneRecord = async function (tableName, id, expand) {
-        return pocketBase.collection(tableName).getOne(id, { expand })
+        return this.http.collection(tableName).getOne(id, { expand })
     }
     store.deleteRecord = async function (tableName, id) {
-        await pocketBase
-            .collection(tableName)
-            .delete(id, { $autoCancel: false })
+        await this.http.collection(tableName).delete(id, { $autoCancel: false })
     }
     store.updateRecord = async function (tableName, id, data) {
-        return pocketBase
+        return this.http
             .collection(tableName)
             .update(id, generateFormData(data))
     }
     store.saveRecord = async function (tableName, data) {
         let create = generateFormData(data)
-        return pocketBase.collection(tableName).create(create)
+        return this.http.collection(tableName).create(create)
     }
     store.saveRecords = async function (tableName, data) {
-        return pocketBase
+        return this.http
             .collection(tableName)
             .create(generateFormData(data), { $autoCancel: false })
     }
     store.getUrl = async function (record, fileName) {
-        return pocketBase.files.getUrl(record, fileName)
+        return this.http.files.getUrl(record, fileName)
     }
     store.authWithPassword = async function (
         tableName,
@@ -63,20 +60,20 @@ const postsAPI = (store) => {
         password,
         expand
     ) {
-        return pocketBase
+        return this.http
             .collection(tableName)
             .authWithPassword(email, password, {}, { expand })
     }
     store.authRefresh = async function (tableName, expand) {
-        return pocketBase
+        return this.http
             .collection(tableName)
             .authRefresh({}, { expand: 'permissions_id' })
     }
     store.requestPasswordReset = async function (tableName, email) {
-        return pocketBase.collection(tableName).requestPasswordReset(email)
+        return this.http.collection(tableName).requestPasswordReset(email)
     }
     store.confirmPasswordReset = async function (tableName, record) {
-        return pocketBase.collection(tableName).confirmPasswordReset(record)
+        return this.http.collection(tableName).confirmPasswordReset(record)
     }
 }
 

@@ -78,33 +78,32 @@ export default {
             }
             commit('SET_EMPLOYEES', filteredItems)
         },
-        async SEARCH_CONTACT_BY_SELECTIONS({
-            commit,
-            state,
-            dispatch,
-            getters,
-        }) {
+        async SEARCH_CONTACT_BY_SELECTIONS({ commit, state, getters }) {
             const find = {}
             for (let company in getters.companyDetails) {
                 let { selected } = getters.companyDetails[company]
                 if (selected) find[selected] = company
             }
-            let { items } = Object.keys(find).length
+            let items = Object.keys(find).length
                 ? await this.getListByFilter(
-                    state.collectionName,
-                    Object.keys(find)
-                        .map(
-                            (id) =>
-                                `${getters.companyDetails[find[id]].id
-                                }='${id}'`
-                        )
-                        .join('&&'),
-                    'office_id'
-                )
+                      state.collectionName,
+                      Object.keys(find)
+                          .map(
+                              (id) =>
+                                  `${
+                                      getters.companyDetails[find[id]].id
+                                  }='${id}'`
+                          )
+                          .join('&&'),
+                      'office_id'
+                  )
                 : await this.getFullList(state.collectionName, {
-                    expand: 'office_id',
-                })
-            let filteredItems = items.map((employee) => expanding(employee))
+                      expand: 'office_id',
+                  })
+            let filteredItems = Array.isArray(items)
+                ? items.map((employee) => expanding(employee))
+                : items.items
+
             commit('SET_FILTERED_EMPLOYEES', filteredItems)
         },
         async GET_OFFICE_BY_RELATION({ commit, state }) {

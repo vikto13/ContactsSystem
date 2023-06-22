@@ -1,15 +1,16 @@
-import Employee from "./storeSlices/EmployeeAction"
-import NavBar from "./storeSlices/NavBar"
-import Paginate from "./storeSlices/PaginateAction"
-import DialogActions from "./storeSlices/DialogActions"
-import Admin from "./storeSlices/AdminAction"
-import Company from "./storeSlices/CompanyActions"
-import AlertMessage from "./storeSlices/AlertMessage"
-import Image from "./storeSlices/ImageAction"
-import Message from "./storeSlices/MessageAction"
-import Office from "./storeSlices/OfficeAction"
-import User from "./storeSlices/UserActions"
-import PostsAPI from "../services/postAPI"
+import Employee from './storeSlices/EmployeeAction'
+import NavBar from './storeSlices/NavBar'
+import Paginate from './storeSlices/PaginateAction'
+import DialogActions from './storeSlices/DialogActions'
+import Admin from './storeSlices/AdminAction'
+import Company from './storeSlices/CompanyActions'
+import AlertMessage from './storeSlices/AlertMessage'
+import Image from './storeSlices/ImageAction'
+import Message from './storeSlices/MessageAction'
+import Office from './storeSlices/OfficeAction'
+import User from './storeSlices/UserActions'
+import PostsAPI from '../services/postAPI'
+import Layout from './storeSlices/LayoutAction'
 
 export const initializeStore = {
     modules: {
@@ -23,7 +24,8 @@ export const initializeStore = {
         Message,
         Office,
         Admin,
-        User
+        User,
+        Layout,
     },
-    plugins: [PostsAPI]
+    plugins: [PostsAPI],
 }
